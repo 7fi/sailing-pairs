@@ -7,6 +7,8 @@ const loadHolder = document.getElementById('loadDropContainer');
 const nameInput = document.getElementById('nameInput');
 const saveButton = document.getElementById('save');
 const loadButton = document.getElementById('load');
+const modeToggle = document.getElementById('modeToggle');
+var lightMode = false;
 
 const API_URL = 'https://bhspairs.herokuapp.com';
 // const API_URL = 'http://localhost:3000';
@@ -182,3 +184,26 @@ async function getSaved(){
         }
     }
 }
+
+modeToggle.addEventListener('click', () => {
+    if(!lightMode){
+        document.documentElement.style.setProperty('--dark','#eaeaea');
+        document.documentElement.style.setProperty('--medDark','#fff');
+        document.documentElement.style.setProperty('--med','#cfcfcf');
+        document.documentElement.style.setProperty('--medLight','#d1d1d1');
+        document.documentElement.style.setProperty('--light','#b3b3b3');
+        document.documentElement.style.setProperty('--highlight','#000');
+        document.documentElement.style.setProperty('--highlight1','#12A5B1');
+        document.documentElement.style.setProperty('--highlight2','#203960');
+    }else{
+        document.documentElement.style.setProperty('--dark','#333');
+        document.documentElement.style.setProperty('--medDark','#444');
+        document.documentElement.style.setProperty('--med','#555');
+        document.documentElement.style.setProperty('--medLight','#666');
+        document.documentElement.style.setProperty('--light','#777');
+        document.documentElement.style.setProperty('--highlight','#fff');
+        document.documentElement.style.setProperty('--highlight1','#24646a');
+        document.documentElement.style.setProperty('--highlight2','#44536b');
+    }
+    lightMode = !lightMode;
+})

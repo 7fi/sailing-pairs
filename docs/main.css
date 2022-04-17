@@ -1,3 +1,24 @@
+:root{
+    --highlight:#fff;
+    --dark:#333;
+    --medDark:#444;
+    --med:#555;
+    --medLight: #666;
+    --light:#777;
+    --highlight1:#24646a;
+    --highlight2:#44536b;
+}
+/* :root{
+    --highlight:rgb(0, 0, 0);
+    --dark:#eaeaea;
+    --medDark:#fff;
+    --med:#cfcfcf;
+    --medLight: #d1d1d1;
+    --light:#b3b3b3;
+    --highlight1:#12A5B1;
+    --highlight2:#203960;
+} */
+
 body{
     font-family: 'Fira sans', sans-serif;
 }
@@ -19,7 +40,7 @@ button{
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 8% auto;
     gap: 20px;
-    background-color: #444;
+    background-color: var(--medDark);
     overflow-x:hidden;
 }
 /* .dragging{
@@ -27,7 +48,7 @@ button{
 } */
 
 #header{
-    background-color: #333;
+    background-color: var(--dark);
     grid-area: header;
 }
 #title{
@@ -38,12 +59,19 @@ button{
     position:absolute;
     text-align: center;
 }
+#modeToggle{
+    position:absolute;
+    top:4%;
+    background-color: var(--med);
+    border-radius: 5px;
+    left: 50%;
+}
 #save, #loadText{
     /* position: absolute; */
     /* right: 0; */
     /* top:50%; */
     /* z-index: 100; */
-    background-color:#555;
+    background-color:var(--med);
     margin:5px;
     border-radius: 5px;
     font-weight: 600;
@@ -66,7 +94,7 @@ button{
     flex-direction: column;
 }
 #nameInput{
-    background-color: #555;
+    background-color: var(--med);
     border-radius: 5px;
     margin:5px;
     padding:3px;
@@ -76,7 +104,7 @@ button{
     top: -5px;
     position: relative;
     flex-direction: column;
-    background-color:#666;
+    background-color:var(--medLight);
     /* height: 300px; */
     border-radius: 5px;
 }
@@ -110,7 +138,7 @@ button{
 
 #listContainer{
     /* margin: 2%; */
-    background-color: #555;
+    background-color: var(--dark);
     /* width: 96%; */
     height: calc(100% - 20px);
     border-radius: 20px;
@@ -130,21 +158,29 @@ button{
 }
 .pairSlot{
     /* height: calc(100% / 15); */
-    background-color: #333;
+    background-color: var(--dark);
     border-radius: 10px;
     display: grid;
     align-items: stretch;
 /* align-self: flex-start; */}
 .pairSlot:nth-child(2n - 1)::before{
     content:"Skipper";
+    color:var(--highlight2);
+}
+.pairSlot:nth-child(2n - 1) .name{
+    color:var(--highlight2);
 }
 .pairSlot:nth-child(2n)::before{
     content:"Crew";
+    color:var(--highlight1);
 }
+.pairSlot:nth-child(2n) .name{
+    color:var(--highlight1);
+}
+
 .pairSlot::before{
     position:absolute;
     /* z-index: -1; */
-    color:#444;
     font-weight: 600;
     text-align: center;
     padding: 15px;
@@ -152,7 +188,7 @@ button{
 
 #right .name{
     display:inline-block;
-    background-color:#666;
+    background-color:var(--med);
     /* width: 50%; */
     width:calc(50% - 20px);
     text-align: center;
@@ -161,10 +197,11 @@ button{
     margin:5px;
     border-radius: 5px;
     padding:5px;
+    color: var(--highlight);
 }
 .pairSlot .name{
     display:inline-block;
-    background-color:#666;
+    background-color:var(--med);
     /* width:calc(50% - 20px); */
     /* height:50px; */
     z-index: 1;
