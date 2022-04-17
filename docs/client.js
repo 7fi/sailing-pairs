@@ -11,7 +11,7 @@ const loadButton = document.getElementById('load');
 const API_URL = 'https://bhspairs.herokuapp.com';
 // const API_URL = 'http://localhost:3000';
 
-const names = ['Adam', 'Alden','Ava','Barrett','Ben','Beto','Carter','Chris','Elliott','Evan','Fin','Giana','Jaya','Jeffrey','Joseph','Lauren','Luke','Maura','Maxwell','Nick','Nolan W','Nolan L','Owen','Payton','Pearl','Ryan','Sabrina','Sharkey','Stone','Talia','Zane'];
+const names = ['Adam', 'Alden','Ava','Barrett','Ben','Beto','Carter','Chris','Elliott','Evan','Fin','Gianna','Jaya','Jeffrey','Joseph','Lauren','Luke','Maura','Maxwell','Nick','Nolan W','Nolan L','Owen','Payton','Pearl','Ryan','Sabrina','Sharkey','Stone','Talia','Zane'];
 
 makePairs();
 function makePairs(inputPairs){
@@ -93,10 +93,18 @@ function makeNames(inputPairs){
             nameEl.setAttribute("draggable", "true");
 
             //Event listeners for dragging
+            // nameEl.addEventListener('touchmove', (e) =>{
+            //     console.log("touched" + nameEl.textContent);
+            //     nameEl.classList.add('dragging');
+            //     var touchLocation = e.targetTouches[0];
+
+            //     nameEl.style.position = 'fixed';
+            //     nameEl.style.left = touchLocation.pageX + 'px';
+            //     nameEl.style.top = touchLocation.pageY + 'px';
+            // })  
             nameEl.addEventListener('dragstart', () =>{
                 nameEl.classList.add('dragging');
             })  
-
             nameEl.addEventListener('dragend', async () =>{
                 nameEl.classList.remove('dragging');
                 console.log("dragend: " , nameEl.textContent);

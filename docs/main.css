@@ -22,6 +22,9 @@ button{
     background-color: #444;
     overflow-x:hidden;
 }
+/* .dragging{
+    position:absolute;
+} */
 
 #header{
     background-color: #333;
