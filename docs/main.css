@@ -28,20 +28,61 @@ button{
     grid-area: header;
 }
 #title{
-    width: 100%;
+    /* width: 100%; */
     padding: 20px;
     font-weight: 700;
     font-size: 2em;
     position:absolute;
     text-align: center;
 }
-#save{
-    position: absolute;
+#save, #loadText{
+    /* position: absolute; */
     /* right: 0; */
     /* top:50%; */
     /* z-index: 100; */
+    background-color:#555;
+    margin:5px;
+    border-radius: 5px;
+    font-weight: 600;
+    font-size: 1.1em;
+}
+#loadText{
+    width: 200px;
+    text-align: center;
 }
 
+#loadSave{
+    right:0;
+    position: absolute;
+    display: flex;
+    flex-direction: row;
+    width: max-content;
+}
+#saveHolder{
+    display:flex;
+    flex-direction: column;
+}
+#nameInput{
+    background-color: #555;
+    border-radius: 5px;
+    margin:5px;
+    padding:3px;
+}
+#loadDropContainer{
+    display: none;
+    top: -5px;
+    position: relative;
+    flex-direction: column;
+    background-color:#555;
+    /* height: 300px; */
+    border-radius: 5px;
+}
+#loadText:hover + #loadDropContainer{
+    display: flex;
+}
+#loadDropContainer:hover{
+    display: flex;
+}
 #left{
     grid-area: left;
     margin: 0 0 20px 20px;
@@ -82,6 +123,20 @@ button{
     display: grid;
     align-items: stretch;
 /* align-self: flex-start; */}
+.pairSlot:nth-child(2n - 1)::before{
+    content:"Skipper";
+}
+.pairSlot:nth-child(2n)::before{
+    content:"Crew";
+}
+.pairSlot::before{
+    position:absolute;
+    /* z-index: -1; */
+    color:#444;
+    font-weight: 600;
+    text-align: center;
+    padding: 15px;
+}
 
 #right .name{
     display:inline-block;
@@ -100,6 +155,7 @@ button{
     background-color:#666;
     /* width:calc(50% - 20px); */
     /* height:50px; */
+    z-index: 1;
     text-align: center;
     font-weight: 600;
     font-size: 1.2em;
