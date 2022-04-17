@@ -93,7 +93,7 @@ saveButton.addEventListener('click', async () => {
 
         options = {method:"POST",headers:{"Content-Type":"application/json"},body: JSON.stringify(pairs)};
         // loadingEl.style.display ='block';
-        const response = await fetch('http://localhost:3000/pairs', options);
+        const response = await fetch('https://bhspairs.herokuapp.com/pairs', options);
         const json = await response.json();
         // loadingEl.style.display ='none';
         console.log(json);
@@ -110,7 +110,7 @@ loadButton.addEventListener('click', async () =>{
     if(nameInput.value != ""){
         options = {method:"POST",headers:{"Content-Type":"application/json"},body: JSON.stringify({name:nameInput.value})};
         // loadingEl.style.display ='block';
-        const response = await fetch('http://localhost:3000/getPairs', options);
+        const response = await fetch('https://bhspairs.herokuapp.com/getPairs', options);
         const json = await response.json();
         // loadingEl.style.display ='none';
         console.log(json);
