@@ -9,7 +9,7 @@ const saveButton = document.getElementById('save');
 const loadButton = document.getElementById('load');
 
 const API_URL = 'https://bhspairs.herokuapp.com';
-// const API_URL = 'https://localhost:3000';
+// const API_URL = 'http://localhost:3000';
 
 const names = ['Adam', 'Alden','Ava','Barrett','Ben','Beto','Carter','Chris','Elliott','Evan','Fin','Giana','Jaya','Jeffrey','Joseph','Lauren','Luke','Maura','Maxwell','Nick','Nolan W','Nolan L','Owen','Payton','Pearl','Ryan','Sabrina','Sharkey','Stone','Talia','Zane'];
 
@@ -144,7 +144,7 @@ getSaved();
 async function getSaved(){
     options = {method:"POST",headers:{"Content-Type":"application/json"},body: JSON.stringify({})};
     // loadingEl.style.display ='block';
-    const response = await fetch(API_URL + '/getPairs', options);
+    const response = await fetch(API_URL + '/getNames', options);
     const json = await response.json();
     // loadingEl.style.display ='none';
     console.log(json);
@@ -170,6 +170,7 @@ async function getSaved(){
                 }
             })
             // savedNames[i] = json.pairs[i].name;
+            loadHolder.appendChild(loadName);
         }
     }
 }

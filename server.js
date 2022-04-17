@@ -37,7 +37,7 @@ app.post('/getPairs', async (req, res) => {
 })
 app.post('/getNames', async (req,res) => {
     Pairs.find({}, async function (err, docs){
-        console.log(docs);
+        console.log(await docs);
         res.json({pairs:docs})
     })
 })
