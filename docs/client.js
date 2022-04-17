@@ -149,25 +149,27 @@ async function getSaved(){
     // loadingEl.style.display ='none';
     console.log(json);
     // var savedNames; 
-    for (let i = 0; i < json.pairs.length; i++) {
-        const loadName = document.createElement('button')
-        loadName.classList.add('loadName');
-        loadName.textContent = json.pairs[i].name;
-        loadName.addEventListener('click', async () =>{
-            options = {method:"POST",headers:{"Content-Type":"application/json"},body: JSON.stringify({name:loadName.textContent})};
-            // loadingEl.style.display ='block';
-            const response = await fetch(API_URL + '/getPairs', options);
-            const json = await response.json();
-            // loadingEl.style.display ='none';
-            console.log(json);
-            if(json.pairs != null){
-                makeNames(json.pairs);
-                makePairs(json.pairs);
-                nameInput.value = "";
-            }else{
-                alert("No pairs saved under this name.");
-            }
-        })
-        // savedNames[i] = json.pairs[i].name;
+    if(json.pairs != null){
+        for (let i = 0; i < json.pairs.length; i++) {
+            const loadName = document.createElement('button')
+            loadName.classList.add('loadName');
+            loadName.textContent = json.pairs[i].name;
+            loadName.addEventListener('click', async () =>{
+                options = {method:"POST",headers:{"Content-Type":"application/json"},body: JSON.stringify({name:loadName.textContent})};
+                // loadingEl.style.display ='block';
+                const response = await fetch(API_URL + '/getPairs', options);
+                const json = await response.json();
+                // loadingEl.style.display ='none';
+                console.log(json);
+                if(json.pairs != null){
+                    makeNames(json.pairs);
+                    makePairs(json.pairs);
+                    nameInput.value = "";
+                }else{
+                    alert("No pairs saved under this name.");
+                }
+            })
+            // savedNames[i] = json.pairs[i].name;
+        }
     }
 }
