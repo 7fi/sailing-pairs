@@ -41,3 +41,8 @@ app.post('/getNames', async (req,res) => {
         res.json({pairs:docs})
     })
 })
+app.post('/delPair', async (req,res) =>{
+    Pairs.deleteOne({name:req.body.name}, function (err,docs){
+        res.json({status:'sucess'})
+    })
+})

@@ -5,8 +5,8 @@
     --med:#555;
     --medLight: #666;
     --light:#777;
-    --highlight1:#24646a;
-    --highlight2:#44536b;
+    --highlight1:#222;
+    --highlight2:#222;
 }
 /* :root{
     --highlight:rgb(0, 0, 0);
@@ -50,21 +50,36 @@ button{
 #header{
     background-color: var(--dark);
     grid-area: header;
+    display: flex;
+    flex-direction: row;
 }
 #title{
     /* width: 100%; */
     padding: 20px;
     font-weight: 700;
     font-size: 2em;
-    position:absolute;
+    width: fit-content;
+    /* position:absolute; */
     text-align: center;
 }
 #modeToggle{
-    position:absolute;
-    top:4%;
+    /* position:absolute; */
+    /* top:4%; */
     background-color: var(--med);
     border-radius: 5px;
-    left: 50%;
+    width: 33px;
+    height: 33px;
+    padding: 5px;
+    margin: 22px 0px;
+    /* left: 50%; */
+}
+#resetPairs{
+    background-color: var(--med);
+    border-radius: 5px;
+    width: 33px;
+    height: 33px;
+    padding: 7px;
+    margin: 22px 10px;
 }
 #save, #loadText{
     /* position: absolute; */
@@ -73,6 +88,7 @@ button{
     /* z-index: 100; */
     background-color:var(--med);
     margin:5px;
+    padding:5px;
     border-radius: 5px;
     font-weight: 600;
     font-size: 1.1em;
@@ -104,7 +120,7 @@ button{
     top: -5px;
     position: relative;
     flex-direction: column;
-    background-color:var(--medLight);
+    background-color:var(--medDark);
     /* height: 300px; */
     border-radius: 5px;
 }
@@ -117,10 +133,28 @@ button{
 .loadName{
     font-weight: 600;
     font-size: 1.1em;
+    width: 100%;
+}
+.loadNameHolder{
     margin:3px;
+    /* width: 160px; */
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.loadDel{
+    /* width: 40px;
+    height: 40px; */
+    /* right: 10px; */
+}
+.loadDel:hover{
+    background-color: #00000044;
 }
 .loadName:hover{
     background-color: #00000044;
+}
+.selected{
+    background-color: #f00;
 }
 
 #left{
