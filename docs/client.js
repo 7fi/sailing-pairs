@@ -12,9 +12,6 @@ const resetPairs = document.getElementById('resetPairs');
 let lightMode = false;
 
 let mobile = window.matchMedia("only screen and (max-width: 1000px)").matches;
-if(mobile){
-    document.documentElement.style.setProperty('--medDark','#fff');
-}
 
 const API_URL = 'https://bhspairs.herokuapp.com';
 // const API_URL = 'http://localhost:3000';
@@ -281,8 +278,8 @@ modeToggle.addEventListener('click', () => {
         document.documentElement.style.setProperty('--medLight','#666');
         document.documentElement.style.setProperty('--light','#777');
         document.documentElement.style.setProperty('--highlight','#fff');
-        document.documentElement.style.setProperty('--highlight1','#24646a');
-        document.documentElement.style.setProperty('--highlight2','#44536b');
+        document.documentElement.style.setProperty('--highlight1','#222');
+        document.documentElement.style.setProperty('--highlight2','#222');
     }
     lightMode = !lightMode;
 })

@@ -99,6 +99,7 @@ button{
 }
 
 #loadSave{
+    grid-area: header;
     right:0;
     position: absolute;
     display: flex;
@@ -246,4 +247,43 @@ button{
     border-radius: 8px;
     padding:5px;
     align-self: flex-start;
+}
+
+@media only screen and (max-width:1000px){
+    #window{
+        grid-template-areas: "header header" "left left" "right right" "footer footer";
+        grid-template-rows: 8% auto auto 12%;
+        gap:0;
+    }
+    #placeholder{
+        flex-grow: 1;
+    }
+    
+    #loadSave{
+        /* position:absolute; */
+        margin: 25px 0 0 0;
+        grid-area:footer;
+    }
+    #left{
+        margin:10px;
+    }
+    #right{
+        margin:0 10px;
+    }
+    #title{
+        padding:5px;
+    }
+    #modeToggle, #resetPairs{
+        /* padding:5px; */
+        margin:5px;
+    }
+    #listContainer{
+        display: grid;
+        width: 97%;height: 100%;
+        grid-template-columns: 1fr 1fr;
+        gap:10px;
+    }
+    #right .name{
+        /* display: none; */width: 98%;
+    }
 }
