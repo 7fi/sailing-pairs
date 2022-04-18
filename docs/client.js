@@ -16,8 +16,8 @@ if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(naviga
     mobile = true;
 }
 
-// const API_URL = 'https://bhspairs.herokuapp.com';
-const API_URL = 'http://localhost:3000';
+const API_URL = 'https://bhspairs.herokuapp.com';
+// const API_URL = 'http://localhost:3000';
 
 const names = ['Adam', 'Alden','Ava','Barrett','Ben','Beto','Carter','Chris','Elliott','Evan','Fin','Gianna','Jaya','Jeffrey','Joseph','Lauren','Luke','Maura','Maxwell','Nick','Nolan W','Nolan L','Owen','Payton','Pearl','Ryan','Sabrina','Sharkey','Stone','Talia','Zane'];
 
@@ -38,29 +38,41 @@ function makePairs(inputPairs){
             nameEl.setAttribute("draggable", "true");
             
             if(!mobile){
-            //Event listeners for dragging
-            nameEl.addEventListener('dragstart', () =>{
-                nameEl.classList.add('dragging');
-            })
-            
-            nameEl.addEventListener('dragend', async () =>{
-                nameEl.classList.remove('dragging');
-                console.log("dragend: " , nameEl.textContent);
-            })
-            }else{
-                nameEl.addEventListener('click', async () => {
-                    nameEl.classList.add('selected');
+                //Event listeners for dragging
+                nameEl.addEventListener('dragstart', () =>{
+                    nameEl.classList.add('dragging');
                 })
+                
+                nameEl.addEventListener('dragend', async () =>{
+                    nameEl.classList.remove('dragging');
+                    console.log("dragend: " , nameEl.textContent);
+                })
+            }else{ //Mobile
+                nameEl.addEventListener('click', async () => {
+                    const tempSelected = document.querySelector('.selected');
+                    if(tempSelected != null || tempSelected != undefined){
+                        tempSelected.classList.remove('selected');
+                    }
+                    nameEl.classList.add('selected');
+                }) 
             }
+
             pairSlotEl.appendChild(nameEl);
         }
-    
+        pairSlotEl.addEventListener('click', () => {
+            const tempSelected = document.querySelector('.selected');
+            if(tempSelected != null || tempSelected != undefined){
+                pairSlotEl.append(tempSelected);
+                tempSelected.classList.remove('selected');
+            }
+        })
         pairSlotEl.addEventListener('dragover', e => {
             e.preventDefault();
-            
-            const draggingEl = document.querySelector('.dragging');
-            if(pairSlotEl.childElementCount < 1){
-                pairSlotEl.appendChild(draggingEl);
+            if(!mobile){
+                const draggingEl = document.querySelector('.dragging');
+                if(pairSlotEl.childElementCount < 1){
+                    pairSlotEl.appendChild(draggingEl);
+                }
             }
         })
         pairingHolder.appendChild(pairSlotEl);
@@ -82,47 +94,64 @@ function makeNames(inputPairs){
         tempNames.forEach(name => {
             const nameEl = document.createElement('div');
             nameEl.textContent = name;
+            
             nameEl.classList.add('name');
             nameEl.classList.add('draggable');
             nameEl.setAttribute("draggable", "true");
 
-            //Event listeners for dragging
-            nameEl.addEventListener('dragstart', () =>{
-                nameEl.classList.add('dragging');
-            })  
+            if(!mobile){
+                //Event listeners for dragging
+                nameEl.addEventListener('dragstart', () =>{
+                    nameEl.classList.add('dragging');
+                })  
 
-            nameEl.addEventListener('dragend', async () =>{
-                nameEl.classList.remove('dragging');
-                console.log("dragend: " , nameEl.textContent);
-            })
-
+                nameEl.addEventListener('dragend', async () =>{
+                    nameEl.classList.remove('dragging');
+                    console.log("dragend: " , nameEl.textContent);
+                })
+            }else{
+                nameEl.addEventListener('click', async () => {
+                    const tempSelected = document.querySelector('.selected');
+                    if(tempSelected != null || tempSelected != undefined){
+                        tempSelected.classList.remove('selected');
+                    }
+                    console.log(nameEl.classList.contains('selected'));
+                    if(nameEl.classList.contains('selected')){
+                        nameEl.classList.remove('selected');
+                    }else{
+                        nameEl.classList.add('selected');
+                    }
+                })
+            } 
             nameList.appendChild(nameEl);
         });
     }else{
         names.forEach(name => {
-            const nameEl = document.createElement('div');
+            const nameEl = document.createElement('button');
             nameEl.textContent = name;
             nameEl.classList.add('name');
             nameEl.classList.add('draggable');
             nameEl.setAttribute("draggable", "true");
 
-            //Event listeners for dragging
-            // nameEl.addEventListener('touchmove', (e) =>{
-            //     console.log("touched" + nameEl.textContent);
-            //     nameEl.classList.add('dragging');
-            //     let touchLocation = e.targetTouches[0];
-
-            //     nameEl.style.position = 'fixed';
-            //     nameEl.style.left = touchLocation.pageX + 'px';
-            //     nameEl.style.top = touchLocation.pageY + 'px';
-            // })  
-            nameEl.addEventListener('dragstart', () =>{
-                nameEl.classList.add('dragging');
-            })  
-            nameEl.addEventListener('dragend', async () =>{
-                nameEl.classList.remove('dragging');
-                console.log("dragend: " , nameEl.textContent);
-            })
+            if(!mobile){
+                nameEl.addEventListener('dragstart', () =>{
+                    nameEl.classList.add('dragging');
+                })  
+                nameEl.addEventListener('dragend', async () =>{
+                    nameEl.classList.remove('dragging');
+                    console.log("dragend: " , nameEl.textContent);
+                })
+            }else{
+                nameEl.addEventListener('click', async () => {
+                    const tempSelected = document.querySelector('.selected');
+                    if(tempSelected != null || tempSelected != undefined){
+                        tempSelected.classList.remove('selected');
+                        // tempSelected.classList.toggle('selected',true);
+                    }
+                    nameEl.classList.toggle('selected');
+                    // console.log());
+                })
+            }
 
             nameList.appendChild(nameEl);
         });
@@ -131,11 +160,20 @@ function makeNames(inputPairs){
 
 nameList.addEventListener('dragover', e => {
     e.preventDefault();
-    
-    const draggingEl = document.querySelector('.dragging');
-    nameList.appendChild(draggingEl);
+    if(!mobile){
+        const draggingEl = document.querySelector('.dragging');
+        nameList.appendChild(draggingEl);
+    }
 })
-
+nameList.addEventListener('click', e => {
+    e.preventDefault();
+    if(e.target == nameList && mobile){
+        const tempSelected = document.querySelector('.selected');
+        if(tempSelected != null || tempSelected != undefined){
+            tempSelected.classList.remove('selected');
+        }
+    }
+})
 saveButton.addEventListener('click', async () => {
     if(nameInput.value != ""){
         let pairs = {name:nameInput.value};

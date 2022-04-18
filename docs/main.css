@@ -154,7 +154,7 @@ button{
     background-color: #00000044;
 }
 .selected{
-    background-color: #f00;
+    background-color: #f00!important;
 }
 
 #left{
