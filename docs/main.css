@@ -73,13 +73,16 @@ button{
     margin: 22px 0px;
     /* left: 50%; */
 }
-#resetPairs{
+#resetPairs,#randomPairs{
     background-color: var(--med);
     border-radius: 5px;
     width: 33px;
     height: 33px;
     padding: 7px;
-    margin: 22px 10px;
+    margin: 22px 0px 0px 10px;
+}
+#randomPairs{
+    padding: 5px;
 }
 #save, #loadText{
     /* position: absolute; */
@@ -273,7 +276,7 @@ button{
     #title{
         padding:5px;
     }
-    #modeToggle, #resetPairs{
+    #modeToggle, #resetPairs, #randomPairs{
         /* padding:5px; */
         margin:5px;
     }

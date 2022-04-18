@@ -9,6 +9,7 @@ const saveButton = document.getElementById('save');
 // const loadButton = document.getElementById('load');
 const modeToggle = document.getElementById('modeToggle');
 const resetPairs = document.getElementById('resetPairs');
+const randomPairs = document.getElementById('randomPairs');
 let lightMode = false;
 
 let mobile = window.matchMedia("only screen and (max-width: 1000px)").matches;
@@ -17,6 +18,7 @@ const API_URL = 'https://bhspairs.herokuapp.com';
 // const API_URL = 'http://localhost:3000';
 
 const names = ['Adam', 'Alden','Ava','Barrett','Ben','Beto','Carter','Chris','Elliott','Evan','Fin','Gianna','Jaya','Jeffrey','Joseph','Lauren','Luke','Maura','Maxwell','Nick','Nolan W','Nolan L','Owen','Payton','Pearl','Ryan','Sabrina','Sharkey','Stone','Talia','Zane'];
+const pref = [true,true,true,true,true,true,true,false,false,true,false,true,false,false,false,true,false,true,false,false,true,true,true,false,false,true,false,false,true,false,true];
 
 makePairs();
 function makePairs(inputPairs){
@@ -67,7 +69,8 @@ function makePairs(inputPairs){
             e.preventDefault();
             if(!mobile){
                 const draggingEl = document.querySelector('.dragging');
-                if(pairSlotEl.childElementCount < 1){
+                // console.log(pref[names.indexOf(draggingEl.textContent)]);
+                if(pairSlotEl.childElementCount < 1){ //&& pref[names.indexOf(draggingEl.textContent)]
                     pairSlotEl.appendChild(draggingEl);
                 }
             }
@@ -287,4 +290,22 @@ resetPairs.addEventListener('click', () => {
     getSaved();
     makeNames();
     makePairs();
+})
+randomPairs.addEventListener('click', () => {
+    let shuffledNames = names.slice();
+    let currentIndex = shuffledNames.length,  randomIndex;
+
+    // While there remain elements to shuffle.
+    while (currentIndex != 0) {
+  
+      // Pick a remaining element.
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex--;
+  
+      // And swap it with the current element.
+      [shuffledNames[currentIndex], shuffledNames[randomIndex]] = [
+        shuffledNames[randomIndex], shuffledNames[currentIndex]];
+    }
+    makePairs(shuffledNames);
+    makeNames(shuffledNames);
 })
