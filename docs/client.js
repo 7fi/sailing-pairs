@@ -12,6 +12,9 @@ const resetPairs = document.getElementById('resetPairs');
 let lightMode = false;
 
 let mobile = window.matchMedia("only screen and (max-width: 1000px)").matches;
+if(mobile){
+    document.documentElement.style.setProperty('--medDark','#fff');
+}
 
 const API_URL = 'https://bhspairs.herokuapp.com';
 // const API_URL = 'http://localhost:3000';
