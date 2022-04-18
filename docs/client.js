@@ -11,10 +11,7 @@ const modeToggle = document.getElementById('modeToggle');
 const resetPairs = document.getElementById('resetPairs');
 let lightMode = false;
 
-let mobile = false;
-if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-    mobile = true;
-}
+let mobile = window.matchMedia("only screen and (max-width: 1000px)").matches;
 
 const API_URL = 'https://bhspairs.herokuapp.com';
 // const API_URL = 'http://localhost:3000';
