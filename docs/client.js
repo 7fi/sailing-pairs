@@ -1,63 +1,45 @@
+//Grab elements from dom
 const left = document.getElementById('left');
 const right = document.getElementById('right');
 const nameList = document.getElementById('listContainer');
 const pairingHolder = document.getElementById('pairingHolder');
 const loadHolder = document.getElementById('loadDropContainer');
+const loadingEl = document.getElementById('loadingEl');
 
 const nameInput = document.getElementById('nameInput');
 const saveButton = document.getElementById('save');
-// const loadButton = document.getElementById('load');
 const modeToggle = document.getElementById('modeToggle');
 const resetPairs = document.getElementById('resetPairs');
 const randomPairs = document.getElementById('randomPairs');
 let lightMode = false;
 
+//Check for mobile (only works on reload)
 let mobile = window.matchMedia("only screen and (max-width: 1000px)").matches;
 
-const API_URL = 'https://bhspairs.herokuapp.com';
-// const API_URL = 'http://localhost:3000';
+const API_URL = 'https://bhspairs.herokuapp.com'; // For deployment
+// const API_URL = 'http://localhost:3000'; // For development 
 
-const names = ['Adam', 'Alden','Ava','Barrett','Ben','Beto','Carter','Chris','Elliott','Evan','Fin','Gianna','Jaya','Jeffrey','Joseph','Lauren','Luke','Maura','Maxwell','Nick','Nolan W','Nolan L','Owen','Payton','Pearl','Ryan','Sabrina','Sharkey','Stone','Talia','Zane'];
-const pref = [true,true,true,true,true,true,true,false,false,true,false,true,false,false,false,true,false,true,false,false,true,true,true,false,false,true,false,false,true,false,true];
+// Name list and if they preffer skippering (unused)
+const names = ['Alden','Ava','Barrett','Ben','Beto','Carter','Chris','Elliott','Evan','Fin','Gianna','Jaya','Jeffrey','Joseph','Lauren','Luke','Maura','Maxwell','Nick','Nolan W','Nolan L','Owen','Payton','Pearl','Ryan','Sabrina','Sharkey','Stone','Talia','Zane'];
+const pref = [true,true,true,true,true,true,false,false,true,false,true,false,false,false,true,false,true,false,false,true,true,true,false,false,true,false,false,true,false,true];
 
 makePairs();
-function makePairs(inputPairs){
+function makePairs(inputPairs){ // Creates pair slots either empty or populated with inputPairs object
+    // deletes all previous pair slots
     while (pairingHolder.firstChild) {
         pairingHolder.removeChild(pairingHolder.firstChild);
     }
+    // Creates all pair slots
     for (let i = 0; i < 30; i++) {
         const pairSlotEl = document.createElement('div');
         pairSlotEl.classList.add('pairSlot');
 
+        //If input pairing supplied then populate with new name
         if(inputPairs != undefined && inputPairs[i] != ""){
-            const nameEl = document.createElement('div');
-            nameEl.textContent = inputPairs[i];
-            nameEl.classList.add('name');
-            nameEl.classList.add('draggable');
-            nameEl.setAttribute("draggable", "true");
-            
-            if(!mobile){
-                //Event listeners for dragging
-                nameEl.addEventListener('dragstart', () =>{
-                    nameEl.classList.add('dragging');
-                })
-                
-                nameEl.addEventListener('dragend', async () =>{
-                    nameEl.classList.remove('dragging');
-                    console.log("dragend: " , nameEl.textContent);
-                })
-            }else{ //Mobile
-                nameEl.addEventListener('click', async () => {
-                    const tempSelected = document.querySelector('.selected');
-                    if(tempSelected != null || tempSelected != undefined){
-                        tempSelected.classList.remove('selected');
-                    }
-                    nameEl.classList.add('selected');
-                }) 
-            }
-
+            const nameEl = makeName(inputPairs[i]);
             pairSlotEl.appendChild(nameEl);
         }
+        //add event listeners
         pairSlotEl.addEventListener('click', () => {
             const tempSelected = document.querySelector('.selected');
             if(tempSelected != null || tempSelected != undefined){
@@ -79,10 +61,11 @@ function makePairs(inputPairs){
     }
 }
 makeNames();
-function makeNames(inputPairs){
-    while (nameList.firstChild) {
+function makeNames(inputPairs){ // makes name list without the input parings 
+    while (nameList.firstChild) { // removed all previous names
         nameList.removeChild(nameList.firstChild);
     }
+    // if input pairs supplied then dont create those names
     if(inputPairs != undefined){
         let tempNames = names.slice();
         for (let i = 0; i < 30; i++) {
@@ -92,79 +75,55 @@ function makeNames(inputPairs){
             }
         }
         tempNames.forEach(name => {
-            const nameEl = document.createElement('div');
-            nameEl.textContent = name;
-            
-            nameEl.classList.add('name');
-            nameEl.classList.add('draggable');
-            nameEl.setAttribute("draggable", "true");
-
-            if(!mobile){
-                //Event listeners for dragging
-                nameEl.addEventListener('dragstart', () =>{
-                    nameEl.classList.add('dragging');
-                })  
-
-                nameEl.addEventListener('dragend', async () =>{
-                    nameEl.classList.remove('dragging');
-                    console.log("dragend: " , nameEl.textContent);
-                })
-            }else{
-                nameEl.addEventListener('click', async () => {
-                    const tempSelected = document.querySelector('.selected');
-                    if(tempSelected != null || tempSelected != undefined){
-                        tempSelected.classList.remove('selected');
-                    }
-                    console.log(nameEl.classList.contains('selected'));
-                    if(nameEl.classList.contains('selected')){
-                        nameEl.classList.remove('selected');
-                    }else{
-                        nameEl.classList.add('selected');
-                    }
-                })
-            } 
+            const nameEl = makeName(name);
             nameList.appendChild(nameEl);
         });
-    }else{
+    }else{ // otherwise make all names
         names.forEach(name => {
-            const nameEl = document.createElement('button');
-            nameEl.textContent = name;
-            nameEl.classList.add('name');
-            nameEl.classList.add('draggable');
-            nameEl.setAttribute("draggable", "true");
-
-            if(!mobile){
-                nameEl.addEventListener('dragstart', () =>{
-                    nameEl.classList.add('dragging');
-                })  
-                nameEl.addEventListener('dragend', async () =>{
-                    nameEl.classList.remove('dragging');
-                    console.log("dragend: " , nameEl.textContent);
-                })
-            }else{
-                nameEl.addEventListener('click', async () => {
-                    const tempSelected = document.querySelector('.selected');
-                    if(tempSelected != null || tempSelected != undefined){
-                        tempSelected.classList.remove('selected');
-                        // tempSelected.classList.toggle('selected',true);
-                    }
-                    nameEl.classList.toggle('selected');
-                    // console.log();
-                })
-            }
-
+            const nameEl = makeName(name);
             nameList.appendChild(nameEl);
         });
     }
 }
+function makeName(name){ // creates single name 
+    const nameEl = document.createElement('button');
+    nameEl.textContent = name;
+    nameEl.classList.add('name');
+    nameEl.classList.add('draggable');
+    nameEl.setAttribute("draggable", "true");
+    
+    if(!mobile){ // if on desktop
+        //Event listeners for dragging
+        nameEl.addEventListener('dragstart', () =>{
+            nameEl.classList.add('dragging');
+        })
+        
+        nameEl.addEventListener('dragend', async () =>{
+            nameEl.classList.remove('dragging');
+            console.log("dragend: " , nameEl.textContent);
+        })
+    }else{ // otherwise mobile
+        nameEl.addEventListener('click', async () => {
+            const tempSelected = document.querySelector('.selected');
+            if(tempSelected != null || tempSelected != undefined){
+                tempSelected.classList.remove('selected');
+            }
+            nameEl.classList.add('selected');
+        }) 
+    }
+    return nameEl;
+}
 
-nameList.addEventListener('dragover', e => {
+// dragging on desktop
+nameList.addEventListener('dragover', e => { 
     e.preventDefault();
     if(!mobile){
         const draggingEl = document.querySelector('.dragging');
         nameList.appendChild(draggingEl);
     }
 })
+
+// deselecting on mobile
 nameList.addEventListener('click', e => {
     e.preventDefault();
     if(e.target == nameList && mobile){
@@ -174,6 +133,8 @@ nameList.addEventListener('click', e => {
         }
     }
 })
+
+//Saving pairings
 saveButton.addEventListener('click', async () => {
     if(nameInput.value != ""){
         let pairs = {name:nameInput.value};
@@ -182,39 +143,41 @@ saveButton.addEventListener('click', async () => {
         }
         console.log(pairs);
         nameInput.value = "";
-        // nameInput.focus();
 
+        //send to server
         options = {method:"POST",headers:{"Content-Type":"application/json"},body: JSON.stringify(pairs)};
-        // loadingEl.style.display ='block';
+        loadingEl.style.display ='block';
         const response = await fetch(API_URL + '/pairs', options);
         const json = await response.json();
-        // loadingEl.style.display ='none';
+        loadingEl.style.display ='none';
         console.log(json);
         
-        // location.reload();
+        //reset
         makePairs();
         makeNames();
         getSaved();
-        // makePairs(json.pairs);
     }else{
         alert("Please Enter Your Name");
     }
 })
+
 getSaved();
+//Gets list of saved paring names from server
 async function getSaved(){
+    //Gets names from server
     options = {method:"POST",headers:{"Content-Type":"application/json"},body: JSON.stringify({})};
-    // loadingEl.style.display ='block';
+    loadingEl.style.display ='block';
     const response = await fetch(API_URL + '/getNames', options);
     const json = await response.json();
-    // loadingEl.style.display ='none';
+    loadingEl.style.display ='none';
     console.log(json);
-    // let savedNames; 
-
     
+    // if names exist create buttons for them
     if(json.pairs != null){
-        while(loadHolder.firstChild){
+        while(loadHolder.firstChild){ // remove old buttons
             loadHolder.removeChild(loadHolder.firstChild);
         }
+        // loop through names and create button
         for (let i = 0; i < json.pairs.length; i++) {
             const loadNameHolder = document.createElement('div');
             loadNameHolder.classList.add('loadNameHolder');
@@ -223,13 +186,16 @@ async function getSaved(){
             loadName.classList.add('loadName');
             loadName.textContent = json.pairs[i].name;
             loadName.addEventListener('click', async () =>{
+                //on click get pairings from server
                 options = {method:"POST",headers:{"Content-Type":"application/json"},body: JSON.stringify({name:loadName.textContent})};
-                // loadingEl.style.display ='block';
+                loadingEl.style.display ='block';
                 const response = await fetch(API_URL + '/getPairs', options);
                 const json = await response.json();
-                // loadingEl.style.display ='none';
+                loadingEl.style.display ='none';
                 console.log(json);
+
                 getSaved();
+                // if pairs exist create them
                 if(json.pairs != null){
                     makeNames(json.pairs);
                     makePairs(json.pairs);
@@ -240,28 +206,31 @@ async function getSaved(){
                     alert("No pairs saved under this name.");
                 }
             })
+
+            //Delete button
             const loadDel = document.createElement('button');
             loadDel.classList.add('loadDel');
             const loadDelIcon = document.createElement('i');
             loadDelIcon.classList.add('gg-trash');
             loadDel.appendChild(loadDelIcon);
             loadDel.addEventListener('click', async () =>{
+                //send deletion request to server
                 options = {method:"POST",headers:{"Content-Type":"application/json"},body: JSON.stringify({name:loadName.textContent})};
-                // loadingEl.style.display ='block';
+                loadingEl.style.display ='block';
                 const response = await fetch(API_URL + '/delPair', options);
                 const json = await response.json();
-                // loadingEl.style.display ='none';
+                loadingEl.style.display ='none';
                 console.log(json);
                 getSaved();
             });
             loadNameHolder.appendChild(loadName);
             loadNameHolder.appendChild(loadDel);
-            // savedNames[i] = json.pairs[i].name;
             loadHolder.appendChild(loadNameHolder);
         }
     }
 }
 
+// Toggle between light and dark mode
 modeToggle.addEventListener('click', () => {
     if(!lightMode){
         modeToggle.children[0].classList.replace('gg-sun','gg-moon');
@@ -286,25 +255,24 @@ modeToggle.addEventListener('click', () => {
     }
     lightMode = !lightMode;
 })
+
+//Reset pairs button
 resetPairs.addEventListener('click', () => {
     getSaved();
     makeNames();
     makePairs();
 })
+
+// Randomize pairs button
 randomPairs.addEventListener('click', () => {
     let shuffledNames = names.slice();
     let currentIndex = shuffledNames.length,  randomIndex;
 
-    // While there remain elements to shuffle.
     while (currentIndex != 0) {
-  
-      // Pick a remaining element.
       randomIndex = Math.floor(Math.random() * currentIndex);
       currentIndex--;
   
-      // And swap it with the current element.
-      [shuffledNames[currentIndex], shuffledNames[randomIndex]] = [
-        shuffledNames[randomIndex], shuffledNames[currentIndex]];
+      [shuffledNames[currentIndex], shuffledNames[randomIndex]] = [shuffledNames[randomIndex], shuffledNames[currentIndex]];
     }
     makePairs(shuffledNames);
     makeNames(shuffledNames);

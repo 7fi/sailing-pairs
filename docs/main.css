@@ -1,3 +1,4 @@
+/* Dark mode */
 :root{
     --highlight:#fff;
     --dark:#333;
@@ -8,6 +9,7 @@
     --highlight1:#222;
     --highlight2:#222;
 }
+/* Light mode */
 /* :root{
     --highlight:rgb(0, 0, 0);
     --dark:#eaeaea;
@@ -43,9 +45,6 @@ button{
     background-color: var(--medDark);
     overflow-x:hidden;
 }
-/* .dragging{
-    position:absolute;
-} */
 
 #header{
     background-color: var(--dark);
@@ -125,7 +124,6 @@ button{
     position: relative;
     flex-direction: column;
     background-color:var(--medDark);
-    /* height: 300px; */
     border-radius: 5px;
 }
 #loadText:hover + #loadDropContainer{
@@ -141,15 +139,9 @@ button{
 }
 .loadNameHolder{
     margin:3px;
-    /* width: 160px; */
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-}
-.loadDel{
-    /* width: 40px;
-    height: 40px; */
-    /* right: 10px; */
 }
 .loadDel:hover{
     background-color: #00000044;
@@ -169,15 +161,10 @@ button{
 #right{
     grid-area: right;
     margin: 0 20px 20px 0;
-    /* display:grid; */
-    /* grid-template-columns: 1fr 1fr; */
-    /* align-items: stretch; */
 }
 
 #listContainer{
-    /* margin: 2%; */
     background-color: var(--dark);
-    /* width: 96%; */
     height: calc(100% - 20px);
     border-radius: 20px;
     overflow: auto;
@@ -188,19 +175,15 @@ button{
     display:grid;
     width: 100%;height: 100%;
     grid-template-columns: 1fr 1fr;
-    /* align-items: stretch; */
     grid-template-rows: repeat(15, 47px);
     gap:10px;
-    /* justify-content: start; */
-    /* margin:10px; */
 }
 .pairSlot{
-    /* height: calc(100% / 15); */
     background-color: var(--dark);
     border-radius: 10px;
     display: grid;
     align-items: stretch;
-/* align-self: flex-start; */}
+}
 .pairSlot:nth-child(2n - 1)::before{
     content:"Skipper";
     color:var(--highlight2);
@@ -218,7 +201,6 @@ button{
 
 .pairSlot::before{
     position:absolute;
-    /* z-index: -1; */
     font-weight: 600;
     text-align: center;
     padding: 15px;
@@ -227,7 +209,6 @@ button{
 #right .name{
     display:inline-block;
     background-color:var(--med);
-    /* width: 50%; */
     width:calc(50% - 20px);
     text-align: center;
     font-weight: 600;
@@ -240,8 +221,6 @@ button{
 .pairSlot .name{
     display:inline-block;
     background-color:var(--med);
-    /* width:calc(50% - 20px); */
-    /* height:50px; */
     z-index: 1;
     text-align: center;
     font-weight: 600;
@@ -252,6 +231,20 @@ button{
     align-self: flex-start;
 }
 
+#loadingEl{
+    position:absolute;
+    left:45%;
+    top:45%;
+    background:var(--highlight);
+    animation: loadingAnim 2s infinite;
+    animation-timing-function: linear;
+}
+@keyframes loadingAnim {
+    from{transform: rotate(0deg);}
+    to{transform: rotate(360deg);}
+}
+
+/*For moblie stuffs*/
 @media only screen and (max-width:1000px){
     #window{
         grid-template-areas: "header header" "left left" "right right" "footer footer";
@@ -263,7 +256,6 @@ button{
     }
     
     #loadSave{
-        /* position:absolute; */
         margin: 25px 0 0 0;
         grid-area:footer;
     }
@@ -277,7 +269,6 @@ button{
         padding:5px;
     }
     #modeToggle, #resetPairs, #randomPairs{
-        /* padding:5px; */
         margin:5px;
     }
     #listContainer{
@@ -287,6 +278,6 @@ button{
         gap:10px;
     }
     #right .name{
-        /* display: none; */width: 98%;
+        width: 98%;
     }
 }
