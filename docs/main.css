@@ -271,6 +271,13 @@ button{
     #modeToggle, #resetPairs, #randomPairs{
         margin:5px;
     }
+    #loadSave{
+        flex-direction: column;
+        width: 100%!important;
+    }
+    #loadText{
+        right: 0;
+    }
     #listContainer{
         display: grid;
         width: 97%;height: 100%;
