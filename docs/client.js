@@ -149,7 +149,7 @@ function makeNames(inputPairs){
                         // tempSelected.classList.toggle('selected',true);
                     }
                     nameEl.classList.toggle('selected');
-                    // console.log());
+                    // console.log();
                 })
             }
 
