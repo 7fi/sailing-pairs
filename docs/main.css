@@ -243,6 +243,13 @@ button{
     from{transform: rotate(0deg);}
     to{transform: rotate(360deg);}
 }
+#invLink{
+    top:0;
+    right:0;
+    left:0;
+    bottom:0;
+    position: absolute;
+}
 
 /*For moblie stuffs*/
 @media only screen and (max-width:1000px){
@@ -277,6 +284,7 @@ button{
     }
     #loadText{
         right: 0;
+        width: auto;
     }
     #listContainer{
         display: grid;

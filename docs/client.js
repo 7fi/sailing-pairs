@@ -208,24 +208,26 @@ async function getSaved(){
             })
 
             //Delete button
-            const loadDel = document.createElement('button');
-            loadDel.classList.add('loadDel');
-            const loadDelIcon = document.createElement('i');
-            loadDelIcon.classList.add('gg-trash');
-            loadDel.appendChild(loadDelIcon);
-            loadDel.addEventListener('click', async () =>{
-                //send deletion request to server
-                options = {method:"POST",headers:{"Content-Type":"application/json"},body: JSON.stringify({name:loadName.textContent})};
-                loadingEl.style.display ='block';
-                const response = await fetch(API_URL + '/delPair', options);
-                const json = await response.json();
-                loadingEl.style.display ='none';
-                console.log(json);
-                getSaved();
-            });
-            loadNameHolder.appendChild(loadName);
-            loadNameHolder.appendChild(loadDel);
-            loadHolder.appendChild(loadNameHolder);
+            if(!mobile){
+                const loadDel = document.createElement('button');
+                loadDel.classList.add('loadDel');
+                const loadDelIcon = document.createElement('i');
+                loadDelIcon.classList.add('gg-trash');
+                loadDel.appendChild(loadDelIcon);
+                loadDel.addEventListener('click', async () =>{
+                    //send deletion request to server
+                    options = {method:"POST",headers:{"Content-Type":"application/json"},body: JSON.stringify({name:loadName.textContent})};
+                    loadingEl.style.display ='block';
+                    const response = await fetch(API_URL + '/delPair', options);
+                    const json = await response.json();
+                    loadingEl.style.display ='none';
+                    console.log(json);
+                    getSaved();
+                });
+                loadNameHolder.appendChild(loadName);
+                loadNameHolder.appendChild(loadDel);
+                loadHolder.appendChild(loadNameHolder);
+            }
         }
     }
 }
