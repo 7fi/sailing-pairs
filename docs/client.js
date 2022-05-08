@@ -11,7 +11,13 @@ const saveButton = document.getElementById('save');
 const modeToggle = document.getElementById('modeToggle');
 const resetPairs = document.getElementById('resetPairs');
 const randomPairs = document.getElementById('randomPairs');
+const betoEl = document.getElementById('betoEl');
 let lightMode = false;
+
+let betoClicks = 0;
+let betoQuotes = ['Hi',"I'm bad at sailing!"];
+let sabrinaClicks = 0;
+let elliottClicks = 0;
 
 //Check for mobile (only works on reload)
 let mobile = window.matchMedia("only screen and (max-width: 1000px)").matches;
@@ -20,8 +26,8 @@ const API_URL = 'https://bhspairs.herokuapp.com'; // For deployment
 // const API_URL = 'http://localhost:3000'; // For development 
 
 // Name list and if they preffer skippering (unused)
-const names = ['Alden','Ava','Barrett','Ben','Beto','Carter','Chris','Elliott','Evan','Fin','Gianna','Jaya','Jeffrey','Joseph','Lauren','Luke','Maura','Maxwell','Nick','Nolan W','Nolan L','Owen','Payton','Pearl','Ryan','Sabrina','Sharkey','Stone','Talia','Zane'];
-const pref = [true,true,true,true,true,true,false,false,true,false,true,false,false,false,true,false,true,false,false,true,true,true,false,false,true,false,false,true,false,true];
+const names = ['Adam','Alden','Ava','Barrett','Ben','Beto','Carter','Chris','Elliott','Evan','Fin','Gianna','Jaya','Jeffrey','Joseph','Lauren','Logan','Luke','Maura','Maxwell','Nick','Nolan W','Nolan L','Owen','Payton','Pearl','Ryan','Sabrina','Sharkey','Stone','Talia','Zane'];
+const pref = [true, true,true,true,true,true,true,false,false,true,false,true,false,false,false,true,false,true, false,false,false,true,true,true,false,false,true,false,false,true,false,true];
 
 makePairs();
 function makePairs(inputPairs){ // Creates pair slots either empty or populated with inputPairs object
@@ -111,6 +117,41 @@ function makeName(name){ // creates single name
             nameEl.classList.add('selected');
         }) 
     }
+
+    if(name == 'Beto'){
+        nameEl.addEventListener('click', ()=>{
+            betoClicks++;
+            if(betoClicks == 10){
+                betoClicks = 0;
+                console.log('Beto secret');
+                console.log(betoQuotes[Math.round(Math.random(betoQuotes.length - 1))]);
+                // betoEl.before = betoQuotes[Math.round(Math.random(betoQuotes.length - 1))];
+                // betoEl.target.setAttribute('data-before', betoQuotes[Math.round(Math.random(betoQuotes.length - 1))]);
+                betoEl.style.display = 'block';
+            }
+        })
+    }
+    if(name == 'Sabrina'){
+        nameEl.addEventListener('click', ()=>{
+            betoClicks++;
+            if(betoClicks == 10){
+                betoClicks = 0;
+                console.log('Sabrina secret');
+                location.href = 'https://smachef.wordpress.com'
+            }
+        })
+    }
+    if(name == 'Elliott'){
+        nameEl.addEventListener('click', ()=>{
+            betoClicks++;
+            if(betoClicks == 10){
+                betoClicks = 0;
+                console.log('Elliott secret');
+                location.href = ''
+            }
+        })
+    }
+
     return nameEl;
 }
 
