@@ -36,7 +36,7 @@ function makePairs(inputPairs){ // Creates pair slots either empty or populated 
         pairingHolder.removeChild(pairingHolder.firstChild);
     }
     // Creates all pair slots
-    for (let i = 0; i < 30; i++) {
+    for (let i = 0; i < 32; i++) {
         const pairSlotEl = document.createElement('div');
         pairSlotEl.classList.add('pairSlot');
 
@@ -74,7 +74,7 @@ function makeNames(inputPairs){ // makes name list without the input parings
     // if input pairs supplied then dont create those names
     if(inputPairs != undefined){
         let tempNames = names.slice();
-        for (let i = 0; i < 30; i++) {
+        for (let i = 0; i < 32; i++) {
             if(inputPairs[i] != ''){
                 tempNames.splice(tempNames.indexOf(inputPairs[i]), 1);
                 console.log(tempNames);
@@ -147,7 +147,7 @@ function makeName(name){ // creates single name
             if(betoClicks == 10){
                 betoClicks = 0;
                 console.log('Elliott secret');
-                location.href = ''
+                location.href = 'https://exoplanetresearch.netlify.app/'
             }
         })
     }
@@ -179,7 +179,7 @@ nameList.addEventListener('click', e => {
 saveButton.addEventListener('click', async () => {
     if(nameInput.value != ""){
         let pairs = {name:nameInput.value};
-        for (let i = 0; i < 30; i++) {
+        for (let i = 0; i < 32; i++) {
             pairs[i] = pairingHolder.children[i].textContent;
         }
         console.log(pairs);
