@@ -12,7 +12,7 @@ const modeToggle = document.getElementById('modeToggle');
 const resetPairs = document.getElementById('resetPairs');
 const randomPairs = document.getElementById('randomPairs');
 const betoEl = document.getElementById('betoEl');
-let lightMode = false;
+let lightMode = true;
 
 let betoClicks = 0;
 let betoQuotes = ['Hi',"I'm bad at sailing!"];

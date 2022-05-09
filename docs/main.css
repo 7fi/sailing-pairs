@@ -1,5 +1,5 @@
 /* Dark mode */
-:root{
+/* :root{
     --highlight:#fff;
     --dark:#333;
     --medDark:#444;
@@ -8,9 +8,9 @@
     --light:#777;
     --highlight1:#222;
     --highlight2:#222;
-}
+} */
 /* Light mode */
-/* :root{
+:root{
     --highlight:rgb(0, 0, 0);
     --dark:#eaeaea;
     --medDark:#fff;
@@ -19,7 +19,7 @@
     --light:#b3b3b3;
     --highlight1:#12A5B1;
     --highlight2:#203960;
-} */
+}
 
 body{
     font-family: 'Fira sans', sans-serif;
@@ -176,7 +176,7 @@ button{
     width: 100%;height: 100%;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: repeat(15, 47px);
-    gap:10px;
+    gap:7px;
 }
 .pairSlot{
     background-color: var(--dark);
