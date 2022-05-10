@@ -29,6 +29,14 @@ const API_URL = 'https://bhspairs.herokuapp.com'; // For deployment
 const names = ['Adam','Alden','Ava','Barrett','Ben','Beto','Carter','Chris','Elliott','Evan','Fin','Gianna','Jaya','Jeffrey','Joseph','Lauren','Logan','Luke','Maura','Maxwell','Nick','Nolan W','Nolan L','Owen','Payton','Pearl','Ryan','Sabrina','Sharkey','Stone','Talia','Zane'];
 const pref = [true, true,true,true,true,true,true,false,false,true,false,true,false,false,false,true,false,true, false,false,false,true,true,true,false,false,true,false,false,true,false,true];
 
+function load(){
+    let myBool = (decodeURIComponent(document.cookie).split('=')[1] === 'true');
+    console.log("Lightmode is wrong:", myBool != lightMode)
+    if(myBool != lightMode){
+        switchMode();
+    }
+}
+
 makePairs();
 function makePairs(inputPairs){ // Creates pair slots either empty or populated with inputPairs object
     // deletes all previous pair slots
@@ -275,6 +283,10 @@ async function getSaved(){
 
 // Toggle between light and dark mode
 modeToggle.addEventListener('click', () => {
+    switchMode();
+})
+
+function switchMode(){
     if(!lightMode){
         modeToggle.children[0].classList.replace('gg-sun','gg-moon');
         document.documentElement.style.setProperty('--dark','#eaeaea');
@@ -297,7 +309,9 @@ modeToggle.addEventListener('click', () => {
         document.documentElement.style.setProperty('--highlight2','#222');
     }
     lightMode = !lightMode;
-})
+    document.cookie = ("lightMode=" + lightMode + "; path=/");
+    console.log(lightMode)
+}
 
 //Reset pairs button
 resetPairs.addEventListener('click', () => {
