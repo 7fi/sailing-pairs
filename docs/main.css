@@ -87,7 +87,7 @@ button{
 #squareMode{
     padding: 8px;
 }
-#save, #loadText{
+#save, #loadText, #saveLocal{
     /* position: absolute; */
     /* right: 0; */
     /* top:50%; */
@@ -109,7 +109,8 @@ button{
     /* top: 35%; */
     z-index: 10;
     display: grid;
-    grid-template-columns: (1fr, 1fr);
+    grid-template-areas:  "left-load right-load" "name name" "left-bottom right-bottom";
+    gap:5px;
     background-color: var(--dark);
     box-shadow: #000 3px 3px 10px;
     padding: 15px;
@@ -129,12 +130,13 @@ button{
     flex-direction: column;
 }
 #nameInput{
+    grid-area: name;
     background-color: var(--med);
     border-radius: var(--radius);
-    margin:5px;
+    /* margin:0; */
     padding:3px;
 }
-#loadDropContainer{
+#loadDropContainer, #localSaved{
     display: flex;
     top: -5px;
     position: relative;

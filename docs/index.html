@@ -25,16 +25,23 @@
             <button id="randomPairs" title="Randomize Pairs" type="button"><i class="gg-dice-5"></i></button>
             <button id="squareMode" title="Become square" type="button"><i class="gg-shape-square"></i></button>
         </div>
-        <div id="loadSaveContainer" style="display:none; place-items:center; position:fixed;top:0; left:0; right:0; bottom:0; background-color:#00000055;">
+        <div id="loadSaveContainer" style="z-index:9; display:none; place-items:center; position:fixed;top:0; left:0; right:0; bottom:0; background-color:#00000055;">
             <div id="loadSaveWindow">
+                <div id="localSaved">
+                </div>
                 <div id="savedNames">
                     <div id="loadDropContainer">
                     </div>
                 </div>
+                <input type="text" id="nameInput" placeholder="Enter Name">
+                <div id="saveLeft">
+                    <div id="saveHolder">
+                        <button id="saveLocal">Save Pairs Locally</button>
+                    </div>
+                </div>
                 <div id="saveRight">
                     <div id="saveHolder">
-                        <input type="text" id="nameInput" placeholder="Enter Name">
-                        <button id="save">Save Pairs</button>
+                        <button id="save">Save Pairs Publicly</button>
                     </div>
                 </div>
             </div>

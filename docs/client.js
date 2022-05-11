@@ -7,9 +7,11 @@ const loadHolder = document.getElementById('loadDropContainer');
 const loadingEl = document.getElementById('loadingEl');
 const loadText = document.getElementById('loadText');
 const loadSaveContainer = document.getElementById('loadSaveContainer');
+const localSaved = document.getElementById('localSaved');
 
 const nameInput = document.getElementById('nameInput');
 const saveButton = document.getElementById('save');
+const saveButtonLocal = document.getElementById('saveLocal');
 const modeToggle = document.getElementById('modeToggle');
 const resetPairs = document.getElementById('resetPairs');
 const randomPairs = document.getElementById('randomPairs');
@@ -220,6 +222,33 @@ saveButton.addEventListener('click', async () => {
         alert("Please Enter Your Name");
     }
 })
+saveButtonLocal.addEventListener('click', () => {
+    if(nameInput.value != ""){
+        let pairs = {name:nameInput.value};
+        for (let i = 0; i < names.length; i++) {
+            pairs[i] = pairingHolder.children[i].textContent;
+        }
+        console.log(pairs);
+        nameInput.value = "";
+
+        let oldpairs = JSON.parse(window.localStorage.getItem('pairs'));
+        if(oldpairs != undefined & oldpairs != null){
+            oldpairs.push(pairs);
+        }else{
+            oldpairs = [];
+            oldpairs.push(pairs);
+        }
+
+        window.localStorage.setItem('pairs', JSON.stringify(oldpairs));
+        
+        //reset
+        makePairs();
+        makeNames();
+        getSaved();
+    }else{
+        alert("Please Enter Your Name");
+    }
+})
 
 getSaved();
 //Gets list of saved paring names from server
@@ -290,6 +319,56 @@ async function getSaved(){
             }
         }
     }
+
+    let curPairs = JSON.parse(window.localStorage.getItem('pairs'));
+    console.log(curPairs);
+    if(curPairs != null){
+        while(localSaved.firstChild){ // remove old buttons
+            localSaved.removeChild(localSaved.firstChild);
+        }
+        // loop through names and create button
+        for (let i = 0; i < curPairs.length; i++) {
+            const loadNameHolder = document.createElement('div');
+            loadNameHolder.classList.add('loadNameHolder');
+
+            const loadName = document.createElement('button');
+            loadName.classList.add('loadName');
+            loadName.textContent = curPairs[i].name;
+            loadName.addEventListener('click', async () =>{
+
+                getSaved();
+                // if pairs exist create them
+                if(curPairs[i] != null){
+                    makeNames(curPairs[i]);
+                    makePairs(curPairs[i]);
+                    nameInput.value = "";
+                }else{
+                    makeNames();
+                    makePairs();
+                    alert("No pairs saved under this name.");
+                }
+            })
+
+            //Delete button
+            if(!mobile){
+                const loadDel = document.createElement('button');
+                loadDel.classList.add('loadDel');
+                const loadDelIcon = document.createElement('i');
+                loadDelIcon.classList.add('gg-trash');
+                loadDel.appendChild(loadDelIcon);
+                loadDel.addEventListener('click', async () =>{
+                    curPairs.splice(i,1);
+                    console.log(curPairs);
+                    window.localStorage.setItem('pairs', JSON.stringify(curPairs));
+                    getSaved();
+                });
+                loadNameHolder.appendChild(loadName);
+                loadNameHolder.appendChild(loadDel);
+                localSaved.appendChild(loadNameHolder);
+            }
+        }
+    }
+
 }
 
 loadText.addEventListener('click', () =>{
@@ -299,8 +378,10 @@ loadText.addEventListener('click', () =>{
         loadSaveContainer.style.display = 'grid';
     }
 })
-loadSaveContainer.addEventListener('click', () => {
-    loadSaveContainer.style.display = 'none';
+loadSaveContainer.addEventListener('click', (e) => {
+    if(e.target == loadSaveContainer){
+        loadSaveContainer.style.display = 'none';
+    }
 })
 
 // Toggle between light and dark mode
