@@ -7,6 +7,7 @@ const cors = require('cors');
 
 //Import pairs datastructure model
 const Pairs = require('./models/Pairs');
+const PairsBackup = require('./models/PairsBackup');
 
 // enable express and cors
 const app = express();
@@ -29,7 +30,9 @@ app.post('/pairs', async (req,res) => {
     var pairs = req.body;
     if(req.body.name.length < 30){
         const saverPairs = new Pairs(pairs);
+        const saverPairs2 = new PairsBackup(pairs);
         await saverPairs.save();
+        await saverPairs2.save();
     }
 
     res.json({status:'sucess', pairs: req.body})

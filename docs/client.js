@@ -313,10 +313,10 @@ async function getSaved(){
                     console.log(json);
                     getSaved();
                 });
-                loadNameHolder.appendChild(loadName);
                 loadNameHolder.appendChild(loadDel);
-                loadHolder.appendChild(loadNameHolder);
             }
+            loadNameHolder.appendChild(loadName);
+            loadHolder.appendChild(loadNameHolder);
         }
     }
 
@@ -362,10 +362,10 @@ async function getSaved(){
                     window.localStorage.setItem('pairs', JSON.stringify(curPairs));
                     getSaved();
                 });
-                loadNameHolder.appendChild(loadName);
                 loadNameHolder.appendChild(loadDel);
-                localSaved.appendChild(loadNameHolder);
             }
+            loadNameHolder.appendChild(loadName);
+            localSaved.appendChild(loadNameHolder);
         }
     }
 
