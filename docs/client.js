@@ -5,6 +5,8 @@ const nameList = document.getElementById('listContainer');
 const pairingHolder = document.getElementById('pairingHolder');
 const loadHolder = document.getElementById('loadDropContainer');
 const loadingEl = document.getElementById('loadingEl');
+const loadText = document.getElementById('loadText');
+const loadSaveContainer = document.getElementById('loadSaveContainer');
 
 const nameInput = document.getElementById('nameInput');
 const saveButton = document.getElementById('save');
@@ -289,6 +291,17 @@ async function getSaved(){
         }
     }
 }
+
+loadText.addEventListener('click', () =>{
+    if(loadText.style.display == 'grid'){
+        loadSaveContainer.style.display = 'none';
+    }else{
+        loadSaveContainer.style.display = 'grid';
+    }
+})
+loadSaveContainer.addEventListener('click', () => {
+    loadSaveContainer.style.display = 'none';
+})
 
 // Toggle between light and dark mode
 modeToggle.addEventListener('click', () => {

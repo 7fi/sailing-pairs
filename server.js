@@ -27,8 +27,10 @@ app.post('/pairs', async (req,res) => {
     console.log(req.body);
 
     var pairs = req.body;
-    const saverPairs = new Pairs(pairs);
-    await saverPairs.save();
+    if(req.body.name.length < 30){
+        const saverPairs = new Pairs(pairs);
+        await saverPairs.save();
+    }
 
     res.json({status:'sucess', pairs: req.body})
 })

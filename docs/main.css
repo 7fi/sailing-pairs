@@ -103,6 +103,18 @@ button{
     width: 200px;
     text-align: center;
 }
+#loadSaveWindow{
+    /* position: absolute; */
+    /* left: 42%; */
+    /* top: 35%; */
+    z-index: 10;
+    display: grid;
+    grid-template-columns: (1fr, 1fr);
+    background-color: var(--dark);
+    box-shadow: #000 3px 3px 10px;
+    padding: 15px;
+    border-radius: var(--radius);
+}
 
 #loadSave{
     grid-area: header;
@@ -123,7 +135,7 @@ button{
     padding:3px;
 }
 #loadDropContainer{
-    display: none;
+    display: flex;
     top: -5px;
     position: relative;
     flex-direction: column;
@@ -285,14 +297,14 @@ button{
     #modeToggle, #resetPairs, #randomPairs{
         margin:5px;
     }
-    #loadSave{
+    /* #loadSave{
         flex-direction: column;
         width: 100%!important;
     }
     #loadText{
         right: 0;
         width: auto;
-    }
+    } */
     #listContainer{
         display: grid;
         width: 97%;height: 100%;
