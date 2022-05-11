@@ -273,7 +273,7 @@ button{
 /*For moblie stuffs*/
 @media only screen and (max-width:1000px){
     #window{
-        grid-template-areas: "header header" "left left" "right right" "footer footer";
+        grid-template-areas: "header header" "footer footer" "left left" "right right" ;
         grid-template-rows: 8% auto auto 12%;
         gap:0;
     }
