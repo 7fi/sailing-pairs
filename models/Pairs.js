@@ -125,6 +125,14 @@ const pairsSchema = new mongoose.Schema({
     type: String,
     required:false
 },
+'30':{
+    type: String,
+    required:false
+},
+'31':{
+    type: String,
+    required:false
+},
 })
 
-module.exports = mongoose.model('Pair', pairsSchema)
+module.exports = mongoose.model('Pairs', pairsSchema)

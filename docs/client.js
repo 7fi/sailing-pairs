@@ -313,9 +313,11 @@ async function getSaved(){
                     console.log(json);
                     getSaved();
                 });
+                loadNameHolder.appendChild(loadName);
                 loadNameHolder.appendChild(loadDel);
+            }else{
+                loadNameHolder.appendChild(loadName);
             }
-            loadNameHolder.appendChild(loadName);
             loadHolder.appendChild(loadNameHolder);
         }
     }
