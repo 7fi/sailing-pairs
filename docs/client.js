@@ -70,6 +70,8 @@ function makePairs(inputPairs){ // Creates pair slots either empty or populated 
                 // console.log(pref[names.indexOf(draggingEl.textContent)]);
                 if(pairSlotEl.childElementCount < 1){ //&& pref[names.indexOf(draggingEl.textContent)]
                     pairSlotEl.appendChild(draggingEl);
+                }else if(pairSlotEl.children[0] != draggingEl ){
+                    nameList.appendChild(pairSlotEl.children[0]);
                 }
             }
         })
