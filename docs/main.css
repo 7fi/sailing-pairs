@@ -202,6 +202,9 @@ button{
 .pairSlot:nth-child(2n) .name{
     color:var(--highlight1);
 }
+.pairSlot .name:nth-child(2){
+    display: none;
+}
 
 .pairSlot::before{
     position:absolute;

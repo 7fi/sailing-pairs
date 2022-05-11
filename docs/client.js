@@ -46,7 +46,7 @@ function makePairs(inputPairs){ // Creates pair slots either empty or populated 
         pairingHolder.removeChild(pairingHolder.firstChild);
     }
     // Creates all pair slots
-    for (let i = 0; i < 32; i++) {
+    for (let i = 0; i < names.length; i++) {
         const pairSlotEl = document.createElement('div');
         pairSlotEl.classList.add('pairSlot');
 
@@ -68,10 +68,8 @@ function makePairs(inputPairs){ // Creates pair slots either empty or populated 
             if(!mobile){
                 const draggingEl = document.querySelector('.dragging');
                 // console.log(pref[names.indexOf(draggingEl.textContent)]);
-                if(pairSlotEl.childElementCount < 1){ //&& pref[names.indexOf(draggingEl.textContent)]
+                if(pairSlotEl.childElementCount < 2){ //&& pref[names.indexOf(draggingEl.textContent)]
                     pairSlotEl.appendChild(draggingEl);
-                }else if(pairSlotEl.children[0] != draggingEl ){
-                    nameList.appendChild(pairSlotEl.children[0]);
                 }
             }
         })
@@ -86,7 +84,7 @@ function makeNames(inputPairs){ // makes name list without the input parings
     // if input pairs supplied then dont create those names
     if(inputPairs != undefined){
         let tempNames = names.slice();
-        for (let i = 0; i < 32; i++) {
+        for (let i = 0; i < names.length; i++) {
             if(inputPairs[i] != ''){
                 tempNames.splice(tempNames.indexOf(inputPairs[i]), 1);
                 console.log(tempNames);
@@ -117,6 +115,13 @@ function makeName(name){ // creates single name
         })
         
         nameEl.addEventListener('dragend', async () =>{
+            for (let i = 0; i < names.length; i++) {
+                const cur = pairingHolder.children[i];
+                if(cur.childElementCount > 1){
+                    nameList.appendChild(cur.children[0]);
+                }
+            }
+
             nameEl.classList.remove('dragging');
             console.log("dragend: " , nameEl.textContent);
         })
@@ -191,7 +196,7 @@ nameList.addEventListener('click', e => {
 saveButton.addEventListener('click', async () => {
     if(nameInput.value != ""){
         let pairs = {name:nameInput.value};
-        for (let i = 0; i < 32; i++) {
+        for (let i = 0; i < names.length; i++) {
             pairs[i] = pairingHolder.children[i].textContent;
         }
         console.log(pairs);
