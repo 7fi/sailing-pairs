@@ -11,8 +11,10 @@ const saveButton = document.getElementById('save');
 const modeToggle = document.getElementById('modeToggle');
 const resetPairs = document.getElementById('resetPairs');
 const randomPairs = document.getElementById('randomPairs');
+const squareMode = document.getElementById('squareMode');
 const betoEl = document.getElementById('betoEl');
 let lightMode = true;
+let square = false;
 
 let betoClicks = 0;
 let betoQuotes = ['Hi',"I'm bad at sailing!"];
@@ -284,6 +286,17 @@ async function getSaved(){
 // Toggle between light and dark mode
 modeToggle.addEventListener('click', () => {
     switchMode();
+})
+// Toggle between light and dark mode
+squareMode.addEventListener('click', () => {
+    if(square){
+        document.documentElement.style.setProperty('--radius', '7px');
+        squareMode.children[0].classList.replace('gg-shape-circle','gg-shape-square');
+    }else{
+        document.documentElement.style.setProperty('--radius', '0px');
+        squareMode.children[0].classList.replace('gg-shape-square','gg-shape-circle');
+    }
+    square = !square;
 })
 
 function switchMode(){

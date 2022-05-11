@@ -19,6 +19,7 @@
     --light:#b3b3b3;
     --highlight1:#12A5B1;
     --highlight2:#203960;
+    --radius: 7px;
 }
 
 body{
@@ -65,16 +66,16 @@ button{
     /* position:absolute; */
     /* top:4%; */
     background-color: var(--med);
-    border-radius: 5px;
+    border-radius: var(--radius);
     width: 33px;
     height: 33px;
     padding: 5px;
     margin: 22px 0px;
     /* left: 50%; */
 }
-#resetPairs,#randomPairs{
+#resetPairs,#randomPairs, #squareMode{
     background-color: var(--med);
-    border-radius: 5px;
+    border-radius: var(--radius);
     width: 33px;
     height: 33px;
     padding: 7px;
@@ -82,6 +83,9 @@ button{
 }
 #randomPairs{
     padding: 5px;
+}
+#squareMode{
+    padding: 8px;
 }
 #save, #loadText{
     /* position: absolute; */
@@ -91,7 +95,7 @@ button{
     background-color:var(--med);
     margin:5px;
     padding:5px;
-    border-radius: 5px;
+    border-radius: var(--radius);
     font-weight: 600;
     font-size: 1.1em;
 }
@@ -114,7 +118,7 @@ button{
 }
 #nameInput{
     background-color: var(--med);
-    border-radius: 5px;
+    border-radius: var(--radius);
     margin:5px;
     padding:3px;
 }
@@ -124,7 +128,7 @@ button{
     position: relative;
     flex-direction: column;
     background-color:var(--medDark);
-    border-radius: 5px;
+    border-radius: var(--radius);
 }
 #loadText:hover + #loadDropContainer{
     display: flex;
@@ -166,7 +170,7 @@ button{
 #listContainer{
     background-color: var(--dark);
     height: calc(100% - 20px);
-    border-radius: 20px;
+    border-radius: var(--radius);
     overflow: auto;
     padding:10px;
 }
@@ -180,7 +184,7 @@ button{
 }
 .pairSlot{
     background-color: var(--dark);
-    border-radius: 10px;
+    border-radius: var(--radius);
     display: grid;
     align-items: stretch;
 }
@@ -214,7 +218,7 @@ button{
     font-weight: 600;
     font-size: 1.2em;
     margin:5px;
-    border-radius: 5px;
+    border-radius: var(--radius);
     padding:5px;
     color: var(--highlight);
 }
@@ -226,7 +230,7 @@ button{
     font-weight: 600;
     font-size: 1.2em;
     margin:7px;
-    border-radius: 8px;
+    border-radius: var(--radius);
     padding:5px;
     align-self: flex-start;
 }
