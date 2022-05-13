@@ -294,7 +294,8 @@ button{
     }
     #loadSave{
         margin: 25px 0 0 0;
-        grid-area:footer;
+        grid-area: footer;
+        position: absolute;
     }
     #left{
         margin:10px;
