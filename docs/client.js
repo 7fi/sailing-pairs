@@ -27,11 +27,48 @@ let elliottClicks = 0;
 
 //Check for mobile (only works on reload)
 let mobile = window.matchMedia("only screen and (max-width: 1000px)").matches;
+let findDuplicates = arr => arr.filter((item, index) => arr.indexOf(item) != index);
 
 const API_URL = 'https://bhspairs.herokuapp.com'; // For deployment
 // const API_URL = 'http://localhost:3000'; // For development 
 
-// Name list and if they preffer skippering (unused)
+const people =[
+    {name: "Adam", skipper: true, crew: false},
+    {name: "Alden", skipper: true, crew: false},
+    {name: "Ava", skipper: true, crew: true},
+    {name: "Barret", skipper: true, crew: false},
+    {name: "Ben", skipper: true, crew: true},
+    {name: "Beto", skipper: true, crew: false},
+    {name: "Carter", skipper: true, crew: false},
+    {name: "Chris", skipper: false, crew: true},
+    {name: "Elliott", skipper: true, crew: true},
+    {name: "Evan", skipper: true, crew: false},
+    {name: "Fin", skipper: false, crew: true},
+    {name: "Gianna", skipper: true, crew: false},
+    {name: "Jaya", skipper: false, crew: true},
+    {name: "Jeffery", skipper: false, crew: true},
+    {name: "Joseph", skipper: false, crew: true},
+    {name: "Lauren", skipper: true, crew: true},
+    {name: "Logan", skipper: true, crew: true},
+    {name: "Luke", skipper: false, crew: true},
+    {name: "Maura", skipper: true, crew: true},
+    {name: "Maxwell", skipper: false, crew: true},
+    {name: "Nick", skipper: false, crew: true},
+    {name: "Nolan L", skipper: true, crew: false},
+    {name: "Nolan W", skipper: true, crew: false},
+    {name: "Owen", skipper: true, crew: false},
+    {name: "Payton", skipper: false, crew: true},
+    {name: "Pearl", skipper: false, crew: true},
+    {name: "Ryan", skipper: true, crew: false},
+    {name: "Sabrina", skipper: false, crew: true},
+    {name: "Sharkey", skipper: false, crew: true},
+    {name: "Stone", skipper: true, crew: false},
+    {name: "Talia", skipper: false, crew: true},
+    {name: "Zane", skipper: true, crew: true},
+
+]
+
+// Name list
 const names = ['Adam','Alden','Ava','Barrett','Ben','Beto','Carter','Chris','Elliott','Evan','Fin','Gianna','Jaya','Jeffrey','Joseph','Lauren','Logan','Luke','Maura','Maxwell','Nick','Nolan W','Nolan L','Owen','Payton','Pearl','Ryan','Sabrina','Sharkey','Stone','Talia','Zane'];
 const pref = [true, true,true,true,true,true,true,false,false,true,false,true,false,false,false,true,false,true, false,false,false,true,true,true,false,false,true,false,false,true,false,true];
 
@@ -91,7 +128,7 @@ function makeNames(inputPairs){ // makes name list without the input parings
         for (let i = 0; i < names.length; i++) {
             if(inputPairs[i] != ''){
                 tempNames.splice(tempNames.indexOf(inputPairs[i]), 1);
-                console.log(tempNames);
+                // console.log(tempNames);
             }
         }
         tempNames.forEach(name => {
@@ -203,6 +240,8 @@ saveButton.addEventListener('click', async () => {
         for (let i = 0; i < names.length; i++) {
             pairs[i] = pairingHolder.children[i].textContent;
         }
+        
+
         console.log(pairs);
         nameInput.value = "";
 
@@ -225,8 +264,15 @@ saveButton.addEventListener('click', async () => {
 saveButtonLocal.addEventListener('click', () => {
     if(nameInput.value != ""){
         let pairs = {name:nameInput.value};
+        let pairsArray = [];
         for (let i = 0; i < names.length; i++) {
             pairs[i] = pairingHolder.children[i].textContent;
+            pairsArray.push(pairingHolder.children[i].textContent);
+        }
+        console.log(pairsArray);
+        console.log("Duplicates found: " + [...new Set(findDuplicates(pairsArray))]);
+        if(findDuplicates(pairsArray) != ''){
+            console.log("Duplicates foundd!!!")
         }
         console.log(pairs);
         nameInput.value = "";
@@ -438,15 +484,107 @@ resetPairs.addEventListener('click', () => {
 
 // Randomize pairs button
 randomPairs.addEventListener('click', () => {
-    let shuffledNames = names.slice();
+    let shuffledNames = []; //names.slice()
+    people.forEach(person => {
+        shuffledNames.push(person.name);
+    });
     let currentIndex = shuffledNames.length,  randomIndex;
-
+    
     while (currentIndex != 0) {
-      randomIndex = Math.floor(Math.random() * currentIndex);
-      currentIndex--;
-  
-      [shuffledNames[currentIndex], shuffledNames[randomIndex]] = [shuffledNames[randomIndex], shuffledNames[currentIndex]];
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex--;
+        
+        [shuffledNames[currentIndex], shuffledNames[randomIndex]] = [shuffledNames[randomIndex], shuffledNames[currentIndex]];
     }
-    makePairs(shuffledNames);
-    makeNames(shuffledNames);
+    
+    let skippers = [];
+    let crews = [];
+    console.log();
+    for(let i = 0; i < shuffledNames.length; i++){
+        if(people[people.findIndex((e) => e.name == shuffledNames[i])].skipper && !(skippers.length >= shuffledNames.length/2)){
+            skippers.push(shuffledNames[i]);
+            console.log(shuffledNames[i], " is a skipper ", people[people.findIndex((e) => e.name == shuffledNames[i])].skipper);
+        }else{
+            crews.push(shuffledNames[i]);
+        }
+    }
+    // console.log(shuffledNames);
+    // console.log(skippers);
+    // console.log(crews);
+    
+    currentIndex = skippers.length,  randomIndex;
+    
+    while (currentIndex != 0) {
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex--;
+        
+        [skippers[currentIndex], skippers[randomIndex]] = [skippers[randomIndex], skippers[currentIndex]];
+    }
+    
+    currentIndex = crews.length,  randomIndex;
+    
+    while (currentIndex != 0) {
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex--;
+        
+        [crews[currentIndex], crews[randomIndex]] = [crews[randomIndex], crews[currentIndex]];
+    }
+
+    // console.log(skippers);
+    // console.log(crews);
+    let newNames = [];
+    
+    for(let i = 0; i < shuffledNames.length; i++){
+        if(skippers[i] != undefined){
+            newNames.push(skippers[i]);
+        }
+        if(crews[i] != undefined){
+            newNames.push(crews[i]);
+        }
+    }
+    makePairs(newNames);
+    makeNames(newNames);
 })
+/*
+randomPairs.addEventListener('click', () => {
+    let randomNames = [];
+    for (let i = 0; i < people.length; i++) {
+        if(i % 2 == 0){
+            let temp = "";
+            while(temp == ""){
+                temp = getRandomPerson(randomNames,true);
+                console.log(temp);
+            }
+            randomNames.push(temp);
+        }else{
+            let temp = " ";
+            do {
+                temp = getRandomPerson(randomNames,false);
+                console.log("Crew", temp);
+            } while (temp == " ");
+            randomNames.push(temp);
+        }
+    }
+    console.log(randomNames);
+    makePairs(randomNames);
+    makeNames(randomNames);
+})
+
+function getRandomPerson(exclude, skipper){
+    let randomNum = Math.floor(Math.random() * (people.length - exclude.length));
+    if(skipper){
+        if(people[randomNum].skipper && !exclude.includes(people[randomNum].name)){
+            // console.log(people[randomNum].name)
+            return people[randomNum].name;
+        }else{
+            return " ";
+        }
+    }else{
+        if(people[randomNum].crew && !exclude.includes(people[randomNum].name)){
+            // console.log(people[randomNum].name)
+            return people[randomNum].name;
+        }else{
+            return " ";
+        }
+    }
+}*/

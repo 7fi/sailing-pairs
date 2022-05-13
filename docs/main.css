@@ -1,3 +1,4 @@
+@import url("https://use.typekit.net/gar5llr.css");
 /* Dark mode */
 /* :root{
     --highlight:#fff;
@@ -23,7 +24,8 @@
 }
 
 body{
-    font-family: 'Fira sans', sans-serif;
+    font-family: futura-pt, sans-serif;
+    font-weight: 400;
 }
 button{
     appearance: none;
@@ -52,6 +54,9 @@ button{
     grid-area: header;
     display: flex;
     flex-direction: row;
+    position: fixed;
+    width: 100%;
+    z-index: 2;
 }
 #title{
     /* width: 100%; */
@@ -96,7 +101,7 @@ button{
     margin:5px;
     padding:5px;
     border-radius: var(--radius);
-    font-weight: 600;
+    font-weight: 700;
     font-size: 1.1em;
 }
 #loadText{
@@ -120,10 +125,11 @@ button{
 #loadSave{
     grid-area: header;
     right:0;
-    position: absolute;
+    position: fixed;
     display: flex;
     flex-direction: row;
     width: max-content;
+    z-index: 3;
 }
 #saveHolder{
     display:flex;
@@ -151,7 +157,7 @@ button{
     display: flex;
 }
 .loadName{
-    font-weight: 600;
+    font-weight: 700;
     font-size: 1.1em;
     width: 100%;
 }
@@ -232,7 +238,9 @@ button{
     background-color:var(--med);
     width:calc(50% - 20px);
     text-align: center;
-    font-weight: 600;
+    font-family: futura-pt, sans-serif;
+    font-weight: 700;
+    font-style: normal;
     font-size: 1.2em;
     margin:5px;
     border-radius: var(--radius);
@@ -244,7 +252,9 @@ button{
     background-color:var(--med);
     z-index: 1;
     text-align: center;
-    font-weight: 600;
+    font-family: futura-pt, sans-serif;
+    font-weight: 700;
+    font-style: normal;
     font-size: 1.2em;
     margin:7px;
     border-radius: var(--radius);
