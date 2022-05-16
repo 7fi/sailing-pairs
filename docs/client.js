@@ -25,6 +25,13 @@ let betoQuotes = ['Hi',"I'm bad at sailing!"];
 let sabrinaClicks = 0;
 let elliottClicks = 0;
 
+var thisPage;
+if(window.location.href.includes("scores")){
+    thisPage = "scores";
+}else {
+    thisPage = "main";
+}
+
 //Check for mobile (only works on reload)
 let mobile = window.matchMedia("only screen and (max-width: 1000px)").matches;
 let findDuplicates = arr => arr.filter((item, index) => arr.indexOf(item) != index);
@@ -80,6 +87,7 @@ function load(){
     }
 }
 
+if(thisPage == 'main'){
 makePairs();
 function makePairs(inputPairs){ // Creates pair slots either empty or populated with inputPairs object
     // deletes all previous pair slots
@@ -432,11 +440,6 @@ loadSaveContainer.addEventListener('click', (e) => {
     }
 })
 
-// Toggle between light and dark mode
-modeToggle.addEventListener('click', () => {
-    switchMode();
-})
-// Toggle between light and dark mode
 squareMode.addEventListener('click', () => {
     if(square){
         document.documentElement.style.setProperty('--radius', '7px');
@@ -448,32 +451,6 @@ squareMode.addEventListener('click', () => {
     square = !square;
 })
 
-function switchMode(){
-    if(!lightMode){
-        modeToggle.children[0].classList.replace('gg-sun','gg-moon');
-        document.documentElement.style.setProperty('--dark','#eaeaea');
-        document.documentElement.style.setProperty('--medDark','#fff');
-        document.documentElement.style.setProperty('--med','#cfcfcf');
-        document.documentElement.style.setProperty('--medLight','#d1d1d1');
-        document.documentElement.style.setProperty('--light','#b3b3b3');
-        document.documentElement.style.setProperty('--highlight','#000');
-        document.documentElement.style.setProperty('--highlight1','#12A5B1');
-        document.documentElement.style.setProperty('--highlight2','#203960');
-    }else{
-        modeToggle.children[0].classList.replace('gg-moon','gg-sun');
-        document.documentElement.style.setProperty('--dark','#333');
-        document.documentElement.style.setProperty('--medDark','#444');
-        document.documentElement.style.setProperty('--med','#555');
-        document.documentElement.style.setProperty('--medLight','#666');
-        document.documentElement.style.setProperty('--light','#777');
-        document.documentElement.style.setProperty('--highlight','#fff');
-        document.documentElement.style.setProperty('--highlight1','#222');
-        document.documentElement.style.setProperty('--highlight2','#222');
-    }
-    lightMode = !lightMode;
-    document.cookie = ("lightMode=" + lightMode + "; path=/");
-    console.log(lightMode)
-}
 
 //Reset pairs button
 resetPairs.addEventListener('click', () => {
@@ -545,7 +522,48 @@ randomPairs.addEventListener('click', () => {
     makePairs(newNames);
     makeNames(newNames);
 })
-/*
+}
+// Toggle between light and dark mode
+modeToggle.addEventListener('click', () => {
+    switchMode();
+})
+
+function switchMode(){
+    if(!lightMode){
+        modeToggle.children[0].classList.replace('gg-sun','gg-moon');
+        document.documentElement.style.setProperty('--dark','#eaeaea');
+        document.documentElement.style.setProperty('--medDark','#fff');
+        document.documentElement.style.setProperty('--med','#cfcfcf');
+        document.documentElement.style.setProperty('--medLight','#d1d1d1');
+        document.documentElement.style.setProperty('--light','#b3b3b3');
+        document.documentElement.style.setProperty('--highlight','#000');
+        document.documentElement.style.setProperty('--highlight1','#12A5B1');
+        document.documentElement.style.setProperty('--highlight2','#203960');
+    }else{
+        modeToggle.children[0].classList.replace('gg-moon','gg-sun');
+        document.documentElement.style.setProperty('--dark','#333');
+        document.documentElement.style.setProperty('--medDark','#444');
+        document.documentElement.style.setProperty('--med','#555');
+        document.documentElement.style.setProperty('--medLight','#666');
+        document.documentElement.style.setProperty('--light','#777');
+        document.documentElement.style.setProperty('--highlight','#fff');
+        document.documentElement.style.setProperty('--highlight1','#222');
+        document.documentElement.style.setProperty('--highlight2','#222');
+    }
+    lightMode = !lightMode;
+    document.cookie = ("lightMode=" + lightMode + "; path=/");
+    console.log(lightMode)
+}
+console.log(pickSternTier());
+function pickSternTier(){
+    let potentialPpl = [];
+    people.forEach(person => {
+        if(person.name != 'Elliott') potentialPpl.push(person.name);
+    });
+    return potentialPpl[Math.floor(Math.random() * potentialPpl.length)];
+}
+
+/*  
 randomPairs.addEventListener('click', () => {
     let randomNames = [];
     for (let i = 0; i < people.length; i++) {

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"></script>
+    <link rel="stylesheet" href="../main.css">
+    <link href='https://css.gg/moon.css' rel='stylesheet'>
+    <link href='https://css.gg/sync.css' rel='stylesheet'>
+    <link href='https://css.gg/sun.css' rel='stylesheet'>
+    <link href='https://css.gg/trash.css' rel='stylesheet'>
+    <link href='https://css.gg/dice-5.css' rel='stylesheet'>
+    <link href='https://css.gg/shape-square.css' rel='stylesheet'>
+    <link href='https://css.gg/shape-circle.css' rel='stylesheet'>
+    <link href='https://css.gg/shape-zigzag.css' rel='stylesheet'>
+    <title>BHS Sailing Pairings</title>
+</head>
+<body>
+    <div id="window" onload="load()">
+        <div id="loadingEl"></div>
+        <div id="header">
+            <div id="title">Scores</div>
+            <div id="placeholder"></div>
+            <button id="modeToggle" title="Toggle Dark Mode" type="button"><i class="gg-sun"></i></button>
+            <button id="resetPairs" title="Reset Pairs" type="button"><i class="gg-sync"></i></button>
+            <button id="randomPairs" title="Randomize Pairs" type="button"><i class="gg-dice-5"></i></button>
+            <button id="squareMode" title="Become square" type="button"><i class="gg-shape-square"></i></button>
+            <button id="graphMode" title="Switch graph mode" type="button"><i class="gg-shape-zigzag"></i></button>
+        </div>
+        <canvas id="graph">
+
+        </canvas>
+    </div>
+
+    <script>
+        const graphMode = document.getElementById('graphMode');
+        let cScores =  [NaN,NaN,NaN,NaN, 9, 8, 9, 8, 9,11, 3, 4, 6, 3, 5, 8, 6, 5,NaN,NaN, 3, 4, 4, 7, 4, 1, 1, 2, 11,  8,10,12,  5,  7, 4, 8, 16, 21, 1, 3, 8, 9,11,10,12];
+        let eScores =  [  7,  4, 10,  9, 8,10, 2, 7, 9,11, 3, 4, 6, 3, 5, 8, 6, 5,  2,  9, 3, 4, 4, 7, 4, 1, 1, 2,NaN,NaN, 4, 1,NaN,NaN,15, 4,NaN,NaN, 1, 1, 8, 9,11,10,NaN]; 
+        let fleetNum = [ 13, 13, 13, 13,13,13,13,13,15,15,15,15,15,15,15,15,15,15, 15, 15,10,10,10,10,10,10,10,10, 24, 24,24,24, 24, 24,24,24, 24, 24,24,24,27,27,27,27,27];
+        let venues = [];
+        let cPoints = [];
+        let ePoints = [];
+
+        for(let i = 0; i < fleetNum.length; i++){
+            cPoints.push(fleetNum[i] - cScores[i]);
+            ePoints.push(fleetNum[i] - eScores[i]);
+
+            if(i < 8){
+                venues[i] = "Olympia";
+            }else if(i < 18){
+                venues[i] = "Oak Harbor"
+            }else if(i < 20){
+                venues[i] = "SSP"
+            }else if(i < 28){
+                venues[i] = "Bellingham"
+            }else if(i < 40){
+                venues[i] = "Anacortes"
+            }else if(i < 45){
+                venues[i] = "Bellingham"
+            }
+        }
+
+        const config = {
+            type: 'bar',
+            data: {
+                labels: venues,
+                datasets: [ {
+                    label: 'Carter',
+                    data: cPoints,
+                    borderColor: '#f00',
+                    backgroundColor: '#ff000055',
+                    fill:true,
+                  },
+                  {
+                    label: 'Elliott',
+                    data: ePoints,
+                    borderColor: '#00f',
+                    backgroundColor: '#0000ff55',
+                    fill:true,
+                  }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Spring 2022 "Points" (Higher is better) (Fleet racing)'
+                    }
+                }
+            }
+        };
+        const ctx = document.getElementById('graph');
+        var chart = new Chart(ctx, config);
+        graphMode.addEventListener('click', () =>{
+            type();
+        })
+        function type(){
+            if(config.type == 'bar'){
+                config.type = 'line';
+            }else{
+                config.type = 'bar';
+            }
+            chart.destroy();
+            chart = new Chart(ctx, config);
+        }
+    </script>
+    <script src="../client.js"></script>
+</body>
+</html>
