@@ -67,6 +67,12 @@ button{
     /* position:absolute; */
     text-align: center;
 }
+#graph{
+    top: 9%;
+    width: 100%;
+    bottom:0;
+    position:absolute;
+}
 #modeToggle{
     /* position:absolute; */
     /* top:4%; */
