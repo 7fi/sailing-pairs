@@ -440,18 +440,6 @@ loadSaveContainer.addEventListener('click', (e) => {
     }
 })
 
-squareMode.addEventListener('click', () => {
-    if(square){
-        document.documentElement.style.setProperty('--radius', '7px');
-        squareMode.children[0].classList.replace('gg-shape-circle','gg-shape-square');
-    }else{
-        document.documentElement.style.setProperty('--radius', '0px');
-        squareMode.children[0].classList.replace('gg-shape-square','gg-shape-circle');
-    }
-    square = !square;
-})
-
-
 //Reset pairs button
 resetPairs.addEventListener('click', () => {
     getSaved();
@@ -523,6 +511,16 @@ randomPairs.addEventListener('click', () => {
     makeNames(newNames);
 })
 }
+squareMode.addEventListener('click', () => {
+    if(square){
+        document.documentElement.style.setProperty('--radius', '7px');
+        squareMode.children[0].classList.replace('gg-shape-circle','gg-shape-square');
+    }else{
+        document.documentElement.style.setProperty('--radius', '0px');
+        squareMode.children[0].classList.replace('gg-shape-square','gg-shape-circle');
+    }
+    square = !square;
+})
 // Toggle between light and dark mode
 modeToggle.addEventListener('click', () => {
     switchMode();
