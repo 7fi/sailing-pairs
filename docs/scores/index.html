@@ -33,66 +33,85 @@
 
     <script>
         const graphMode = document.getElementById('graphMode');
-        let cScores =  [NaN,NaN,11, 4, 9, 8, 9, 8, 9,11, 3, 4, 6, 3, 5, 8, 6, 5,NaN,NaN, 3, 4, 4, 7, 4, 1, 1, 2, 11,  8,10,12,  5,  7, 4, 8, 16, 21, 1, 3, 8, 9,11,10,12];
-        let eScores =  [  7,  4,10, 9, 8,10, 2, 7, 9,11, 3, 4, 6, 3, 5, 8, 6, 5,  2,  9, 3, 4, 4, 7, 4, 1, 1, 2,NaN,NaN, 4, 1,NaN,NaN,15, 4,NaN,NaN, 1, 1, 8, 9,11,10,NaN]; 
+        //let cScores =  [NaN,NaN,11, 4, 9, 8, 9, 8, 9,11, 3, 4, 6, 3, 5, 8, 6, 5,NaN,NaN, 3, 4, 4, 7, 4, 1, 1, 2, 11,  8,10,12,  5,  7, 4, 8, 16, 21, 1, 3, 8, 9,11,10,12];
+        let cScores = [];
+        //let eScores =  [  7,  4,10, 9, 8,10, 2, 7, 9,11, 3, 4, 6, 3, 5, 8, 6, 5,  2,  9, 3, 4, 4, 7, 4, 1, 1, 2,NaN,NaN, 4, 1,NaN,NaN,15, 4,NaN,NaN, 1, 1, 8, 9,11,10,NaN]; 
+        let eScores = [];
         let fleetNum = [ 13, 13,13,13,13,13,13,13,15,15,15,15,15,15,15,15,15,15, 30, 30,10,10,10,10,10,10,10,10, 24, 24,24,24, 24, 24,24,24, 24, 24,24,24,27,27,27,27,27];
         let venues = [];
         let cPoints = [];
         let ePoints = [];
-
-        for(let i = 0; i < fleetNum.length; i++){
-            cPoints.push(fleetNum[i] - cScores[i]);
-            ePoints.push(fleetNum[i] - eScores[i]);
-
-            if(i < 8){
-                venues[i] = "Olympia";
-            }else if(i < 18){
-                venues[i] = "Oak Harbor"
-            }else if(i < 20){
-                venues[i] = "SSP"
-            }else if(i < 28){
-                venues[i] = "Bellingham"
-            }else if(i < 40){
-                venues[i] = "Anacortes"
-            }else if(i < 45){
-                venues[i] = "Bellingham"
-            }
-        }
-
-        const config = {
-            type: 'bar',
-            data: {
-                labels: venues,
-                datasets: [ {
-                    label: 'Carter',
-                    data: cPoints,
-                    borderColor: '#f00',
-                    backgroundColor: '#ff000055',
-                    fill:true,
-                  },
-                  {
-                    label: 'Elliott',
-                    data: ePoints,
-                    borderColor: '#00f',
-                    backgroundColor: '#0000ff55',
-                    fill:true,
-                  }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        position: 'top',
-                    },
-                    title: {
-                        display: true,
-                        text: 'Spring 2022 "Points" (Higher is better) (Fleet racing)'
-                    }
-                }
-            }
-        };
+        var config;
         const ctx = document.getElementById('graph');
         var chart = new Chart(ctx, config);
+
+        loadScores();
+        async function loadScores(){
+            options = {method:"GET",headers:{"Content-Type":"application/json"}
+            };
+            const response = await fetch("http://127.0.0.1:3000" + '/scores', options);
+            const json = await response.json();
+            const data = json.body; 
+            console.log(json.test);
+
+            for(let i = 1; i < fleetNum.length; i++){
+                if(data[i][0] != undefined){
+                    cScores.push(parseInt(data[i][0]));
+                }else{
+                    cScores.push(NaN);
+                }
+                if(data[i][2] != undefined){
+                    eScores.push(parseInt(data[i][2]));
+                }else{
+                    eScores.push(NaN);
+                }
+                venues.push(json.labels[i][0]);
+            }
+            console.log(cScores);
+
+            for(let i = 0; i < fleetNum.length; i++){
+                cPoints.push(fleetNum[i] - cScores[i]);
+                ePoints.push(fleetNum[i] - eScores[i]);
+            }
+            console.log(cPoints);
+
+            config = {
+                type: 'bar',
+                data: {
+                    labels: venues,
+                    datasets: [ {
+                        label: data[0],
+                        data: cPoints,
+                        borderColor: '#f00',
+                        backgroundColor: '#ff000055',
+                        fill:true,
+                      },
+                      {
+                        label: data[0][1],
+                        data: ePoints,
+                        borderColor: '#00f',
+                        backgroundColor: '#0000ff55',
+                        fill:true,
+                      }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: 'Spring 2022 Scores (From Spreadsheet)'
+                        }
+                    }
+                }
+            };
+            chart.destroy();
+            chart = new Chart(ctx, config);
+        }
+
+        
         graphMode.addEventListener('click', () =>{
             type();
         })

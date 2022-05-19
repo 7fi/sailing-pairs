@@ -26,11 +26,15 @@ let sabrinaClicks = 0;
 let elliottClicks = 0;
 
 var thisPage;
+// console.log(window.location.href.split("/"));
 if(window.location.href.includes("scores")){
     thisPage = "scores";
-}else {
+}else{
     thisPage = "main";
 }
+/*else if(window.location.href.split("/")[window.location.href.split("/").length - 1] != ""){
+    console.log(window.location.href.split("/")[window.location.href.split("/").length - 1]);
+} */
 
 //Check for mobile (only works on reload)
 let mobile = window.matchMedia("only screen and (max-width: 1000px)").matches;
@@ -248,7 +252,6 @@ saveButton.addEventListener('click', async () => {
         for (let i = 0; i < names.length; i++) {
             pairs[i] = pairingHolder.children[i].textContent;
         }
-        
 
         console.log(pairs);
         nameInput.value = "";

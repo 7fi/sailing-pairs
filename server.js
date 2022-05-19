@@ -1,9 +1,11 @@
 const express = require('express');
 const mongoose = require('mongoose'); 
 const cors = require('cors');
+const {google} = require('googleapis');
 
 // For development
-// const dotenv = require('dotenv').config();
+const dotenv = require('dotenv').config();
+// const keys = require("../sailing-pairs/");
 
 //Import pairs datastructure model
 const Pairs = require('./models/Pairs');
@@ -22,6 +24,40 @@ mongoose.connect(process.env.DATABASE_URL, {useNewUrlParser:true});
 const db = mongoose.connection;
 db.once('open', () => app.listen(port, () => console.log(`Starting server at ${port}`))); //start server
 db.on('error', (error) => console.log(error));
+
+const client = new google.auth.JWT(
+    process.env.client_email, 
+    null, 
+    process.env.private_key, 
+    ['https://www.googleapis.com/auth/spreadsheets']
+);
+
+client.authorize(function(err,tokens){
+    if(err){
+        console.log(err);
+        return;
+    }else{
+        console.log("Connected");
+        // teams = gsrun(client, "'Analysis'!U2:U35");
+        // scores = gsrun(client, "'Analysis'!V2:V107");
+    }
+});
+
+async function gsrun(cl, range){
+    const gsapi = google.sheets({version:'v4', auth: cl});
+
+    var opt = {
+        spreadsheetId: '1B56mAoBHFct_xcUB9ZWt-GHA1s2Kmbmc_LiiyABxlpY',
+        range: range
+    };
+
+    let data = await gsapi.spreadsheets.values.get(opt);
+    return data.data.values;
+} 
+
+async function test(){
+    console.log(await gsrun(client, "'scores'!H4:H46"));
+}
 
 // Handle post request for creating a saved pairing list
 app.post('/pairs', async (req,res) => {
@@ -61,4 +97,8 @@ app.post('/delPair', async (req,res) =>{
     Pairs.deleteOne({name:req.body.name}, function (err,docs){
         res.json({status:'sucess'})
     })
+})
+
+app.get('/scores', async(req,res) =>{
+    res.json({body: await gsrun(client, "'back'!A2:B46"), test: await gsrun(client, "'scores'!A2:AG47"), labels: await gsrun(client,"'scores'!A2:A47")})
 })

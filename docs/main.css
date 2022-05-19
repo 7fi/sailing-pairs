@@ -43,7 +43,7 @@ button{
     display:grid;
     grid-template-areas: "header header" "left right";
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: 8% auto;
+    grid-template-rows: 100px auto;
     gap: 20px;
     background-color: var(--medDark);
     overflow-x:hidden;
@@ -278,6 +278,7 @@ button{
     background:var(--highlight);
     animation: loadingAnim 2s infinite;
     animation-timing-function: linear;
+    z-index: 99999;
 }
 @keyframes loadingAnim {
     from{transform: rotate(0deg);}
