@@ -555,7 +555,7 @@ function switchMode(){
     document.cookie = ("lightMode=" + lightMode + "; path=/");
     console.log(lightMode)
 }
-console.log(pickSternTier());
+console.log(pickSternTier() + " is assigned to do stern ties");
 function pickSternTier(){
     let potentialPpl = [];
     people.forEach(person => {

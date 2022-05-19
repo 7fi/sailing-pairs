@@ -273,8 +273,11 @@ button{
 
 #loadingEl{
     position:absolute;
-    left:45%;
-    top:45%;
+    left:49%;
+    top:49%;
+    width: 30px;
+    height: 30px;
+    display: none;
     background:var(--highlight);
     animation: loadingAnim 2s infinite;
     animation-timing-function: linear;
