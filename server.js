@@ -4,7 +4,7 @@ const cors = require('cors');
 const {google} = require('googleapis');
 
 // For development
-// const dotenv = require('dotenv').config();
+const dotenv = require('dotenv').config();
 // const keys = require("../sailing-pairs/");
 
 //Import pairs datastructure model
