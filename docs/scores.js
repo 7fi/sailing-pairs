@@ -59,7 +59,7 @@ loadScores("points","Barrett");
 async function loadScores(type, name, fleet, division, position, pair, regatta){
     loadingEl.style.display ='block';
     options = {method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({name:name, type:type, fleet:fleet,division:division,position:position,pair:pair,regatta:regatta})};
-    const response = await fetch("http://127.0.0.1:3000" + '/scores', options);
+    const response = await fetch('/scores', options);
     const json = await response.json();
     const data = json.body; 
     console.log(json.labels);
