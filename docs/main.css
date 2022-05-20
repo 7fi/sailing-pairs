@@ -22,6 +22,16 @@
     --highlight2:#203960;
     --radius: 7px;
 }
+a{
+    text-decoration: none;
+    color:inherit;
+}
+a:visited{
+    text-decoration: none;
+}
+a:hover{
+    text-decoration: none;
+}
 
 body{
     font-family: futura-pt, sans-serif;
@@ -294,7 +304,7 @@ button{
     bottom:0;
     position: absolute;
 }
-#dropdown{
+.dropdown{
     background: var(--medLight);
     z-index: 10;
     position:absolute;
@@ -305,7 +315,7 @@ button{
     max-height: 500px;
     overflow: auto;
 }
-#dropdown:hover .dropMember{
+.dropdown:hover .dropMember{
     display:block
 }
 .dropMember{

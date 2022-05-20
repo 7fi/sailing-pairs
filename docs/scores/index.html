@@ -20,19 +20,20 @@
     <div id="window" onload="load()">
         <div id="loadingEl"></div>
         <div id="header">
-            <div id="title">Scores</div>
+            <a id="title" href="/">Scores</a>
             <div id="placeholder"></div>
             <button id="modeToggle" title="Toggle Dark Mode" type="button"><i class="gg-sun"></i></button>
             <button id="squareMode" title="Become square" type="button"><i class="gg-shape-square"></i></button>
             <button id="graphMode" title="Switch graph mode" type="button"><i class="gg-shape-zigzag"></i></button>
         </div>
-        <div id="dropdown"></div>
+        <div id="dataset1"class="dropdown"></div>
+        
         <canvas id="graph">
 
         </canvas>
     </div>
 
-    <script src="../scores.js"></script>
     <script src="../client.js"></script>
+    <script src="../scores.js"></script>
 </body>
 </html>

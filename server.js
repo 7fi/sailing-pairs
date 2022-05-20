@@ -38,8 +38,6 @@ client.authorize(function(err,tokens){
         return;
     }else{
         console.log("Connected");
-        // teams = gsrun(client, "'Analysis'!U2:U35");
-        // scores = gsrun(client, "'Analysis'!V2:V107");
     }
 });
 

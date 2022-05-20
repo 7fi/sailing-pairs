@@ -1,46 +1,8 @@
 const graphMode = document.getElementById('graphMode');
-const dropdown = document.getElementById('dropdown');
+const dataset1 = document.getElementById('dataset1');
 var config;
 const ctx = document.getElementById('graph');
 var chart = new Chart(ctx, config);
-const people =[
-    {name: "Adam", skipper: true, crew: false},
-    {name: "Alden", skipper: true, crew: false},
-    {name: "Ava", skipper: true, crew: true},
-    {name: "Barret", skipper: true, crew: false},
-    {name: "Ben", skipper: true, crew: true},
-    {name: "Beto", skipper: true, crew: false},
-    {name: "Carter", skipper: true, crew: false},
-    {name: "Chris", skipper: false, crew: true},
-    {name: "Elliott", skipper: true, crew: true},
-    {name: "Evan", skipper: true, crew: false},
-    {name: "Fin", skipper: false, crew: true},
-    {name: "Gianna", skipper: true, crew: false},
-    {name: "Jaya", skipper: false, crew: true},
-    {name: "Jeffery", skipper: false, crew: true},
-    {name: "Joseph", skipper: false, crew: true},
-    {name: "Lauren", skipper: true, crew: true},
-    {name: "Logan", skipper: true, crew: true},
-    {name: "Luke", skipper: false, crew: true},
-    {name: "Maura", skipper: true, crew: true},
-    {name: "Maxwell", skipper: false, crew: true},
-    {name: "Nick", skipper: false, crew: true},
-    {name: "Nolan L", skipper: true, crew: false},
-    {name: "Nolan W", skipper: true, crew: false},
-    {name: "Owen", skipper: true, crew: false},
-    {name: "Payton", skipper: false, crew: true},
-    {name: "Pearl", skipper: false, crew: true},
-    {name: "Ryan", skipper: true, crew: false},
-    {name: "Sabrina", skipper: false, crew: true},
-    {name: "Sharkey", skipper: false, crew: true},
-    {name: "Stone", skipper: true, crew: false},
-    {name: "Talia", skipper: false, crew: true},
-    {name: "Zane", skipper: true, crew: true},
-
-]
-
-const API_URL = 'https://bhspairs.herokuapp.com'; // For deployment
-// const API_URL = 'http://localhost:3000'; // For development 
 
 makeDropdown();
 async function makeDropdown(){
@@ -53,7 +15,7 @@ async function makeDropdown(){
             console.log("clicked", loadScoreEl.innerHTML)
             await loadScores("raw",loadScoreEl.innerHTML);
         })
-        dropdown.appendChild(loadScoreEl);
+        dataset1.appendChild(loadScoreEl);
     }
 }
 
