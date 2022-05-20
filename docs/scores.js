@@ -39,6 +39,9 @@ const people =[
 
 ]
 
+const API_URL = 'https://bhspairs.herokuapp.com'; // For deployment
+// const API_URL = 'http://localhost:3000'; // For development 
+
 makeDropdown();
 async function makeDropdown(){
     for(let i = 0; i < people.length; i++){
@@ -59,7 +62,7 @@ loadScores("points","Barrett");
 async function loadScores(type, name, fleet, division, position, pair, regatta){
     loadingEl.style.display ='block';
     options = {method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({name:name, type:type, fleet:fleet,division:division,position:position,pair:pair,regatta:regatta})};
-    const response = await fetch('/scores', options);
+    const response = await fetch(API_URL + '/scores', options);
     const json = await response.json();
     const data = json.body; 
     console.log(json.labels);
