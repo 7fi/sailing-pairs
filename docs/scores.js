@@ -19,7 +19,6 @@ async function makeDropdown(){
     }
 }
 
-//
 loadScores("points","Barrett");
 async function loadScores(type, name, fleet, division, position, pair, regatta){
     loadingEl.style.display ='block';

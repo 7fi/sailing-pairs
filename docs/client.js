@@ -48,7 +48,7 @@ const people =[
     {name: "Adam", skipper: true, crew: false},
     {name: "Alden", skipper: true, crew: false},
     {name: "Ava", skipper: true, crew: true},
-    {name: "Barret", skipper: true, crew: false},
+    {name: "Barrett", skipper: true, crew: false},
     {name: "Ben", skipper: true, crew: true},
     {name: "Beto", skipper: true, crew: false},
     {name: "Carter", skipper: true, crew: false},
