@@ -294,6 +294,29 @@ button{
     bottom:0;
     position: absolute;
 }
+#dropdown{
+    background: var(--medLight);
+    z-index: 10;
+    position:absolute;
+    top:90px; 
+    left: 5px;
+    width:100px;
+    min-height: 30px;
+    max-height: 500px;
+    overflow: auto;
+}
+#dropdown:hover .dropMember{
+    display:block
+}
+.dropMember{
+    display: none;
+    background-color:var(--med);
+    /* margin: 5px; */
+    padding:5px;
+}
+.dropMember:hover{
+    background-color: var(--light);
+}
 
 /*For moblie stuffs*/
 @media only screen and (max-width:1000px){

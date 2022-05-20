@@ -17,6 +17,7 @@ const resetPairs = document.getElementById('resetPairs');
 const randomPairs = document.getElementById('randomPairs');
 const squareMode = document.getElementById('squareMode');
 const betoEl = document.getElementById('betoEl');
+
 let lightMode = true;
 let square = false;
 
@@ -244,6 +245,7 @@ nameList.addEventListener('click', e => {
         }
     }
 })
+
 
 //Saving pairings
 saveButton.addEventListener('click', async () => {

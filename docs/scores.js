@@ -1,68 +1,85 @@
 const graphMode = document.getElementById('graphMode');
-//let cScores =  [NaN,NaN,11, 4, 9, 8, 9, 8, 9,11, 3, 4, 6, 3, 5, 8, 6, 5,NaN,NaN, 3, 4, 4, 7, 4, 1, 1, 2, 11,  8,10,12,  5,  7, 4, 8, 16, 21, 1, 3, 8, 9,11,10,12];
-//let eScores =  [  7,  4,10, 9, 8,10, 2, 7, 9,11, 3, 4, 6, 3, 5, 8, 6, 5,  2,  9, 3, 4, 4, 7, 4, 1, 1, 2,NaN,NaN, 4, 1,NaN,NaN,15, 4,NaN,NaN, 1, 1, 8, 9,11,10,NaN]; 
-let scores1 = [];
-let scores2 = [];
-let fleetNum = [ 13, 13,13,13,13,13,13,13,15,15,15,15,15,15,15,15,15,15, 30, 30,10,10,10,10,10,10,10,10, 24, 24,24,24, 24, 24,24,24, 24, 24,24,24,27,27,27,27,27];
-let venues = [];
-let cPoints = [];
-let ePoints = [];
+const dropdown = document.getElementById('dropdown');
 var config;
 const ctx = document.getElementById('graph');
 var chart = new Chart(ctx, config);
+const people =[
+    {name: "Adam", skipper: true, crew: false},
+    {name: "Alden", skipper: true, crew: false},
+    {name: "Ava", skipper: true, crew: true},
+    {name: "Barret", skipper: true, crew: false},
+    {name: "Ben", skipper: true, crew: true},
+    {name: "Beto", skipper: true, crew: false},
+    {name: "Carter", skipper: true, crew: false},
+    {name: "Chris", skipper: false, crew: true},
+    {name: "Elliott", skipper: true, crew: true},
+    {name: "Evan", skipper: true, crew: false},
+    {name: "Fin", skipper: false, crew: true},
+    {name: "Gianna", skipper: true, crew: false},
+    {name: "Jaya", skipper: false, crew: true},
+    {name: "Jeffery", skipper: false, crew: true},
+    {name: "Joseph", skipper: false, crew: true},
+    {name: "Lauren", skipper: true, crew: true},
+    {name: "Logan", skipper: true, crew: true},
+    {name: "Luke", skipper: false, crew: true},
+    {name: "Maura", skipper: true, crew: true},
+    {name: "Maxwell", skipper: false, crew: true},
+    {name: "Nick", skipper: false, crew: true},
+    {name: "Nolan L", skipper: true, crew: false},
+    {name: "Nolan W", skipper: true, crew: false},
+    {name: "Owen", skipper: true, crew: false},
+    {name: "Payton", skipper: false, crew: true},
+    {name: "Pearl", skipper: false, crew: true},
+    {name: "Ryan", skipper: true, crew: false},
+    {name: "Sabrina", skipper: false, crew: true},
+    {name: "Sharkey", skipper: false, crew: true},
+    {name: "Stone", skipper: true, crew: false},
+    {name: "Talia", skipper: false, crew: true},
+    {name: "Zane", skipper: true, crew: true},
 
-loadScores();
-async function loadScores(){
+]
+
+makeDropdown();
+async function makeDropdown(){
+    for(let i = 0; i < people.length; i++){
+        const loadScoreEl = document.createElement('div');
+        loadScoreEl.innerHTML = people[i].name;
+        loadScoreEl.classList.add("dropMember")
+
+        loadScoreEl.addEventListener('click', async () =>{
+            console.log("clicked", loadScoreEl.innerHTML)
+            await loadScores("raw",loadScoreEl.innerHTML);
+        })
+        dropdown.appendChild(loadScoreEl);
+    }
+}
+
+//
+loadScores("points","Barrett");
+async function loadScores(type, name, fleet, division, position, pair, regatta){
     loadingEl.style.display ='block';
-    options = {method:"GET",headers:{"Content-Type":"application/json"}
-    };
+    options = {method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({name:name, type:type, fleet:fleet,division:division,position:position,pair:pair,regatta:regatta})};
     const response = await fetch("http://127.0.0.1:3000" + '/scores', options);
     const json = await response.json();
     const data = json.body; 
-    // console.log(json.test);
-
-    for(let i = 1; i < fleetNum.length; i++){
-        if(data[i][0] != undefined){
-            scores1.push(parseInt(data[i][0]));
-        }else{
-            scores1.push(NaN);
-        }
-        if(data[i][2] != undefined){
-            scores2.push(parseInt(data[i][2]));
-        }else{
-            scores2.push(NaN);
-        }
-        venues.push(json.labels[i][0]);
+    console.log(json.labels);
+    labels = [];
+    for (let i = 1; i < json.labels.length; i++) {
+        labels.push(json.labels[i]);
     }
-    console.log(scores1);
-
-    // for(let i = 0; i < fleetNum.length; i++){
-    //     cPoints.push(fleetNum[i] - cScores[i]);
-    //     ePoints.push(fleetNum[i] - eScores[i]);
-    // }
-    // console.log(cPoints);
 
     var datasets = [{
-        label: data[0],
-        data: scores1,
+        label: name,
+        data: data,
         borderColor: '#f00',
         backgroundColor: '#ff000055',
         fill:true,
     }]
-    if(scores2.length < 0){
-        datasets.push({
-            label: data[0][1],
-                data: scores2,
-                borderColor: '#00f',
-                backgroundColor: '#0000ff55',
-                fill:true,
-        })
-    }
-
+    
     config = {
         type: 'bar',
         data: {
-            labels: venues,
+            labels: labels,
             datasets: datasets
         },
         options: {
