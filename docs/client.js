@@ -211,16 +211,17 @@ function makeName(name){ // creates single name
             }
         })
     }
-    // if(name == 'Elliott'){
-    //     nameEl.addEventListener('click', ()=>{
-    //         betoClicks++;
-    //         if(betoClicks == 10){
-    //             betoClicks = 0;
-    //             console.log('Elliott secret');
-    //             location.href = 'https://exoplanetresearch.netlify.app/'
-    //         }
-    //     })
-    // }
+    if(name == 'Elliott'){
+        nameEl.addEventListener('click', ()=>{
+            elliottClicks++;
+            if(elliottClicks == 10){
+                elliottClicks = 0;
+                console.log('Elliott secret');
+                location.href = 'https://open.spotify.com/track/2QhURnm7mQDxBb5jWkbDug?si=806e79489ecd49bb'
+                // location.href = 'https://exoplanetresearch.netlify.app/'
+            }
+        })
+    }
 
     return nameEl;
 }
