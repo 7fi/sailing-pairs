@@ -236,8 +236,6 @@ function getData(type, name, fleet, division, position, pair, regatta){
                     }
                 })  
             }
-            //console.log(res);
-            
         }
     })
     return res;  

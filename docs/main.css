@@ -78,9 +78,11 @@ button{
     text-align: center;
 }
 #graph{
-    top: 9%;
-    width: 100%;
-    bottom:0;
+    /*top: 9%;*/
+    /* width: 100%; */
+    /* height: 500px; */
+    /* bottom:0; */
+    grid-area: content;
     position:absolute;
 }
 #modeToggle{
@@ -304,19 +306,32 @@ button{
     bottom:0;
     position: absolute;
 }
+#datasets{
+    grid-area:datasets;
+}
+.dataset{
+    /* width: 100%; */
+    margin:10px;
+    display: flex;
+    flex-direction: row;
+    background-color: var(--light);
+    border-radius: var(--radius);
+}
 .dropdown{
     background: var(--medLight);
     z-index: 10;
-    position:absolute;
-    top:90px; 
-    left: 5px;
     width:100px;
     min-height: 30px;
-    max-height: 500px;
+    max-height: 150px;
     overflow: auto;
+    margin: 10px;
+    border-radius: var(--radius);
+    padding: 5px;
+    text-align: center;
+    /* position: absolute; */
 }
-.dropdown:hover .dropMember{
-    display:block
+.dropdown:hover :nth-last-child(n){
+    display:block;
 }
 .dropMember{
     display: none;
