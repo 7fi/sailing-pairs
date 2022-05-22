@@ -41,8 +41,8 @@ if(window.location.href.includes("scores")){
 let mobile = window.matchMedia("only screen and (max-width: 1000px)").matches;
 let findDuplicates = arr => arr.filter((item, index) => arr.indexOf(item) != index);
 
-// const API_URL = 'https://bhspairs.herokuapp.com'; // For deployment
-const API_URL = 'http://localhost:3000'; // For development 
+const API_URL = 'https://bhspairs.herokuapp.com'; // For deployment
+// const API_URL = 'http://localhost:3000'; // For development 
 
 const people =[
     {name: "Adam", skipper: true, crew: false},
@@ -211,16 +211,16 @@ function makeName(name){ // creates single name
             }
         })
     }
-    if(name == 'Elliott'){
-        nameEl.addEventListener('click', ()=>{
-            betoClicks++;
-            if(betoClicks == 10){
-                betoClicks = 0;
-                console.log('Elliott secret');
-                location.href = 'https://exoplanetresearch.netlify.app/'
-            }
-        })
-    }
+    // if(name == 'Elliott'){
+    //     nameEl.addEventListener('click', ()=>{
+    //         betoClicks++;
+    //         if(betoClicks == 10){
+    //             betoClicks = 0;
+    //             console.log('Elliott secret');
+    //             location.href = 'https://exoplanetresearch.netlify.app/'
+    //         }
+    //     })
+    // }
 
     return nameEl;
 }
