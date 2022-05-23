@@ -66,7 +66,7 @@ button{
     flex-direction: row;
     position: fixed;
     width: 100%;
-    z-index: 2;
+    z-index: 15;
 }
 #title{
     /* width: 100%; */
@@ -94,6 +94,7 @@ button{
     height: 33px;
     padding: 5px;
     margin: 22px 0px;
+    cursor:pointer;
     /* left: 50%; */
 }
 #resetPairs,#randomPairs, #squareMode, #graphMode{
@@ -103,6 +104,7 @@ button{
     height: 33px;
     padding: 7px;
     margin: 22px 0px 0px 10px;
+    cursor:pointer;
 }
 #randomPairs{
     padding: 5px;
@@ -128,6 +130,7 @@ button{
 #loadText{
     width: 200px;
     text-align: center;
+    cursor:pointer;
 }
 #loadSaveWindow{
     /* position: absolute; */
@@ -253,7 +256,9 @@ button{
     text-align: center;
     padding: 15px;
 }
-
+.name{
+    cursor:grab;
+}
 #right .name{
     display:inline-block;
     background-color:var(--med);
@@ -319,7 +324,7 @@ button{
 }
 .dropdown{
     background: var(--medLight);
-    z-index: 10;
+    z-index: 8;
     width:100px;
     min-height: 30px;
     max-height: 150px;

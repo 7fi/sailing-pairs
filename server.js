@@ -169,7 +169,7 @@ class person{
 
 loadVals();
 async function loadVals(){
-    values = await gsrun(client, "'scores'!A1:AG47")
+    values = await gsrun(client, "'scores'!A1:AG52")
     venues = values[0]
 
     for(let i = 1; i < values.length; i++){
@@ -181,32 +181,34 @@ function getData(type, name, fleet, division, position, pair, regatta){
     let res = []
     people.forEach(x => {
         //console.log(x.name);
-        if(x.name == name){
-            tempRaces = x.races
+        if(x.name == name && x.races != undefined){
+            tempRaces = [...x.races]
             for(let race = 0; race < x.races.length; race++){
-                if(fleet != undefined){
-                    if(x.races[race].fleet != fleet){
-                        tempRaces[race] = undefined
+                if(x.races[race] != undefined){
+                    if(fleet != undefined){
+                        if(x.races[race].fleet != fleet){
+                            tempRaces[race] = undefined
+                        }
                     }
-                }
-                if(division != undefined){
-                    if(x.races[race].division != division){
-                        tempRaces[race] = undefined
+                    if(division != undefined){
+                        if(x.races[race].division != division){
+                            tempRaces[race] = undefined
+                        }
                     }
-                }
-                if(position != undefined){
-                    if(x.races[race].position != position){
-                        tempRaces[race] = undefined
+                    if(position != undefined){
+                        if(x.races[race].position != position){
+                            tempRaces[race] = undefined
+                        }
                     }
-                }
-                if(pair != undefined){
-                    if(x.races[race].pair != pair){
-                        tempRaces[race] = undefined
+                    if(pair != undefined){
+                        if(x.races[race].pair != pair){
+                            tempRaces[race] = undefined
+                        }
                     }
-                }
-                if(regatta != undefined){
-                    if(x.races[race].regatta != regatta){
-                        tempRaces[race] = undefined
+                    if(regatta != undefined){
+                        if(x.races[race].regatta != regatta){
+                            tempRaces[race] = undefined
+                        }
                     }
                 }
             }

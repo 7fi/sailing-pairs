@@ -13,10 +13,10 @@ async function addDataset(){
     let fleets = ["any","g", "s","z"];
     let divisions = ["any","a", "b"];
 
-    const typeDrop = document.createElement('div');
-    typeDrop.classList.add("dropdown");
     const typeDropLabel = document.createElement('div');
     typeDropLabel.innerHTML = "raw";
+    const typeDrop = document.createElement('div');
+    typeDrop.classList.add("dropdown");
     typeDrop.appendChild(typeDropLabel);
     
     for(let i = 0; i < types.length; i++){
