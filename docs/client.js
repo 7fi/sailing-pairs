@@ -41,8 +41,8 @@ if(window.location.href.includes("scores")){
 let mobile = window.matchMedia("only screen and (max-width: 1000px)").matches;
 let findDuplicates = arr => arr.filter((item, index) => arr.indexOf(item) != index);
 
-// const API_URL = 'https://bhspairs.herokuapp.com'; // For deployment
-const API_URL = 'http://localhost:3000'; // For development 
+const API_URL = 'https://bhspairs.herokuapp.com'; // For deployment
+// const API_URL = 'http://localhost:3000'; // For development 
 
 const people =[
     {name: "Adam", skipper: true, crew: false},
