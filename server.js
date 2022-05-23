@@ -62,8 +62,8 @@ async function test(){
 
 // Handle post request for creating a saved pairing list
 app.post('/pairs', async (req,res) => {
-    console.log(req.body);
-
+    // console.log(req.body);
+    
     var pairs = req.body;
     if(req.body.name.length < 30){
         const saverPairs = new Pairs(pairs);
@@ -71,15 +71,17 @@ app.post('/pairs', async (req,res) => {
         await saverPairs.save();
         await saverPairs2.save();
     }
-
+    
     res.json({status:'sucess', pairs: req.body})
+    console.log("Pairs saved")
 })
 
 // Handle request single saved pairing list
 app.post('/getPairs', async (req, res) => {
     if(req.body.name != ''){
         Pairs.findOne({name: req.body.name}, async function (err, docs){
-            console.log(docs);
+            // console.log(docs);
+            console.log("pairs gotten")
             res.json({pairs:docs})
         })
     }
@@ -88,7 +90,8 @@ app.post('/getPairs', async (req, res) => {
 //Handle request for updated saved pairs
 app.post('/getNames', async (req,res) => {
     Pairs.find({}, async function (err, docs){
-        console.log(await docs);
+        // console.log(await docs);
+        console.log("Names gotten")
         res.json({pairs:docs})
     })
 })
@@ -101,7 +104,7 @@ app.post('/delPair', async (req,res) =>{
 })
 
 app.post('/scores', async(req,res) =>{
-    console.log(req.body);
+    // console.log(req.body);
     res.json({body: getData(req.body.type,req.body.name,req.body.fleet,req.body.division,req.body.position,req.body.pair,req.body.regatta), labels: venues})
 })
 
