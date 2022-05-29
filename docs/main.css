@@ -267,9 +267,13 @@ button{
 }
 .name{
     cursor:grab;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap:10px;
 }
 #right .name{
-    display:inline-block;
+    /* display:inline-block; */
     background-color:var(--med);
     width:calc(50% - 20px);
     text-align: center;
@@ -283,7 +287,7 @@ button{
     color: var(--highlight);
 }
 .pairSlot .name{
-    display:inline-block;
+    /* display:inline-block; */
     background-color:var(--med);
     z-index: 1;
     text-align: center;
