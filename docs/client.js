@@ -16,10 +16,12 @@ const modeToggle = document.getElementById('modeToggle');
 const resetPairs = document.getElementById('resetPairs');
 const randomPairs = document.getElementById('randomPairs');
 const squareMode = document.getElementById('squareMode');
+const picModeButton = document.getElementById('picMode');
 const betoEl = document.getElementById('betoEl');
 
 let lightMode = true;
 let square = false;
+let picMode = false;
 
 let betoClicks = 0;
 let betoQuotes = ['Hi',"I'm bad at sailing!"];
@@ -156,7 +158,18 @@ function makeNames(inputPairs){ // makes name list without the input parings
 }
 function makeName(name){ // creates single name 
     const nameEl = document.createElement('button');
-    nameEl.textContent = name;
+    if(picMode == false){
+        nameEl.textContent = name;
+    }else{
+        const profilePic = document.createElement("img");
+        profilePic.classList.add("profilePic");
+        if(name != "Adam" && name != "Owen"  && name != "Pearl"){
+            profilePic.src = "/docs/img/ppl/" + name + ".png";
+            nameEl.appendChild(profilePic);
+        }else{
+            nameEl.innerHTML = name;
+        }
+    }
     nameEl.classList.add('name');
     nameEl.classList.add('draggable');
     nameEl.setAttribute("draggable", "true");
@@ -515,6 +528,23 @@ randomPairs.addEventListener('click', () => {
     makePairs(newNames);
     makeNames(newNames);
 })
+
+picModeButton.addEventListener('click', () => {
+    if(picMode){
+        document.getElementById('pairingHolder').classList.remove('pairingHolderPic');
+    }else{
+        document.getElementById('pairingHolder').classList.add('pairingHolderPic');
+    }
+    picMode = !picMode;
+    let pairs = {name:nameInput.value};
+    for (let i = 0; i < names.length; i++) {
+        pairs[i] = pairingHolder.children[i].textContent;
+    }
+    makeNames(pairs);
+    makePairs(pairs);
+    console.log(picMode);
+})
+
 }
 squareMode.addEventListener('click', () => {
     if(square){

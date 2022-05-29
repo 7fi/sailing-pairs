@@ -97,7 +97,7 @@ button{
     cursor:pointer;
     /* left: 50%; */
 }
-#resetPairs,#randomPairs, #squareMode, #graphMode{
+#resetPairs,#randomPairs, #squareMode, #graphMode, #picMode{
     background-color: var(--med);
     border-radius: var(--radius);
     width: 33px;
@@ -221,10 +221,19 @@ button{
 
 #pairingHolder{
     display:grid;
-    width: 100%;height: 100%;
+    width: 100%;
+    height: 100%;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: repeat(16, 47px);
     gap:7px;
+}
+.pairingHolderPic{
+    grid-template-rows:repeat(16,105px)!important;
+}
+.profilePic{
+    object-fit:cover;
+    width: 75px;
+    height: 75px;
 }
 .pairSlot{
     background-color: var(--dark);
@@ -347,6 +356,7 @@ button{
 .dropMember:hover{
     background-color: var(--light);
 }
+
 
 /*For moblie stuffs*/
 @media only screen and (max-width:1000px){
