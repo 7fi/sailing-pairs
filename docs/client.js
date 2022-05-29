@@ -60,7 +60,7 @@ const people =[
     {name: "Fin", skipper: false, crew: true},
     {name: "Gianna", skipper: true, crew: false},
     {name: "Jaya", skipper: false, crew: true},
-    {name: "Jeffery", skipper: false, crew: true},
+    {name: "Jeffrey", skipper: false, crew: true},
     {name: "Joseph", skipper: false, crew: true},
     {name: "Lauren", skipper: true, crew: true},
     {name: "Logan", skipper: true, crew: true},
