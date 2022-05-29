@@ -161,13 +161,12 @@ function makeName(name){ // creates single name
     if(picMode == false){
         nameEl.textContent = name;
     }else{
-        const profilePic = document.createElement("img");
-        profilePic.classList.add("profilePic");
+        nameEl.innerHTML = name;
         if(name != "Adam" && name != "Owen"  && name != "Pearl"){
-            profilePic.src = "/docs/img/ppl/" + name + ".png";
+            const profilePic = document.createElement("img");
+            profilePic.classList.add("profilePic");
+            profilePic.src = "/img/ppl/" + name + ".png";
             nameEl.appendChild(profilePic);
-        }else{
-            nameEl.innerHTML = name;
         }
     }
     nameEl.classList.add('name');
