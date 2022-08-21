@@ -58,8 +58,8 @@ const people =[
     {name: "Cyrus", skipper: false, crew: true},
     {name: "Elliott", skipper: true, crew: true},
     {name: "Fin", skipper: false, crew: true},
-    {name: "Gretchen", skipper: false, crew: true},
-    {name: "Gretchen", skipper: false, crew: true},
+    {name: "Gretchen F", skipper: false, crew: true},
+    {name: "Gretchen I", skipper: false, crew: true},
     {name: "Holden", skipper: false, crew: true},
     {name: "Jaya", skipper: false, crew: true},
     {name: "Jeffrey", skipper: false, crew: true},
@@ -82,8 +82,8 @@ const people =[
 ]
 
 // Name list
-const names = ['Adam','Alden','Ava','Barrett','Ben','Beto','Carter','Chris','Elliott','Evan','Fin','Gianna','Jaya','Jeffrey','Joseph','Lauren','Logan','Luke','Maura','Maxwell','Nick','Nolan W','Nolan L','Owen','Payton','Pearl','Ryan','Sabrina','Sharkey','Stone','Talia','Zane'];
-const pref = [true, true,true,true,true,true,true,false,false,true,false,true,false,false,false,true,false,true, false,false,false,true,true,true,false,false,true,false,false,true,false,true];
+const names = ['Adam','Alexander','Ava','Ben','Beto','Carter','Cascade','Chris','Cyrus','Elliott','Fin','Gretchen F','Gretchen I','Jaya','Jeffrey','Joseph','Logan','Luke','Maura','Nelson','Nick','Nolan','Owen','Payton','Pearl','Ryan','Sabrina','Sharkey','Stella','Suraj','Talia','Zephyr'];
+//const pref = [true, true,true,true,true,true,true,false,false,true,false,true,false,false,false,true,false,true, false,false,false,true,true,true,false,false,true,false,false,true,false,true];
 
 function load(){
     let myBool = (decodeURIComponent(document.cookie).split('=')[1] === 'true');
