@@ -82,7 +82,7 @@ const people =[
 ]
 
 // Name list
-const names = ['Adam','Alexander','Ava','Ben','Beto','Carter','Cascade','Chris','Cyrus','Elliott','Fin','Gretchen F','Gretchen I','Jaya','Jeffrey','Joseph','Logan','Luke','Maura','Nelson','Nick','Nolan','Owen','Payton','Pearl','Ryan','Sabrina','Sharkey','Stella','Suraj','Talia','Zephyr'];
+const names = ['Adam','Alexander','Ava','Ben','Beto','Carter','Cascade','Chris','Cyrus','Elliott','Fin','Gretchen F','Gretchen I','Holden','Jaya','Jeffrey','Joseph','Logan','Luke','Maura','Nelson','Nick','Nolan','Owen','Payton','Ryan','Sabrina','Sharkey','Stella','Suraj','Talia','Zephyr'];
 //const pref = [true, true,true,true,true,true,true,false,false,true,false,true,false,false,false,true,false,true, false,false,false,true,true,true,false,false,true,false,false,true,false,true];
 
 function load(){
@@ -162,7 +162,7 @@ function makeName(name){ // creates single name
         nameEl.textContent = name;
     }else{
         nameEl.innerHTML = name;
-        if(name != "Adam" && name != "Owen"  && name != "Pearl"){
+        if(name != "Adam" && name != "Alexander" && name != "Owen" && name != "Cascade" && name != "Cyrus" && name != "Gretchen I" && name != "Gretchen F" && name != "Holden" && name != "Nelson" && name != "Stella" && name != "Suraj" && name != "Zephyr"){
             const profilePic = document.createElement("img");
             profilePic.classList.add("profilePic");
             profilePic.src = "/img/ppl/" + name + ".png";
