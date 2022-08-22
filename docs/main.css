@@ -64,7 +64,7 @@ button{
     grid-area: header;
     display: flex;
     flex-direction: row;
-    position: fixed;
+    position: relative;
     width: 100%;
     z-index: 8;
 }
@@ -105,6 +105,9 @@ button{
     padding: 7px;
     margin: 22px 0px 0px 10px;
     cursor:pointer;
+}
+#picMode{
+    margin: 6px 6px 0px 6px;
 }
 #randomPairs{
     padding: 5px;
@@ -385,6 +388,7 @@ button{
     }
     #title{
         padding:5px;
+        font-size: 1.6em;
     }
     #modeToggle, #resetPairs, #randomPairs, #squareMode{
         margin:5px;
