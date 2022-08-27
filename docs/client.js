@@ -64,7 +64,7 @@ const people =[
     {name: "Jaya", skipper: false, crew: true},
     {name: "Jeffrey", skipper: false, crew: true},
     {name: "Joseph", skipper: false, crew: true},
-    {name: "Logan", skipper: true, crew: true},
+    {name: "Kai", skipper:false, crew:true},
     {name: "Luke", skipper: false, crew: true},
     {name: "Maura", skipper: true, crew: true},
     {name: "Nelson", skipper: true, crew: true},
@@ -82,7 +82,7 @@ const people =[
 ]
 
 // Name list
-const names = ['Adam','Alexander','Ava','Ben','Beto','Carter','Cascade','Chris','Cyrus','Elliott','Fin','Gretchen F','Gretchen I','Holden','Jaya','Jeffrey','Joseph','Logan','Luke','Maura','Nelson','Nick','Nolan','Owen','Payton','Ryan','Sabrina','Sharkey','Stella','Suraj','Talia','Zephyr'];
+const names = ['Adam','Alexander','Ava','Ben','Beto','Carter','Cascade','Chris','Cyrus','Elliott','Fin','Gretchen F','Gretchen I','Holden','Jaya','Jeffrey','Joseph','Kai','Luke','Maura','Nelson','Nick','Nolan','Owen','Payton','Ryan','Sabrina','Sharkey','Stella','Suraj','Talia','Zephyr'];
 //const pref = [true, true,true,true,true,true,true,false,false,true,false,true,false,false,false,true,false,true, false,false,false,true,true,true,false,false,true,false,false,true,false,true];
 
 function load(){
