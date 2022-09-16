@@ -49,18 +49,21 @@ const API_URL = 'https://bhspairs.herokuapp.com'; // For deployment
 const people =[
     {name: "Adam", skipper: true, crew: false},
     {name: "Alexander", skipper: true, crew: false},
+    {name: "Andrea", skipper: true, crew: true},
     {name: "Ava", skipper: true, crew: true},
-    {name: "Ben", skipper: true, crew: true},
+    {name: "Ben", skipper: true, crew: false},
     {name: "Beto", skipper: true, crew: false},
+    {name: "Carson", skipper: false, crew: true},
     {name: "Carter", skipper: true, crew: false},
-    {name: "Cascade", skipper: true, crew: true},
     {name: "Chris", skipper: false, crew: true},
+    {name: "Cole", skipper: false, crew: true},
     {name: "Cyrus", skipper: false, crew: true},
     {name: "Elliott", skipper: true, crew: true},
     {name: "Fin", skipper: false, crew: true},
     {name: "Gretchen F", skipper: false, crew: true},
     {name: "Gretchen I", skipper: false, crew: true},
     {name: "Holden", skipper: false, crew: true},
+    {name: "Isaia", skipper: true, crew: true},
     {name: "Jaya", skipper: false, crew: true},
     {name: "Jeffrey", skipper: false, crew: true},
     {name: "Joseph", skipper: false, crew: true},
@@ -82,7 +85,7 @@ const people =[
 ]
 
 // Name list
-const names = ['Adam','Alexander','Ava','Ben','Beto','Carter','Cascade','Chris','Cyrus','Elliott','Fin','Gretchen F','Gretchen I','Holden','Jaya','Jeffrey','Joseph','Kai','Luke','Maura','Nelson','Nick','Nolan','Owen','Payton','Ryan','Sabrina','Sharkey','Stella','Suraj','Talia','Zephyr'];
+const names = ['Adam','Alexander','Andrea','Ava','Ben','Beto','Carson','Carter','Cascade','Chris','Cole','Cyrus','Elliott','Fin','Gretchen F','Gretchen I','Holden','Isaia','Jaya','Jeffrey','Joseph','Kai','Luke','Maura','Nelson','Nick','Nolan','Owen','Payton','Ryan','Sabrina','Sharkey','Stella','Suraj','Talia','Zephyr'];
 //const pref = [true, true,true,true,true,true,true,false,false,true,false,true,false,false,false,true,false,true, false,false,false,true,true,true,false,false,true,false,false,true,false,true];
 
 function load(){
