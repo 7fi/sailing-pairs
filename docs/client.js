@@ -104,7 +104,7 @@ function makePairs(inputPairs){ // Creates pair slots either empty or populated 
         pairingHolder.removeChild(pairingHolder.firstChild);
     }
     // Creates all pair slots
-    for (let i = 0; i < names.length; i++) {
+    for (let i = 0; i < (Math.floor((names.length)/2)*2); i++) {
         const pairSlotEl = document.createElement('div');
         pairSlotEl.classList.add('pairSlot');
 
