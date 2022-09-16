@@ -85,7 +85,7 @@ const people =[
 ]
 
 // Name list
-const names = ['Adam','Alexander','Andrea','Ava','Ben','Beto','Carson','Carter','Cascade','Chris','Cole','Cyrus','Elliott','Fin','Gretchen F','Gretchen I','Holden','Isaia','Jaya','Jeffrey','Joseph','Kai','Luke','Maura','Nelson','Nick','Nolan','Owen','Payton','Ryan','Sabrina','Sharkey','Stella','Suraj','Talia','Zephyr'];
+const names = ['Adam','Alexander','Andrea','Ava','Ben','Beto','Carson','Carter','Chris','Cole','Cyrus','Elliott','Fin','Gretchen F','Gretchen I','Holden','Isaia','Jaya','Jeffrey','Joseph','Kai','Luke','Maura','Nelson','Nick','Nolan','Owen','Payton','Ryan','Sabrina','Sharkey','Stella','Suraj','Talia','Zephyr'];
 //const pref = [true, true,true,true,true,true,true,false,false,true,false,true,false,false,false,true,false,true, false,false,false,true,true,true,false,false,true,false,false,true,false,true];
 
 function load(){
@@ -104,7 +104,8 @@ function makePairs(inputPairs){ // Creates pair slots either empty or populated 
         pairingHolder.removeChild(pairingHolder.firstChild);
     }
     // Creates all pair slots
-    for (let i = 0; i < (Math.floor((names.length)/2)*2); i++) {
+    console.log("SUP", Math.floor((names.length)/2)*2);
+    for (let i = 0; i < (Math.floor((names.length)/2)*2); i++){
         const pairSlotEl = document.createElement('div');
         pairSlotEl.classList.add('pairSlot');
 
