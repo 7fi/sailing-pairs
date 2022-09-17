@@ -87,6 +87,7 @@ const people =[
 // Name list
 const names = ['Adam','Alexander','Andrea','Ava','Ben','Beto','Carson','Carter','Chris','Cole','Cyrus','Elliott','Fin','Gretchen F','Gretchen I','Holden','Isaia','Jaya','Jeffrey','Joseph','Kai','Luke','Maura','Nelson','Nick','Nolan','Owen','Payton','Ryan','Sabrina','Sharkey','Stella','Suraj','Talia','Zephyr'];
 //const pref = [true, true,true,true,true,true,true,false,false,true,false,true,false,false,false,true,false,true, false,false,false,true,true,true,false,false,true,false,false,true,false,true];
+const slotsLength = (Math.floor((names.length)/2)*2);
 
 function load(){
     let myBool = (decodeURIComponent(document.cookie).split('=')[1] === 'true');
@@ -104,8 +105,7 @@ function makePairs(inputPairs){ // Creates pair slots either empty or populated 
         pairingHolder.removeChild(pairingHolder.firstChild);
     }
     // Creates all pair slots
-    console.log("SUP", Math.floor((names.length)/2)*2);
-    for (let i = 0; i < (Math.floor((names.length)/2)*2); i++){
+    for (let i = 0; i < slotsLength; i++){
         const pairSlotEl = document.createElement('div');
         pairSlotEl.classList.add('pairSlot');
 
@@ -115,11 +115,14 @@ function makePairs(inputPairs){ // Creates pair slots either empty or populated 
             pairSlotEl.appendChild(nameEl);
         }
         //add event listeners
-        pairSlotEl.addEventListener('click', () => {
+        pairSlotEl.addEventListener('click', (e) => {
             const tempSelected = document.querySelector('.selected');
             if(tempSelected != null || tempSelected != undefined){
                 pairSlotEl.append(tempSelected);
-                tempSelected.classList.remove('selected');
+                if(e.target != tempSelected){
+                    tempSelected.classList.remove('selected');
+                    console.log("Removed 3")
+                }
             }
         })
         pairSlotEl.addEventListener('dragover', e => {
@@ -184,8 +187,9 @@ function makeName(name){ // creates single name
         })
         
         nameEl.addEventListener('dragend', async () =>{
-            for (let i = 0; i < names.length; i++) {
+            for (let i = 0; i < slotsLength; i++) {
                 const cur = pairingHolder.children[i];
+                //console.log(cur)
                 if(cur.childElementCount > 1){
                     nameList.appendChild(cur.children[0]);
                 }
@@ -198,9 +202,20 @@ function makeName(name){ // creates single name
         nameEl.addEventListener('click', async () => {
             const tempSelected = document.querySelector('.selected');
             if(tempSelected != null || tempSelected != undefined){
+                nameEl.parentElement.append(tempSelected);
+                nameList.appendChild(nameEl);
                 tempSelected.classList.remove('selected');
+            }else{
+                nameEl.classList.add('selected');
             }
-            nameEl.classList.add('selected');
+
+            for (let i = 0; i < slotsLength; i++) {
+                const cur = pairingHolder.children[i];
+                //console.log(cur)
+                if(cur.childElementCount > 1){
+                    nameList.appendChild(cur.children[0]);
+                }
+            }
         }) 
     }
 
@@ -257,7 +272,9 @@ nameList.addEventListener('click', e => {
     if(e.target == nameList && mobile){
         const tempSelected = document.querySelector('.selected');
         if(tempSelected != null || tempSelected != undefined){
+            nameList.append(tempSelected);
             tempSelected.classList.remove('selected');
+            console.log("Removed 2")
         }
     }
 })
@@ -267,7 +284,7 @@ nameList.addEventListener('click', e => {
 saveButton.addEventListener('click', async () => {
     if(nameInput.value != ""){
         let pairs = {name:nameInput.value};
-        for (let i = 0; i < names.length; i++) {
+        for (let i = 0; i < slotsLength; i++) {
             pairs[i] = pairingHolder.children[i].textContent;
         }
 
