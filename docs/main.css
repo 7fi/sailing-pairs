@@ -97,7 +97,7 @@ button{
     cursor:pointer;
     /* left: 50%; */
 }
-#resetPairs,#randomPairs, #squareMode, #graphMode, #picMode{
+#selectAbsent, #resetPairs,#randomPairs, #squareMode, #graphMode, #picMode{
     background-color: var(--med);
     border-radius: var(--radius);
     width: 33px;
@@ -197,6 +197,9 @@ button{
 }
 .loadName:hover{
     background-color: #00000044;
+}
+.absent{
+    background-color: #42caca!important;
 }
 .selected{
     background-color: #f00!important;
@@ -388,7 +391,7 @@ button{
         padding:5px;
         font-size: 1.6em;
     }
-    #modeToggle, #resetPairs, #randomPairs, #squareMode{
+    #modeToggle, #selectAbsent, #resetPairs, #randomPairs, #squareMode{
         margin:5px;
     }
     #loadSave{

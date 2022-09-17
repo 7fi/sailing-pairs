@@ -133,6 +133,14 @@ const pairsSchema = new mongoose.Schema({
     type: String,
     required:false
 },
+'32':{
+    type: String,
+    required:false
+},
+'33':{
+    type: String,
+    required:false
+},
 })
 
 module.exports = mongoose.model('PairsBackup', pairsSchema)

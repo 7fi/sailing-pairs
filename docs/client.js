@@ -22,6 +22,8 @@ const betoEl = document.getElementById('betoEl');
 let lightMode = true;
 let square = false;
 let picMode = false;
+let selAbsent = false;
+let absent = [];
 
 let betoClicks = 0;
 let betoQuotes = ['Hi',"I'm bad at sailing!"];
@@ -88,6 +90,7 @@ const people =[
 const names = ['Adam','Alexander','Andrea','Ava','Ben','Beto','Carson','Carter','Chris','Cole','Cyrus','Elliott','Fin','Gretchen F','Gretchen I','Holden','Isaia','Jaya','Jeffrey','Joseph','Kai','Luke','Maura','Nelson','Nick','Nolan','Owen','Payton','Ryan','Sabrina','Sharkey','Stella','Suraj','Talia','Zephyr'];
 //const pref = [true, true,true,true,true,true,true,false,false,true,false,true,false,false,false,true,false,true, false,false,false,true,true,true,false,false,true,false,false,true,false,true];
 const slotsLength = (Math.floor((names.length)/2)*2);
+console.log(slotsLength, "slotsLength");
 
 function load(){
     let myBool = (decodeURIComponent(document.cookie).split('=')[1] === 'true');
@@ -110,10 +113,11 @@ function makePairs(inputPairs){ // Creates pair slots either empty or populated 
         pairSlotEl.classList.add('pairSlot');
 
         //If input pairing supplied then populate with new name
-        if(inputPairs != undefined && inputPairs[i] != ""){
+        if(inputPairs != undefined && inputPairs[i] != "" && inputPairs[i] != undefined){
             const nameEl = makeName(inputPairs[i]);
             pairSlotEl.appendChild(nameEl);
         }
+        
         //add event listeners
         pairSlotEl.addEventListener('click', (e) => {
             const tempSelected = document.querySelector('.selected');
@@ -200,13 +204,19 @@ function makeName(name){ // creates single name
         })
     }else{ // otherwise mobile
         nameEl.addEventListener('click', async () => {
-            const tempSelected = document.querySelector('.selected');
-            if(tempSelected != null || tempSelected != undefined){
-                nameEl.parentElement.append(tempSelected);
-                nameList.appendChild(nameEl);
-                tempSelected.classList.remove('selected');
+            if(!selAbsent){
+                const tempSelected = document.querySelector('.selected');
+                if(tempSelected != null || tempSelected != undefined){
+                    nameEl.parentElement.append(tempSelected);
+                    nameList.appendChild(nameEl);
+                    tempSelected.classList.remove('selected');
+                }else{
+                    nameEl.classList.add('selected');
+                }
             }else{
-                nameEl.classList.add('selected');
+                absent.push(nameEl.innerHTML);
+                nameEl.classList.add('absent');
+                console.log(absent);
             }
 
             for (let i = 0; i < slotsLength; i++) {
@@ -478,6 +488,10 @@ loadSaveContainer.addEventListener('click', (e) => {
     }
 })
 
+selectAbsent.addEventListener('click', () =>{
+    selAbsent = !selAbsent;
+})
+
 //Reset pairs button
 resetPairs.addEventListener('click', () => {
     getSaved();
@@ -489,7 +503,9 @@ resetPairs.addEventListener('click', () => {
 randomPairs.addEventListener('click', () => {
     let shuffledNames = []; //names.slice()
     people.forEach(person => {
-        shuffledNames.push(person.name);
+        if(!absent.includes(person.name)){
+            shuffledNames.push(person.name);
+        }
     });
     let currentIndex = shuffledNames.length,  randomIndex;
     
@@ -502,7 +518,7 @@ randomPairs.addEventListener('click', () => {
     
     let skippers = [];
     let crews = [];
-    console.log();
+    console.log(shuffledNames.length);
     for(let i = 0; i < shuffledNames.length; i++){
         if(people[people.findIndex((e) => e.name == shuffledNames[i])].skipper && !(skippers.length >= shuffledNames.length/2)){
             skippers.push(shuffledNames[i]);
@@ -515,7 +531,8 @@ randomPairs.addEventListener('click', () => {
     // console.log(skippers);
     // console.log(crews);
     
-    currentIndex = skippers.length,  randomIndex;
+    //shuffle skippers
+    currentIndex = skippers.length, randomIndex;
     
     while (currentIndex != 0) {
         randomIndex = Math.floor(Math.random() * currentIndex);
@@ -524,7 +541,8 @@ randomPairs.addEventListener('click', () => {
         [skippers[currentIndex], skippers[randomIndex]] = [skippers[randomIndex], skippers[currentIndex]];
     }
     
-    currentIndex = crews.length,  randomIndex;
+    //shuffle crews
+    currentIndex = crews.length,randomIndex;
     
     while (currentIndex != 0) {
         randomIndex = Math.floor(Math.random() * currentIndex);
@@ -533,8 +551,8 @@ randomPairs.addEventListener('click', () => {
         [crews[currentIndex], crews[randomIndex]] = [crews[randomIndex], crews[currentIndex]];
     }
 
-    // console.log(skippers);
-    // console.log(crews);
+    console.log(skippers);
+    console.log(crews);
     let newNames = [];
     
     for(let i = 0; i < shuffledNames.length; i++){
