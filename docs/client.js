@@ -206,6 +206,19 @@ function makeName(name){ // creates single name
             nameEl.classList.remove('dragging');
             console.log("dragend: " , nameEl.textContent);
         })
+
+        nameEl.addEventListener('click', async () => {
+            if(selAbsent){
+                if(!absent.includes(nameEl.innerHTML)){
+                    absent.push(nameEl.innerHTML);
+                    nameEl.classList.add('absent');
+                }else{
+                    absent.splice(absent.indexOf(nameEl.innerHTML), 1);
+                    nameEl.classList.remove('absent');
+                }
+                //console.log(absent);
+            }
+        })
     }else{ // otherwise mobile
         nameEl.addEventListener('click', async () => {
             if(!selAbsent){
@@ -218,9 +231,14 @@ function makeName(name){ // creates single name
                     nameEl.classList.add('selected');
                 }
             }else{
-                absent.push(nameEl.innerHTML);
-                nameEl.classList.add('absent');
-                console.log(absent);
+                if(!absent.includes(nameEl.innerHTML)){
+                    absent.push(nameEl.innerHTML);
+                    nameEl.classList.add('absent');
+                }else{
+                    absent.splice(absent.indexOf(nameEl.innerHTML), 1);
+                    nameEl.classList.remove('absent');
+                }
+                //console.log(absent);
             }
 
             for (let i = 0; i < slotsLength; i++) {
