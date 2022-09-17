@@ -13,6 +13,7 @@ const nameInput = document.getElementById('nameInput');
 const saveButton = document.getElementById('save');
 const saveButtonLocal = document.getElementById('saveLocal');
 const modeToggle = document.getElementById('modeToggle');
+const selectAbsent = document.getElementById('selectAbsent');
 const resetPairs = document.getElementById('resetPairs');
 const randomPairs = document.getElementById('randomPairs');
 const squareMode = document.getElementById('squareMode');
@@ -151,7 +152,7 @@ function makeNames(inputPairs){ // makes name list without the input parings
     if(inputPairs != undefined){
         let tempNames = names.slice();
         for (let i = 0; i < names.length; i++) {
-            if(inputPairs[i] != ''){
+            if(inputPairs[i] != '' && inputPairs[i] != undefined){
                 tempNames.splice(tempNames.indexOf(inputPairs[i]), 1);
                 // console.log(tempNames);
             }
@@ -159,6 +160,9 @@ function makeNames(inputPairs){ // makes name list without the input parings
         tempNames.forEach(name => {
             const nameEl = makeName(name);
             nameList.appendChild(nameEl);
+            if(absent.includes(nameEl.innerHTML)){
+                nameEl.classList.add('absent');
+            }
         });
     }else{ // otherwise make all names
         names.forEach(name => {
@@ -490,6 +494,7 @@ loadSaveContainer.addEventListener('click', (e) => {
 
 selectAbsent.addEventListener('click', () =>{
     selAbsent = !selAbsent;
+    selectAbsent.classList.toggle('absent');
 })
 
 //Reset pairs button
