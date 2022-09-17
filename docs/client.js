@@ -311,7 +311,7 @@ saveButtonLocal.addEventListener('click', () => {
     if(nameInput.value != ""){
         let pairs = {name:nameInput.value};
         let pairsArray = [];
-        for (let i = 0; i < names.length; i++) {
+        for (let i = 0; i < slotsLength; i++) {
             pairs[i] = pairingHolder.children[i].textContent;
             pairsArray.push(pairingHolder.children[i].textContent);
         }
