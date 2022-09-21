@@ -116,7 +116,7 @@ button{
 #graphMode{
     padding:0 0 0 25px;
 }
-#save, #loadText, #saveLocal{
+#save, #loadText, #saveLocal, #saveOfficial{
     /* position: absolute; */
     /* right: 0; */
     /* top:50%; */
@@ -127,6 +127,11 @@ button{
     border-radius: var(--radius);
     font-weight: 700;
     font-size: 1.1em;
+}
+#saveBoth{
+    grid-area: bottom;
+    padding: 0px;
+
 }
 #loadText{
     width: 200px;
@@ -139,7 +144,7 @@ button{
     /* top: 35%; */
     z-index: 10;
     display: grid;
-    grid-template-areas:  "left-load right-load" "name name" "left-bottom right-bottom";
+    grid-template-areas:  "left-load right-load" "name name" "left-bottom right-bottom" "bottom bottom";
     gap:5px;
     background-color: var(--dark);
     box-shadow: #000 3px 3px 10px;
@@ -245,14 +250,33 @@ button{
     display: grid;
     align-items: stretch;
 }
-.pairSlot:nth-child(2n - 1)::before{
+.pairSlot:nth-child(2n - 1):nth-child(-2n + 15)::before{
+    content:"FJ";
+}
+.pairSlot:nth-child(2n + 17):nth-child(-2n + 19)::before{
+    content:"C420";
+}
+.pairSlot:nth-child(2n + 21):nth-child(-2n + 31)::before{
+    content:"420E";
+}
+.pairSlot:nth-last-child(2n - 2)::before{
+    content:"Rotating";
+}
+.pairSlot::before{
+    z-index: 2;
+    position: absolute;
+    color:var(--highlight2); 
+    padding: 15px;
+    text-align: right;
+}
+/* .pairSlot:nth-child(2n - 1)::after{
     content:"Skipper";
     color:var(--highlight2);
-}
-.pairSlot:nth-child(2n - 1) .name{
+} */
+.pairSlot:nth-child(2n - 1) .name{  
     color:var(--highlight2);
 }
-.pairSlot:nth-child(2n)::before{
+.pairSlot:nth-child(2n)::after{
     content:"Crew";
     color:var(--highlight1);
 }
@@ -263,7 +287,7 @@ button{
     display: none;
 }
 
-.pairSlot::before{
+.pairSlot::after{
     position:absolute;
     font-weight: 500;
     text-align: center;

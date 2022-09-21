@@ -12,6 +12,7 @@ const localSaved = document.getElementById('localSaved');
 const nameInput = document.getElementById('nameInput');
 const saveButton = document.getElementById('save');
 const saveButtonLocal = document.getElementById('saveLocal');
+const saveButtonOfficial = document.getElementById('saveOfficial');
 const modeToggle = document.getElementById('modeToggle');
 const selectAbsent = document.getElementById('selectAbsent');
 const resetPairs = document.getElementById('resetPairs');
@@ -100,6 +101,20 @@ function load(){
         switchMode();
     }
 }
+
+function padTo2Digits(num) {
+    return num.toString().padStart(2, '0');
+}
+  
+function formatDate(date) {
+    return [
+        date.getFullYear(),
+        padTo2Digits(date.getMonth() + 1),
+        padTo2Digits(date.getDate()),
+    ].join('-');
+}
+
+console.log(formatDate(new Date()));
 
 if(thisPage == 'main'){
 makePairs();
@@ -335,6 +350,40 @@ saveButton.addEventListener('click', async () => {
         makePairs();
         makeNames();
         getSaved();
+    }else{
+        alert("Please Enter Your Name");
+    }
+})
+saveButtonOfficial.addEventListener('click', async () => {
+    if(nameInput.value != ""){
+        if(confirm("Are you sure you want to save these pairings officially?")){
+            let inputDate = prompt("Enter date of pairings (Leave blank for todays date) (YYYY-MM-DD)");
+            if(inputDate != "" && dateInput.value.length != 9){
+                return;
+            }else{
+                inputDate = formatDate(new Date());
+            }
+            let pairs = {name:nameInput.value, date:inputDate};
+            for (let i = 0; i < slotsLength; i++) {
+                pairs[i] = pairingHolder.children[i].textContent;
+            }
+
+            console.log(pairs);
+            nameInput.value = "";
+
+            //send to server
+            options = {method:"POST",headers:{"Content-Type":"application/json"},body: JSON.stringify(pairs)};
+            loadingEl.style.display ='block';
+            const response = await fetch(API_URL + '/pairsOfficial', options);
+            const json = await response.json();
+            loadingEl.style.display ='none';
+            console.log(json);
+            
+            //reset
+            makePairs();
+            makeNames();
+            getSaved();
+        }
     }else{
         alert("Please Enter Your Name");
     }

@@ -10,6 +10,7 @@ const dotenv = require('dotenv').config();
 //Import pairs datastructure model
 const Pairs = require('./models/Pairs');
 const PairsBackup = require('./models/PairsBackup');
+const boatCount = require('./models/boatCount');
 
 // enable express && cors
 const app = express();
@@ -76,6 +77,22 @@ app.post('/pairs', async (req,res) => {
     console.log("Pairs saved")
 })
 
+// Handle post request for creating a saved pairing list
+app.post('/pairsOfficial', async (req,res) => {
+    // console.log(req.body);
+    
+    var pairs = req.body;
+    if(req.body.name.length < 30){
+        const saverPairs = new PairsOfficial(pairs);
+        const saverPairs2 = new PairsBackup(pairs);
+        await saverPairs.save();
+        await saverPairs2.save();
+    }
+    
+    res.json({status:'sucess', pairs: req.body})
+    console.log("Pairs saved")
+})
+
 // Handle request single saved pairing list
 app.post('/getPairs', async (req, res) => {
     if(req.body.name != ''){
@@ -102,6 +119,25 @@ app.post('/delPair', async (req,res) =>{
         res.json({status:'sucess'})
     })
 })
+
+/* Unused now
+// Handle request to update boat count
+app.post('/BoatCount', async (req,res) =>{
+
+    var count = req.body;
+    const saverCount = new boatCount(count);
+    await saverCount.save();
+    
+    res.json({status:'sucess', boatCount: req.body})
+    console.log("Boat count saved")
+})
+
+// Handle request for boat count
+app.post('/getBoatCount', async (req,res) =>{
+    boatCount.find({}, async function(err,docs){
+        res.json({boatCount:docs})
+    })
+})*/
 
 app.post('/scores', async(req,res) =>{
     // console.log(req.body);

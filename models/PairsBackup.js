@@ -5,6 +5,10 @@ const pairsSchema = new mongoose.Schema({
     type: Object,
     required: true
   },
+  date: {
+    type: Date,
+    required: false
+  },
   '0':{
       type: String,
       required:false
