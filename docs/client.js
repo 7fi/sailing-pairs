@@ -424,15 +424,6 @@ saveButtonLocal.addEventListener('click', () => {
     }
 })
 
-async function getBoatCount(){
-    options = {method:"POST",headers:{"Content-Type":"application/json"},body: JSON.stringify({})};
-    loadingEl.style.display ='block';
-    const response = await fetch(API_URL + '/getPairsOfficial', options);
-    const json = await response.json();
-    loadingEl.style.display ='none';
-    console.log(json);
-}
-
 getSaved();
 //Gets list of saved paring names from server
 async function getSaved(){
@@ -554,6 +545,16 @@ async function getSaved(){
         }
     }
 
+}
+
+getBoatCount();
+async function getBoatCount(){
+    options = {method:"POST",headers:{"Content-Type":"application/json"},body: JSON.stringify({})};
+    loadingEl.style.display ='block';
+    const response = await fetch(API_URL + '/getPairsOfficial', options);
+    const json = await response.json();
+    loadingEl.style.display ='none';
+    console.log("Boat count",json);
 }
 
 loadText.addEventListener('click', () =>{

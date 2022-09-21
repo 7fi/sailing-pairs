@@ -5,7 +5,7 @@ const pairsOfficialSchema = new mongoose.Schema({
         type: Object,
         required: true
     },
-    date: {
+    practiceDate: {
         type: Date,
         required: true
     },

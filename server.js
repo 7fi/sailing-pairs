@@ -95,7 +95,7 @@ app.post('/pairsOfficial', async (req,res) => {
 // Handle request all saved official pairs
 app.post('/getPairsOfficial', async (req, res) => {
     if(req.body.name != ''){
-        Pairs.find({}, async function (err, docs){
+        PairsOfficial.find({}, async function (err, docs){
             // console.log(docs);
             console.log("pairs gotten")
             res.json({pairs:docs})
