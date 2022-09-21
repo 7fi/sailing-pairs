@@ -358,7 +358,8 @@ saveButtonOfficial.addEventListener('click', async () => {
     if(nameInput.value != ""){
         if(confirm("Are you sure you want to save these pairings officially?")){
             let inputDate = prompt("Enter date of pairings (Leave blank for todays date) (YYYY-MM-DD)");
-            if(inputDate != "" && dateInput.value.length != 9){
+            if(inputDate != "" && inputDate.length != 9){
+                alert("Invalid Date Format")
                 return;
             }else{
                 inputDate = formatDate(new Date());
