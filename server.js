@@ -10,7 +10,7 @@ const dotenv = require('dotenv').config();
 //Import pairs datastructure model
 const Pairs = require('./models/Pairs');
 const PairsBackup = require('./models/PairsBackup');
-const pairsOfficial = require('./models/pairsOfficial');
+const pairsOfficial = require('./models/PairsOfficial');
 
 // enable express && cors
 const app = express();
