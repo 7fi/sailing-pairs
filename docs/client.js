@@ -9,6 +9,10 @@ const loadText = document.getElementById('loadText');
 const loadSaveContainer = document.getElementById('loadSaveContainer');
 const localSaved = document.getElementById('localSaved');
 
+const countNamesHolder = document.getElementById('countNamesHolder');
+const countWindow = document.getElementById('countWindow');
+const countButton = document.getElementById('countButton');
+
 const nameInput = document.getElementById('nameInput');
 const saveButton = document.getElementById('save');
 const saveButtonLocal = document.getElementById('saveLocal');
@@ -364,7 +368,7 @@ saveButtonOfficial.addEventListener('click', async () => {
             }else{
                 inputDate = formatDate(new Date());
             }
-            let pairs = {name:nameInput.value, date:inputDate};
+            let pairs = {name:nameInput.value, practiceDate:inputDate};
             for (let i = 0; i < slotsLength; i++) {
                 pairs[i] = pairingHolder.children[i].textContent;
             }
@@ -552,10 +556,60 @@ async function getBoatCount(){
     options = {method:"POST",headers:{"Content-Type":"application/json"},body: JSON.stringify({})};
     loadingEl.style.display ='block';
     const response = await fetch(API_URL + '/getPairsOfficial', options);
-    const json = await response.json();
+    const pairings = await response.json();
     loadingEl.style.display ='none';
-    console.log("Boat count",json);
+    
+    let fjCount = new Array(names.length).fill(0);
+    let c420Count = new Array(names.length).fill(0);
+    let e420Count = new Array(names.length).fill(0);
+    for (let i = 0; i < pairings.pairs.length; i++) {
+        for(let j = 0; j < 16; j++){
+            fjCount[names.indexOf(pairings.pairs[i][j])]++;
+            console.log("HII")
+        }
+        for(let j = 16; j < 20; j++){
+            c420Count[names.indexOf(pairings.pairs[i][j])]++;
+        }
+        for(let j = 20; j < 34; j++){
+            e420Count[names.indexOf(pairings.pairs[i][j])]++;
+        }
+    }
+    console.log("Boat count",names,fjCount,c420Count,e420Count);
+
+    for(let i = 0; i < names.length; i++){
+        const nameEl = document.createElement('div');
+        nameEl.classList.add('countName');
+        nameEl.innerHTML = names[i];
+
+        const gapEl =document.createElement('div');
+        gapEl.style.flexGrow = 1;
+        nameEl.appendChild(gapEl);
+
+        const fjCountEl = document.createElement('div');
+        fjCountEl.classList.add('boatCount');
+        fjCountEl.innerHTML = fjCount[i];
+        nameEl.appendChild(fjCountEl);
+
+        const c420CountEl = document.createElement('div');
+        c420CountEl.classList.add('boatCount');
+        c420CountEl.innerHTML = c420Count[i];
+        nameEl.appendChild(c420CountEl);
+
+        const e420CountEl = document.createElement('div');
+        e420CountEl.classList.add('boatCount');
+        e420CountEl.innerHTML = e420Count[i];
+        nameEl.appendChild(e420CountEl);
+
+        countNamesHolder.appendChild(nameEl);
+    }
 }
+countButton.addEventListener('click', () =>{
+    countWindow.style.display = 'block';
+})
+countWindow.addEventListener('click', () =>{
+    countWindow.style.display = 'none';
+})
+
 
 loadText.addEventListener('click', () =>{
     if(loadText.style.display == 'grid'){
