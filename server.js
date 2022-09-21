@@ -10,7 +10,7 @@ const dotenv = require('dotenv').config();
 //Import pairs datastructure model
 const Pairs = require('./models/Pairs');
 const PairsBackup = require('./models/PairsBackup');
-const boatCount = require('./models/boatCount');
+const pairsOfficial = require('./models/pairsOfficial');
 
 // enable express && cors
 const app = express();
@@ -78,7 +78,7 @@ app.post('/pairs', async (req,res) => {
 })
 
 // Handle post request for creating a saved pairing list
-app.post('/pairsOfficial', async (req,res) => {
+app.post('/pairsOfficial', async (req,res,next) => {
     // console.log(req.body);
     
     var pairs = req.body;
