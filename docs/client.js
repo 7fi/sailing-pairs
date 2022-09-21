@@ -358,7 +358,7 @@ saveButtonOfficial.addEventListener('click', async () => {
     if(nameInput.value != ""){
         if(confirm("Are you sure you want to save these pairings officially?")){
             let inputDate = prompt("Enter date of pairings (Leave blank for todays date) (YYYY-MM-DD)");
-            if(inputDate != "" && inputDate.length != 9){
+            if(inputDate != "" && inputDate.length != 10){
                 alert("Invalid Date Format")
                 return;
             }else{
@@ -423,6 +423,15 @@ saveButtonLocal.addEventListener('click', () => {
         alert("Please Enter Your Name");
     }
 })
+
+async function getBoatCount(){
+    options = {method:"POST",headers:{"Content-Type":"application/json"},body: JSON.stringify({})};
+    loadingEl.style.display ='block';
+    const response = await fetch(API_URL + '/getPairsOfficial', options);
+    const json = await response.json();
+    loadingEl.style.display ='none';
+    console.log(json);
+}
 
 getSaved();
 //Gets list of saved paring names from server

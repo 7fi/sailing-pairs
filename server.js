@@ -92,6 +92,16 @@ app.post('/pairsOfficial', async (req,res) => {
     res.json({status:'sucess', pairs: req.body})
     console.log("Pairs saved")
 })
+// Handle request all saved official pairs
+app.post('/getPairsOfficial', async (req, res) => {
+    if(req.body.name != ''){
+        Pairs.find({}, async function (err, docs){
+            // console.log(docs);
+            console.log("pairs gotten")
+            res.json({pairs:docs})
+        })
+    }
+})
 
 // Handle request single saved pairing list
 app.post('/getPairs', async (req, res) => {
