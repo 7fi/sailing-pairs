@@ -129,7 +129,7 @@ button{
     font-size: 1.1em;
 }
 #saveBoth{
-    grid-area: mid-bottom;
+    grid-area: bottom;
     padding: 0px;
 
 }
@@ -144,7 +144,7 @@ button{
     /* top: 35%; */
     z-index: 10;
     display: grid;
-    grid-template-areas:  "left-load right-load" "name name" "left-bottom right-bottom" "mid-bottom mid-bottom" "bottom bottom";
+    grid-template-areas:  "left-load right-load" "name name" "left-bottom right-bottom" "bottom bottom";
     gap:5px;
     background-color: var(--dark);
     box-shadow: #000 3px 3px 10px;
@@ -172,16 +172,13 @@ button{
     /* margin:0; */
     padding:3px;
 }
-#loadDropContainer, #localSaved, #officialList{
+#loadDropContainer, #localSaved{
     display: flex;
     top: -5px;
     position: relative;
     flex-direction: column;
     background-color:var(--medDark);
     border-radius: var(--radius);
-}
-#officialList{
-    grid-area: bottom;
 }
 #loadText:hover + #loadDropContainer{
     display: flex;

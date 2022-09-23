@@ -8,6 +8,7 @@ const loadingEl = document.getElementById('loadingEl');
 const loadText = document.getElementById('loadText');
 const loadSaveContainer = document.getElementById('loadSaveContainer');
 const localSaved = document.getElementById('localSaved');
+const officialList = document.getElementById('officialList');
 
 const countNamesHolder = document.getElementById('countNamesHolder');
 const countWindow = document.getElementById('countWindow');
@@ -110,15 +111,15 @@ function padTo2Digits(num) {
     return num.toString().padStart(2, '0');
 }
   
-function formatDate(date) {
+function formatDate(date, dateOffset) {
     return [
         date.getFullYear(),
         padTo2Digits(date.getMonth() + 1),
-        padTo2Digits(date.getDate()),
+        padTo2Digits(date.getDate() + dateOffset),
     ].join('-');
 }
 
-console.log(formatDate(new Date()));
+console.log(formatDate(new Date(), 0));
 
 if(thisPage == 'main'){
 makePairs();
@@ -366,7 +367,7 @@ saveButtonOfficial.addEventListener('click', async () => {
                 alert("Invalid Date Format")
                 return;
             }else{
-                inputDate = formatDate(new Date());
+                inputDate = formatDate(new Date(), 0);
             }
             let pairs = {name:nameInput.value, practiceDate:inputDate};
             for (let i = 0; i < slotsLength; i++) {
@@ -434,8 +435,8 @@ async function getSaved(){
     //Gets names from server
     options = {method:"POST",headers:{"Content-Type":"application/json"},body: JSON.stringify({})};
     loadingEl.style.display ='block';
-    const response = await fetch(API_URL + '/getNames', options);
-    const json = await response.json();
+    let response = await fetch(API_URL + '/getNames', options);
+    let json = await response.json();
     loadingEl.style.display ='none';
     console.log(json);
     
@@ -495,8 +496,56 @@ async function getSaved(){
                 loadNameHolder.appendChild(loadDel);
             }else{
                 loadNameHolder.appendChild(loadName);
-            }
+            } 
             loadHolder.appendChild(loadNameHolder);
+        }
+    }
+
+    
+    //Gets names from server
+    loadingEl.style.display ='block';
+    response = await fetch(API_URL + '/getPairsOfficial', options);
+    json = await response.json();
+    loadingEl.style.display ='none';
+    console.log(json);
+
+    // if names exist create buttons for them
+    if(json.pairs != null){
+        while(officialList.firstChild){ // remove old buttons
+            officialList.removeChild(officialList.firstChild);
+        }
+        // loop through names and create button
+        for (let i = 0; i < json.pairs.length; i++) {
+            const loadNameHolder = document.createElement('div');
+            loadNameHolder.classList.add('loadNameHolder');
+
+            const loadName = document.createElement('button');
+            loadName.classList.add('loadName'); 
+            loadName.textContent = formatDate(new Date(json.pairs[i].practiceDate), 1);
+            loadName.addEventListener('click', async () =>{
+                //on click get pairings from server
+                options = {method:"POST",headers:{"Content-Type":"application/json"},body: JSON.stringify({name:loadName.textContent})};
+                loadingEl.style.display ='block';
+                const response = await fetch(API_URL + '/getPairsOfficialOne', options);
+                const json = await response.json();
+                loadingEl.style.display ='none';
+                console.log(json);
+
+                getSaved();
+                // if pairs exist create them
+                if(json.pairs != null){
+                    makeNames(json.pairs);
+                    makePairs(json.pairs);
+                    nameInput.value = "";
+                }else{
+                    makeNames();
+                    makePairs();
+                    alert("No pairs saved under this name.");
+                }
+            })
+
+            loadNameHolder.appendChild(loadName);
+            officialList.appendChild(loadNameHolder);
         }
     }
 
@@ -700,6 +749,11 @@ randomPairs.addEventListener('click', () => {
             newNames.push(crews[i]);
         }
     }
+    
+    // for (let i = 0; i < slotsLength; i++) {
+    //     if()
+    // }
+
     makePairs(newNames);
     makeNames(newNames);
 })
