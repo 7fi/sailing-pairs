@@ -481,4 +481,7 @@ button{
     #picMode{
         margin: 6px 6px 0px 6px;
     }
+    #countNamesHolder{
+        margin:20px;
+    }
 }
