@@ -63,10 +63,15 @@ button{
     background-color: var(--dark);
     grid-area: header;
     display: flex;
+    flex-wrap: nowrap;
     flex-direction: row;
     position: relative;
     width: 100%;
     z-index: 8;
+}
+#buttons{
+    display: flex;
+    flex-wrap: wrap;
 }
 #title{
     /* width: 100%; */
@@ -437,7 +442,7 @@ button{
 @media only screen and (max-width:1000px){
     #window{
         grid-template-areas: "header header" "left left" "right right" "footer footer" ;
-        grid-template-rows: 8% auto auto 12%;
+        grid-template-rows: auto auto auto 12%;
         gap:0;
     }
     #placeholder{
@@ -458,7 +463,7 @@ button{
         padding:5px;
         font-size: 1.6em;
     }
-    #modeToggle, #selectAbsent, #resetPairs, #randomPairs, #squareMode{
+    #modeToggle, #selectAbsent, #resetPairs, #randomPairs, #squareMode, #picMode, #countButton{
         margin:5px;
     }
     #loadSave{
@@ -477,9 +482,6 @@ button{
     }
     #right .name{
         width: 98%;
-    }
-    #picMode{
-        margin: 6px 6px 0px 6px;
     }
     #countNamesHolder{
         margin:20px;
