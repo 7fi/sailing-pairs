@@ -521,7 +521,7 @@ async function getSaved(){
 
             const loadName = document.createElement('button');
             loadName.classList.add('loadName'); 
-            loadName.textContent = formatDate(new Date(json.pairs[i].practiceDate), 1);
+            loadName.textContent = json.pairs[i].name;
             loadName.addEventListener('click', async () =>{
                 //on click get pairings from server
                 options = {method:"POST",headers:{"Content-Type":"application/json"},body: JSON.stringify({name:loadName.textContent})};
