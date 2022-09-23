@@ -231,8 +231,8 @@ button{
     max-height: 91%;
     overflow-y: scroll;
 }
-#countNamesHolder:nth-child() .countName{
-    background-color: var(--light);
+#countNamesHolder .countName:nth-child(odd){
+    background-color: var(--medDark);
 }
 .countName{
     display: flex;
