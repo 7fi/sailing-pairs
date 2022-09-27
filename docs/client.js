@@ -649,6 +649,13 @@ async function getBoatCount(){
         e420CountEl.innerHTML = e420Count[i];
         nameEl.appendChild(e420CountEl);
 
+        if(fjCount[i]-c420Count[i]-e420Count[i] < 0){
+            nameEl.style.color = '#0f0';
+        }
+        if(fjCount[i]-c420Count[i]-e420Count[i] > 0){
+            nameEl.style.color = '#f00';
+        }
+
         countNamesHolder.appendChild(nameEl);
     }
 }
