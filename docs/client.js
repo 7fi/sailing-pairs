@@ -616,13 +616,12 @@ async function getBoatCount(){
     for (let i = 0; i < pairings.pairs.length; i++) {
         for(let j = 0; j < 16; j++){
             fjCount[names.indexOf(pairings.pairs[i][j])]++;
-            console.log("HII")
         }
-        for(let j = 16; j < 20; j++){
-            c420Count[names.indexOf(pairings.pairs[i][j])]++;
-        }
-        for(let j = 20; j < 34; j++){
+        for(let j = 16; j < 30; j++){
             e420Count[names.indexOf(pairings.pairs[i][j])]++;
+        }
+        for(let j = 30; j < 34; j++){
+            c420Count[names.indexOf(pairings.pairs[i][j])]++;
         }
     }
     console.log("Boat count",names,fjCount,c420Count,e420Count);
