@@ -617,10 +617,10 @@ async function getBoatCount(){
         for(let j = 0; j < 16; j++){
             fjCount[names.indexOf(pairings.pairs[i][j])]++;
         }
-        for(let j = 16; j < 30; j++){
+        for(let j = 16; j < 28; j++){
             e420Count[names.indexOf(pairings.pairs[i][j])]++;
         }
-        for(let j = 30; j < 34; j++){
+        for(let j = 28; j < 32; j++){
             c420Count[names.indexOf(pairings.pairs[i][j])]++;
         }
     }
