@@ -249,7 +249,7 @@ button{
     overflow-y: scroll;
 }
 #countNamesHolder .countName:nth-child(odd){
-    background-color: var(--medDark);
+    background-color: var(--medDark)!important;
 }
 .countName{
     display: flex;
