@@ -63,7 +63,7 @@ const people =[
     {name: "Ben", skipper: true, crew: false},
     {name: "Beto", skipper: true, crew: false},
     {name: "Carson", skipper: false, crew: true},
-    {name: "Carter", skipper: true, crew: false},
+    {name: "Carter", skipper: true, crew: false, pic:"https://35b7f1d7d0790b02114c-1b8897185d70b198c119e1d2b7efd8a2.ssl.cf1.rackcdn.com/roster_full_photos/83071916/original/d436c99f-76cc-4838-a257-a84324c2599d.jpg"},
     {name: "Chris", skipper: false, crew: true},
     {name: "Cole", skipper: false, crew: true},
     {name: "Cyrus", skipper: false, crew: true},
@@ -95,14 +95,13 @@ const people =[
 
 // Name list
 const names = ['Adam','Alexander','Andrea','Ava','Ben','Beto','Carson','Carter','Chris','Cole','Cyrus','Elliott','Fin','Gretchen F','Gretchen I','Holden','Isaia','Jaya','Jeffrey','Joseph','Kai','Luke','Maura','Nelson','Nick','Nolan','Owen','Payton','Ryan','Sabrina','Sharkey','Stella','Suraj','Talia','Zephyr'];
-//const pref = [true, true,true,true,true,true,true,false,false,true,false,true,false,false,false,true,false,true, false,false,false,true,true,true,false,false,true,false,false,true,false,true];
 const slotsLength = (Math.floor((names.length)/2)*2);
 console.log(slotsLength, "slotsLength");
 
-function load(){
-    let myBool = (decodeURIComponent(document.cookie).split('=')[1] === 'true');
-    console.log("Lightmode is wrong:", myBool != lightMode)
-    if(myBool != lightMode){
+const currentTheme = localStorage.getItem('theme') ? localStorage.getItem('theme') : null;
+if (currentTheme) {
+    document.documentElement.setAttribute('data-theme', currentTheme);
+    if (currentTheme === 'dark') {
         switchMode();
     }
 }
@@ -200,7 +199,10 @@ function makeName(name){ // creates single name
         if(name != "Adam" && name != "Alexander" && name != "Owen" && name != "Cascade" && name != "Cyrus" && name != "Gretchen I" && name != "Gretchen F" && name != "Holden" && name != "Nelson" && name != "Stella" && name != "Suraj" && name != "Zephyr"){
             const profilePic = document.createElement("img");
             profilePic.classList.add("profilePic");
-            profilePic.src = "/img/ppl/" + name + ".png";
+            // profilePic.src = "/img/ppl/" + name + ".png";
+            if(name == "Carter"){
+                profilePic.src = people[7].pic;
+            }
             nameEl.appendChild(profilePic);
         }
     }
@@ -800,29 +802,23 @@ modeToggle.addEventListener('click', () => {
 function switchMode(){
     if(!lightMode){
         modeToggle.children[0].classList.replace('gg-sun','gg-moon');
-        document.documentElement.style.setProperty('--dark','#eaeaea');
-        document.documentElement.style.setProperty('--medDark','#fff');
-        document.documentElement.style.setProperty('--med','#cfcfcf');
-        document.documentElement.style.setProperty('--medLight','#d1d1d1');
-        document.documentElement.style.setProperty('--light','#b3b3b3');
-        document.documentElement.style.setProperty('--highlight','#000');
-        document.documentElement.style.setProperty('--highlight1','#12A5B1');
-        document.documentElement.style.setProperty('--highlight2','#203960');
+        document.documentElement.setAttribute('data-theme','light');
+        localStorage.setItem('theme','light');
     }else{
         modeToggle.children[0].classList.replace('gg-moon','gg-sun');
-        document.documentElement.style.setProperty('--dark','#333');
-        document.documentElement.style.setProperty('--medDark','#444');
-        document.documentElement.style.setProperty('--med','#555');
-        document.documentElement.style.setProperty('--medLight','#666');
-        document.documentElement.style.setProperty('--light','#777');
-        document.documentElement.style.setProperty('--highlight','#fff');
-        document.documentElement.style.setProperty('--highlight1','#222');
-        document.documentElement.style.setProperty('--highlight2','#222');
+        document.documentElement.setAttribute('data-theme','dark');
+        localStorage.setItem('theme','dark');
     }
+
     lightMode = !lightMode;
-    document.cookie = ("lightMode=" + lightMode + "; path=/");
-    console.log(lightMode)
+    console.log(lightMode, "HI");
 }
+function setTheme(theme){
+    document.documentElement.setAttribute('data-theme',theme);
+    localStorage.setItem('theme',theme);
+    console.log("Theme set to", theme);
+}
+
 console.log(pickSternTier() + " is assigned to do stern ties");
 function pickSternTier(){
     let potentialPpl = [];
@@ -831,47 +827,3 @@ function pickSternTier(){
     });
     return potentialPpl[Math.floor(Math.random() * potentialPpl.length)];
 }
-
-/*  
-randomPairs.addEventListener('click', () => {
-    let randomNames = [];
-    for (let i = 0; i < people.length; i++) {
-        if(i % 2 == 0){
-            let temp = "";
-            while(temp == ""){
-                temp = getRandomPerson(randomNames,true);
-                console.log(temp);
-            }
-            randomNames.push(temp);
-        }else{
-            let temp = " ";
-            do {
-                temp = getRandomPerson(randomNames,false);
-                console.log("Crew", temp);
-            } while (temp == " ");
-            randomNames.push(temp);
-        }
-    }
-    console.log(randomNames);
-    makePairs(randomNames);
-    makeNames(randomNames);
-})
-
-function getRandomPerson(exclude, skipper){
-    let randomNum = Math.floor(Math.random() * (people.length - exclude.length));
-    if(skipper){
-        if(people[randomNum].skipper && !exclude.includes(people[randomNum].name)){
-            // console.log(people[randomNum].name)
-            return people[randomNum].name;
-        }else{
-            return " ";
-        }
-    }else{
-        if(people[randomNum].crew && !exclude.includes(people[randomNum].name)){
-            // console.log(people[randomNum].name)
-            return people[randomNum].name;
-        }else{
-            return " ";
-        }
-    }
-}*/

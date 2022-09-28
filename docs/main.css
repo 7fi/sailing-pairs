@@ -1,15 +1,5 @@
 @import url("https://use.typekit.net/gar5llr.css");
-/* Dark mode */
-/* :root{
-    --highlight:#fff;
-    --dark:#333;
-    --medDark:#444;
-    --med:#555;
-    --medLight: #666;
-    --light:#777;
-    --highlight1:#222;
-    --highlight2:#222;
-} */
+
 /* Light mode */
 :root{
     --highlight:rgb(0, 0, 0);
@@ -21,6 +11,28 @@
     --highlight1:#12A5B1;
     --highlight2:#203960;
     --radius: 7px;
+}
+/* Dark mode */
+[data-theme="dark"]{
+    --highlight:#fff;
+    --dark:#333;
+    --medDark:#444;
+    --med:#555;
+    --medLight: #666;
+    --light:#777;
+    --highlight1:#222;
+    --highlight2:#222;
+}
+
+[data-theme="red"]{
+    --highlight:#ffb2b2;
+    --dark:#710000;
+    --medDark:#8b2f2f;
+    --med:#a62929;
+    --medLight: #9e2c2c;
+    --light:#ff9292;
+    --highlight1:#ff8f8f;
+    --highlight2:#ff8383;
 }
 a{
     text-decoration: none;
@@ -301,13 +313,13 @@ button{
 .pairSlot:nth-child(2n - 1):nth-child(-2n + 15)::before{
     content:"FJ";
 }
-.pairSlot:nth-child(2n + 17):nth-child(-2n + 19)::before{
-    content:"C420";
-}
-.pairSlot:nth-child(2n + 21):nth-child(-2n + 31)::before{
+.pairSlot:nth-child(2n + 17):nth-child(-2n + 27)::before{
     content:"420E";
 }
-.pairSlot:nth-last-child(2n - 2)::before{
+.pairSlot:nth-child(2n + 29):nth-child(-2n + 31)::before{
+    content:"C420";
+}
+.pairSlot:nth-last-child(2)::before{
     content:"Rotating";
 }
 .pairSlot::before{
@@ -404,12 +416,16 @@ button{
     grid-area:datasets;
 }
 .dataset{
-    /* width: 100%; */
+    width: 100%;
     margin:10px;
     display: flex;
+    /* grid-auto-flow: column; */
+    /* grid-template-columns: repeat(4, 1fr); */
     flex-direction: row;
     background-color: var(--light);
     border-radius: var(--radius);
+    /* position:relative; */
+    height: 60px;
 }
 .dropdown{
     background: var(--medLight);
@@ -422,7 +438,8 @@ button{
     border-radius: var(--radius);
     padding: 5px;
     text-align: center;
-    /* position: absolute; */
+    display: inline-block;
+    position: absolute;
 }
 .dropdown:hover :nth-last-child(n){
     display:block;
