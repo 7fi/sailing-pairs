@@ -651,11 +651,10 @@ async function getBoatCount(){
         nameEl.appendChild(e420CountEl);
 
         if(fjCount[i]-c420Count[i]-e420Count[i] < 0){
-            nameEl.style = 'background: linear-gradient(90deg, rgba(0,255,0,0.6) 0%, rgba(0,0,0,0) 50%);';
-            // nameEl.style.backgroundColor = '#95ff80';
+            nameEl.setAttribute("boat-karma", "positive");
         }
         if(fjCount[i]-c420Count[i]-e420Count[i] > 0){
-            nameEl.style = 'background: linear-gradient(90deg, rgba(255,0,0,0.6) 0%, rgba(0,0,0,0) 50%);';
+            nameEl.setAttribute("boat-karma", "negative");
         }
 
         countNamesHolder.appendChild(nameEl);

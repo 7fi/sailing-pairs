@@ -17,7 +17,7 @@
     <title>BHS Sailing Pairings</title>
 </head>
 <body>
-    <div id="window" onload="load()" style="grid-template-areas: 'header' 'datasets' 'content';grid-template-columns: 1fr;grid-template-rows:80px auto 1fr;">
+    <div id="window" style="grid-template-areas: 'header' 'datasets' 'content'; grid-template-columns: 1fr;grid-template-rows:80px auto 1fr;">
         <div id="loadingEl"></div>
         <div id="header">
             <a id="title" href="/">Scores</a>
@@ -26,10 +26,11 @@
             <button id="squareMode" title="Become square" type="button"><i class="gg-shape-square"></i></button>
             <button id="graphMode" title="Switch graph mode" type="button"><i class="gg-shape-zigzag"></i></button>
         </div>
-        <div id="datasets"></div>
+        <div id="datasets">
+            <div id="addDataset">+</div>
+        </div>
         
         <canvas id="graph">
-
         </canvas>
     </div>
 

@@ -251,6 +251,13 @@ button{
 #countNamesHolder .countName:nth-child(odd){
     background-color: var(--medDark)!important;
 }
+.countName[boat-karma="negative"]{
+    background: linear-gradient(90deg, rgba(255,0,0,0.6) 0%, rgba(0,0,0,0) 50%);
+}
+.countName[boat-karma="positive"]{
+    background: linear-gradient(90deg, rgba(0,255,0,0.6) 0%, rgba(0,0,0,0) 50%);
+}
+
 .countName{
     display: flex;
     flex-direction: row;
@@ -412,11 +419,40 @@ button{
     bottom:0;
     position: absolute;
 }
+#addDataset{
+    background-color: var(--med);
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    /* padding-top: 5px; */
+    font-size: 1.5em;
+    border-radius: var(--radius);
+    margin: 10px;
+    cursor: pointer;
+    right: 0;
+}
+.flexGap{
+    flex-grow:1;
+}
+.delDataset{
+    background-color: var(--med);
+    float: right;
+    padding-top: 3px;
+    margin: 10px;
+    border-radius: var(--radius);
+    aspect-ratio: 1/1;
+    text-align: center;
+    font-size: 1.5em;
+    cursor: pointer;
+}
+#addDataset:hover{
+    background-color: var(--medLight);
+}
 #datasets{
     grid-area:datasets;
 }
 .dataset{
-    width: 100%;
+    width: calc(100%-20px);
     margin:10px;
     display: flex;
     /* grid-auto-flow: column; */
@@ -427,31 +463,60 @@ button{
     /* position:relative; */
     height: 60px;
 }
+.dropLabel{
+    pointer-events: none;
+}
 .dropdown{
     background: var(--medLight);
-    z-index: 8;
+    /* z-index: 8; */
     width:100px;
-    min-height: 30px;
-    max-height: 150px;
-    overflow: auto;
+    /* min-height: 30px;
+    max-height: 150px; */
+    /* overflow: auto; */
     margin: 10px;
     border-radius: var(--radius);
-    padding: 5px;
+    /* padding: 5px; */
     text-align: center;
     display: inline-block;
-    position: absolute;
+    position: relative;
+    padding-top: 10px;
 }
-.dropdown:hover :nth-last-child(n){
+.dropdownMenu{
+    position:absolute;
+    opacity: 0;
+    left:0;
+    top: 90%;
+    width: 100px;
+    border-radius: 0px 0px var(--radius) var(--radius);
+    background-color: var(--medLight);
+    transform:translateY(-10px);
+    pointer-events: none;
+    transition: opacity 150ms ease-in-out, transform 150ms ease-in-out;
+    overflow-y: auto;
+    max-height: 300px;
+    z-index: 9;
+}
+.dropdown.active > .dropdownMenu{
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+}
+.dropdown:hover, .dropdown.active, .delDataset:hover{
+    background-color: var(--medDark);
+}
+
+/* .dropdown:hover :nth-last-child(n){
     display:block;
-}
+} */
 .dropMember{
-    display: none;
-    background-color:var(--med);
-    /* margin: 5px; */
+    /* display: none; */
+    /* background-color:var(--med); */
+    margin: 5px;
     padding:5px;
+    border-radius:var(--radius);
 }
 .dropMember:hover{
-    background-color: var(--light);
+    background-color: var(--medDark);
 }
 
 
