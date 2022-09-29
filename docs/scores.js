@@ -142,8 +142,8 @@ addDatasetButton.addEventListener('click', ()=>{
     addDataset();
 })
 
-let colors = ['#f00', '#0f0', '#00f'];
-let backgroundColors = ["#ff000055", "#00ff0055", "#0000ff55"];
+let colors = ['#ff0000', '#00ff00', '#0000ff', "#ffbf00", "#ff7700", "#00fff7", "#008cff", "#9d00ff", "#ff00f7"];
+// let backgroundColors = ["#ff000055", "#00ff0055", "#0000ff55"];
 async function loadScores(type, name, fleet, division, position, pair, regatta){
 
     if(fleet == 'any') {fleet = undefined};
@@ -160,13 +160,14 @@ async function loadScores(type, name, fleet, division, position, pair, regatta){
         labels.push(json.labels[i]);
     }
 
-    let colorNum = Math.floor(Math.random() * 3);
+    let colorNum = Math.floor(Math.random() * colors.length);
     let borderColor = colors[colorNum];
     datasets.push({
         label: name,
         data: data,
+        backgroundColor: colors[colorNum] + "55",
         borderColor: colors[colorNum],
-        backgroundColor: backgroundColors[colorNum],
+        borderWidth: 2,
         fill:true,
     });
     console.log(datasets)
