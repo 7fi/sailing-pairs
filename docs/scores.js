@@ -162,8 +162,6 @@ async function loadScores(type, name, fleet, division, position, pair, regatta){
 
     let colorNum = Math.floor(Math.random() * 3);
     let borderColor = colors[colorNum];
-    // let backgroundColorE = "ff000055";
-    // console.log(borderColorr)
     datasets.push({
         label: name,
         data: data,

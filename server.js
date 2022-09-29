@@ -289,7 +289,7 @@ function getData(type, name, fleet, division, position, pair, regatta){
             }else if(type == "ratio"){
                 tempRaces.forEach(i =>{
                     if(i != undefined){
-                        res.push(i.fleetNum / i.score)
+                        res.push(i.score / i.fleetNum)
                     }else{
                         res.push(NaN)
                     }
