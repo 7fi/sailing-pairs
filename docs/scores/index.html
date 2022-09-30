@@ -15,6 +15,21 @@
     <link href='https://css.gg/shape-circle.css' rel='stylesheet'>
     <link href='https://css.gg/shape-zigzag.css' rel='stylesheet'>
     <title>BHS Sailing Pairings</title>
+    <style>
+        @media only screen and (max-width:600px){
+            #title::before{
+                position:fixed;
+                width: 100%;
+                text-align: center;
+                bottom: 20px;
+                content: "Best viewed in landscape mode";
+                text-shadow: #00000033 2px 2px 5px;
+            }
+        }
+        #graphMode{
+            margin:5px;
+        }
+    </style>
 </head>
 <body>
     <div id="window" style="grid-template-areas: 'header' 'datasets' 'content'; grid-template-columns: 1fr;grid-template-rows:80px auto 1fr;">

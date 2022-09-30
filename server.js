@@ -297,5 +297,5 @@ function getData(type, name, fleet, division, position, pair, regatta){
             }
         }
     })
-    return res;  
+    return res;
 }

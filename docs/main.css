@@ -450,6 +450,8 @@ button{
 }
 #datasets{
     grid-area:datasets;
+    overflow-x: auto;
+    z-index: 9;
 }
 .dataset{
     width: calc(100%-20px);
@@ -462,6 +464,7 @@ button{
     border-radius: var(--radius);
     /* position:relative; */
     height: 60px;
+    
 }
 .dropLabel{
     pointer-events: none;
