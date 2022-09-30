@@ -5,6 +5,7 @@ const ctx = document.getElementById('graph');
 const addDatasetButton = document.getElementById('addDataset');
 var chart = new Chart(ctx, config);
 let datasets = [];
+let chartType = 'bar';
 
 addDataset();
 async function addDataset(){
@@ -176,7 +177,7 @@ async function loadScores(type, name, fleet, division, position, pair, regatta){
 }
 function updateGraph(){
     config = {
-        type: 'bar',
+        type: chartType,
         data: {
             labels: labels,
             datasets: datasets
@@ -204,8 +205,10 @@ graphMode.addEventListener('click', () =>{
 function type(){
     if(config.type == 'bar'){
         config.type = 'line';
+        chartType = "line";
     }else{
         config.type = 'bar';
+        chartType = "bar";
     }
     chart.destroy();
     chart = new Chart(ctx, config);
