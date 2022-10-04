@@ -275,13 +275,13 @@ function getData(type, name, fleet, division, position, pair, regatta){
                     if(i != undefined){
                         res.push(i.score)
                     }else{
-                        res.push(undefined)
+                        res.push(NaN)
                     }
                 })
             }else if(type == "points"){
                 tempRaces.forEach(i =>{
                     if(i != undefined){
-                        res.push(i.fleetNum - i.score)
+                        res.push(i.fleetNum - i.score + 1)
                     }else{
                         res.push(NaN)
                     }
