@@ -13,6 +13,8 @@ const officialList = document.getElementById('officialList');
 const countNamesHolder = document.getElementById('countNamesHolder');
 const countWindow = document.getElementById('countWindow');
 const countButton = document.getElementById('countButton');
+const infoButton = document.getElementById('infoButton');
+const infoWindow = document.getElementById('infoWindow');
 
 const nameInput = document.getElementById('nameInput');
 const saveButton = document.getElementById('save');
@@ -24,6 +26,7 @@ const resetPairs = document.getElementById('resetPairs');
 const randomPairs = document.getElementById('randomPairs');
 const squareMode = document.getElementById('squareMode');
 const picModeButton = document.getElementById('picMode');
+const boatDisplay = document.getElementById('boatDisplay');
 const betoEl = document.getElementById('betoEl');
 
 let lightMode = true;
@@ -31,6 +34,7 @@ let square = false;
 let picMode = false;
 let selAbsent = false;
 let absent = [];
+let boatDisplayVal = "true";
 
 let betoClicks = 0;
 let betoQuotes = ['Hi',"I'm bad at sailing!"];
@@ -131,6 +135,7 @@ function makePairs(inputPairs){ // Creates pair slots either empty or populated 
     for (let i = 0; i < slotsLength; i++){
         const pairSlotEl = document.createElement('div');
         pairSlotEl.classList.add('pairSlot');
+        pairSlotEl.setAttribute('boatDisplay', boatDisplayVal);
 
         //If input pairing supplied then populate with new name
         if(inputPairs != undefined && inputPairs[i] != "" && inputPairs[i] != undefined){
@@ -766,45 +771,63 @@ randomPairs.addEventListener('click', () => {
     makeNames(newNames);
 })
 
-picModeButton.addEventListener('click', () => {
-    if(picMode){
-        document.getElementById('pairingHolder').classList.remove('pairingHolderPic');
-    }else{
-        document.getElementById('pairingHolder').classList.add('pairingHolderPic');
-    }
-    picMode = !picMode;
-    let pairs = {name:nameInput.value};
-    for (let i = 0; i < names.length; i++) {
-        pairs[i] = pairingHolder.children[i].textContent;
-    }
-    makeNames(pairs);
-    makePairs(pairs);
-    console.log(picMode);
-})
+// picModeButton.addEventListener('click', () => {
+//     if(picMode){
+//         document.getElementById('pairingHolder').classList.remove('pairingHolderPic');
+//     }else{
+//         document.getElementById('pairingHolder').classList.add('pairingHolderPic');
+//     }
+//     picMode = !picMode;
+//     let pairs = {name:nameInput.value};
+//     for (let i = 0; i < names.length; i++) {
+//         pairs[i] = pairingHolder.children[i].textContent;
+//     }
+//     makeNames(pairs);
+//     makePairs(pairs);
+//     console.log(picMode);
+// })
 
 }
-squareMode.addEventListener('click', () => {
-    if(square){
-        document.documentElement.style.setProperty('--radius', '7px');
-        squareMode.children[0].classList.replace('gg-shape-circle','gg-shape-square');
-    }else{
-        document.documentElement.style.setProperty('--radius', '0px');
-        squareMode.children[0].classList.replace('gg-shape-square','gg-shape-circle');
-    }
-    square = !square;
-})
+// squareMode.addEventListener('click', () => {
+//     if(square){
+//         document.documentElement.style.setProperty('--radius', '7px');
+//         squareMode.children[0].classList.replace('gg-shape-circle','gg-shape-square');
+//     }else{
+//         document.documentElement.style.setProperty('--radius', '0px');
+//         squareMode.children[0].classList.replace('gg-shape-square','gg-shape-circle');
+//     }
+//     square = !square;
+// }); 
+
 // Toggle between light and dark mode
 modeToggle.addEventListener('click', () => {
     switchMode();
 })
+infoButton.addEventListener('click', () =>{
+    infoWindow.style.display = 'block';
+    console.log("yuh")
+})
+infoWindow.addEventListener('click', () =>{
+    infoWindow.style.display = 'none';
+    console.log('yo')
+})
+
+boatDisplay.addEventListener('click', () => {
+    if(boatDisplayVal == "true"){
+        boatDisplayVal = "false";
+    }else{
+        boatDisplayVal = "true";
+    }
+    document.querySelectorAll(".pairSlot").forEach(slot => {slot.setAttribute("boatDisplay", boatDisplayVal);});
+})
 
 function switchMode(){
     if(!lightMode){
-        modeToggle.children[0].classList.replace('gg-sun','gg-moon');
+        modeToggle.children[0].classList.replace('fa-sun','fa-moon');
         document.documentElement.setAttribute('data-theme','light');
         localStorage.setItem('theme','light');
     }else{
-        modeToggle.children[0].classList.replace('gg-moon','gg-sun');
+        modeToggle.children[0].classList.replace('fa-moon','fa-sun');
         document.documentElement.setAttribute('data-theme','dark');
         localStorage.setItem('theme','dark');
     }

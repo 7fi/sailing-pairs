@@ -43,7 +43,7 @@ async function addDataset(){
     nameDrop.classList.add("dropdown");
     const nameDropLabel = document.createElement('div');
     nameDropLabel.classList.add("dropLabel");
-    nameDropLabel.innerHTML = "Barrett";
+    nameDropLabel.innerHTML = "Carter";
     nameDrop.appendChild(nameDropLabel);
     const nameDropMenu = document.createElement('div');
     nameDropMenu.classList.add("dropdownMenu");
@@ -136,7 +136,7 @@ async function addDataset(){
             dropdown.classList.toggle("active");
         });
     })
-    loadScores("raw", "Barrett");
+    loadScores("raw", "Carter");
 
 }
 addDatasetButton.addEventListener('click', ()=>{
@@ -169,7 +169,7 @@ async function loadScores(type, name, fleet, division, position, pair, regatta){
         backgroundColor: colors[colorNum] + "55",
         borderColor: colors[colorNum],
         borderWidth: 2,
-        fill:true,
+        fill:false,
     });
     console.log(datasets)
     updateGraph();
@@ -198,18 +198,14 @@ function updateGraph(){
     chart.destroy();
     chart = new Chart(ctx, config);
 }
-
+let types = ["bar", "line", "scatter"];
 graphMode.addEventListener('click', () =>{
-    type();
+    type(types[(types.indexOf(config.type) + 1) % 3])
 })
-function type(){
-    if(config.type == 'bar'){
-        config.type = 'line';
-        chartType = "line";
-    }else{
-        config.type = 'bar';
-        chartType = "bar";
-    }
+function type(type){
+    config.type = type;
+    // chartType = type;
+    console.log(config.type)
     chart.destroy();
     chart = new Chart(ctx, config);
 }
