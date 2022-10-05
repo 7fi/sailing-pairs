@@ -22,6 +22,7 @@ const saveButtonLocal = document.getElementById('saveLocal');
 const saveButtonOfficial = document.getElementById('saveOfficial');
 const modeToggle = document.getElementById('modeToggle');
 const selectAbsent = document.getElementById('selectAbsent');
+const selectLocked = document.getElementById('selectLocked');
 const resetPairs = document.getElementById('resetPairs');
 const randomPairs = document.getElementById('randomPairs');
 const squareMode = document.getElementById('squareMode');
@@ -33,7 +34,9 @@ let lightMode = true;
 let square = false;
 let picMode = false;
 let selAbsent = false;
+let selLocked = false;
 let absent = [];
+let locked = [];
 let boatDisplayVal = "true";
 
 let betoClicks = 0;
@@ -201,19 +204,22 @@ function makeName(name){ // creates single name
         nameEl.textContent = name;
     }else{
         nameEl.innerHTML = name;
-        if(name != "Adam" && name != "Alexander" && name != "Owen" && name != "Cascade" && name != "Cyrus" && name != "Gretchen I" && name != "Gretchen F" && name != "Holden" && name != "Nelson" && name != "Stella" && name != "Suraj" && name != "Zephyr"){
+        let noPics = ["Adam","Alexander","Owen","Cascade","Cyrus","Gretchen I", "Gretchen F", "Holden", "Nelson", "Stella", "Suraj", "Zephyr"]
+        if(!noPics.includes(name)){
             const profilePic = document.createElement("img");
             profilePic.classList.add("profilePic");
-            // profilePic.src = "/img/ppl/" + name + ".png";
-            if(name == "Carter"){
-                profilePic.src = people[7].pic;
-            }
+            profilePic.src = "/img/ppl/" + name + ".png";
+            // if(name == "Carter"){
+            //     profilePic.src = people[7].pic;
+            // }
             nameEl.appendChild(profilePic);
         }
     }
     nameEl.classList.add('name');
     nameEl.classList.add('draggable');
     nameEl.setAttribute("draggable", "true");
+    if(locked.includes(name)) nameEl.classList.add('locked');
+    if(absent.includes(name)) nameEl.classList.add('absent');
     
     if(!mobile){ // if on desktop
         //Event listeners for dragging
@@ -245,10 +251,19 @@ function makeName(name){ // creates single name
                 }
                 //console.log(absent);
             }
+            else if(selLocked){
+                if(!locked.includes(nameEl.innerHTML)){
+                    locked.push(nameEl.innerHTML);
+                    nameEl.classList.add('locked');
+                }else{
+                    locked.splice(locked.indexOf(nameEl.innerHTML), 1);
+                    nameEl.classList.remove('locked');
+                }
+            }
         })
     }else{ // otherwise mobile
         nameEl.addEventListener('click', async () => {
-            if(!selAbsent){
+            if(!selAbsent && !selLocked){
                 const tempSelected = document.querySelector('.selected');
                 if(tempSelected != null || tempSelected != undefined){
                     nameEl.parentElement.append(tempSelected);
@@ -257,7 +272,7 @@ function makeName(name){ // creates single name
                 }else{
                     nameEl.classList.add('selected');
                 }
-            }else{
+            }else if(selAbsent){
                 if(!absent.includes(nameEl.innerHTML)){
                     absent.push(nameEl.innerHTML);
                     nameEl.classList.add('absent');
@@ -266,6 +281,14 @@ function makeName(name){ // creates single name
                     nameEl.classList.remove('absent');
                 }
                 //console.log(absent);
+            }else{
+                if(!locked.includes(nameEl.innerHTML)){
+                    locked.push(nameEl.innerHTML);
+                    nameEl.classList.add('locked');
+                }else{
+                    locked.splice(locked.indexOf(nameEl.innerHTML), 1);
+                    nameEl.classList.remove('locked');
+                }
             }
 
             for (let i = 0; i < slotsLength; i++) {
@@ -689,6 +712,10 @@ selectAbsent.addEventListener('click', () =>{
     selAbsent = !selAbsent;
     selectAbsent.classList.toggle('absent');
 })
+selectLocked.addEventListener('click', () =>{
+    selLocked = !selLocked;
+    selectLocked.classList.toggle('locked');
+})
 
 //Reset pairs button
 resetPairs.addEventListener('click', () => {
@@ -710,7 +737,7 @@ boatDisplay.addEventListener('click', () => {
 randomPairs.addEventListener('click', () => {
     let shuffledNames = []; //names.slice()
     people.forEach(person => {
-        if(!absent.includes(person.name)){
+        if(!absent.includes(person.name) && !locked.includes(person.name)){
             shuffledNames.push(person.name);
         }
     });

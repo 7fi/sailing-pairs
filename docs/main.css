@@ -6,8 +6,7 @@
     --dark:#eaeaea;
     --medDark:#fff;
     --med:#cfcfcf;
-    --medLight: #d1d1d1;
-    --light:#b3b3b3;
+    --light: #d1d1d1;
     --highlight1:#12A5B1;
     --highlight2:#203960;
     --radius: 7px;
@@ -18,8 +17,7 @@
     --dark:#333;
     --medDark:#444;
     --med:#555;
-    --medLight: #666;
-    --light:#777;
+    --light: #666;
     --highlight1:#222;
     --highlight2:#222;
 }
@@ -29,11 +27,20 @@
     --dark:#710000;
     --medDark:#8b2f2f;
     --med:#a62929;
-    --medLight: #9e2c2c;
-    --light:#ff9292;
+    --light: #9e2c2c;
     --highlight1:#ff8f8f;
     --highlight2:#ff8383;
 }
+/* [data-theme="bruh"]{
+    --highlight: #232323;
+    --dark:#828889;
+    --medDark:#b4b4b4;
+    --med:#b5b5b5;
+    --light: #ffbb00;
+    --highlight1:#35446f;
+    --highlight2:#ffbb00;
+} */
+
 a{
     text-decoration: none;
     color:inherit;
@@ -91,8 +98,11 @@ button{
     font-weight: 700;
     font-size: 2em;
     width: fit-content;
-    /* position:absolute; */
+    position:relative;
     text-align: center;
+}
+#title::before, #title::after{
+    font-size: 0.5em;
 }
 #graph{
     /*top: 9%;*/
@@ -127,13 +137,15 @@ button{
   transform: translateX(-50%) translateY(var(--translate-y, 0)) scale(var(--scale));
   transition: 100ms transform;
   transform-origin: top center;
+  font-weight: 700;
+  z-index: 9999;
 }
 
 .tooltip::before {
   --translate-y: calc(100% + var(--arrow-size));
 
   content: attr(data-tooltip);
-  color: white;
+  color: var(--highlight);
   padding: .4rem;
   border-radius: .3rem;
   text-align: center;
@@ -163,6 +175,7 @@ button{
     border-radius: var(--radius);
     font-weight: 700;
     font-size: 1.1em;
+    position: relative;
 }
 #saveBoth{
     grid-area: mid-bottom;
@@ -288,8 +301,14 @@ button{
     margin: 0px 10px;
 }
 
+.locked{
+    background-color: #ffd000!important;
+}
 .absent{
     background-color: #42caca!important;
+}
+.locked.absent{
+    background-image: linear-gradient(90deg,#ffd000,#42caca);
 }
 .selected{
     background-color: #f00!important;
@@ -464,7 +483,7 @@ button{
     cursor: pointer;
 }
 #addDataset:hover{
-    background-color: var(--medLight);
+    background-color: var(--light);
 }
 #datasets{
     grid-area:datasets;
@@ -486,7 +505,7 @@ button{
     pointer-events: none;
 }
 .dropdown{
-    background: var(--medLight);
+    background: var(--light);
     /* z-index: 8; */
     width:100px;
     /* min-height: 30px;
@@ -507,7 +526,7 @@ button{
     top: 90%;
     width: 100px;
     border-radius: 0px 0px var(--radius) var(--radius);
-    background-color: var(--medLight);
+    background-color: var(--light);
     transform:translateY(-10px);
     pointer-events: none;
     transition: opacity 150ms ease-in-out, transform 150ms ease-in-out;
