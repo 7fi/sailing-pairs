@@ -487,7 +487,7 @@ async function getSaved(){
                 const loadDel = document.createElement('button');
                 loadDel.classList.add('loadDel');
                 const loadDelIcon = document.createElement('i');
-                loadDelIcon.classList.add('gg-trash');
+                loadDelIcon.classList.add('fa-trash','fa-solid',"fa-lg");
                 loadDel.appendChild(loadDelIcon);
                 loadDel.addEventListener('click', async () =>{
                     //send deletion request to server
@@ -549,6 +549,7 @@ async function getSaved(){
                     makePairs();
                     alert("No pairs saved under this name.");
                 }
+                loadSaveContainer.style.display = 'none';
             })
 
             loadNameHolder.appendChild(loadName);
@@ -590,7 +591,7 @@ async function getSaved(){
                 const loadDel = document.createElement('button');
                 loadDel.classList.add('loadDel');
                 const loadDelIcon = document.createElement('i');
-                loadDelIcon.classList.add('gg-trash');
+                loadDelIcon.classList.add('fa-trash','fa-solid',"fa-lg");
                 loadDel.appendChild(loadDelIcon);
                 loadDel.addEventListener('click', async () =>{
                     curPairs.splice(i,1);
@@ -668,8 +669,8 @@ async function getBoatCount(){
 countButton.addEventListener('click', () =>{
     countWindow.style.display = 'block';
 })
-countWindow.addEventListener('click', () =>{
-    countWindow.style.display = 'none';
+countWindow.addEventListener('click', (e) =>{
+    if(e.target == countWindow) countWindow.style.display = 'none';
 })
 
 
@@ -681,9 +682,7 @@ loadText.addEventListener('click', () =>{
     }
 })
 loadSaveContainer.addEventListener('click', (e) => {
-    if(e.target == loadSaveContainer){
-        loadSaveContainer.style.display = 'none';
-    }
+    if(e.target == loadSaveContainer) loadSaveContainer.style.display = 'none';
 })
 
 selectAbsent.addEventListener('click', () =>{
@@ -696,6 +695,15 @@ resetPairs.addEventListener('click', () => {
     getSaved();
     makeNames();
     makePairs();
+})
+
+boatDisplay.addEventListener('click', () => {
+    if(boatDisplayVal == "true"){
+        boatDisplayVal = "false";
+    }else{
+        boatDisplayVal = "true";
+    }
+    document.querySelectorAll(".pairSlot").forEach(slot => {slot.setAttribute("boatDisplay", boatDisplayVal);});
 })
 
 // Randomize pairs button
@@ -805,20 +813,9 @@ modeToggle.addEventListener('click', () => {
 })
 infoButton.addEventListener('click', () =>{
     infoWindow.style.display = 'block';
-    console.log("yuh")
 })
-infoWindow.addEventListener('click', () =>{
-    infoWindow.style.display = 'none';
-    console.log('yo')
-})
-
-boatDisplay.addEventListener('click', () => {
-    if(boatDisplayVal == "true"){
-        boatDisplayVal = "false";
-    }else{
-        boatDisplayVal = "true";
-    }
-    document.querySelectorAll(".pairSlot").forEach(slot => {slot.setAttribute("boatDisplay", boatDisplayVal);});
+infoWindow.addEventListener('click', (e) =>{
+    if(e.target == infoWindow) infoWindow.style.display = 'none';
 })
 
 function switchMode(){

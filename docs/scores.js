@@ -1,11 +1,12 @@
 const graphMode = document.getElementById('graphMode');
 const datasetsEls = document.getElementById('datasets');
+
 var config;
 const ctx = document.getElementById('graph');
 const addDatasetButton = document.getElementById('addDataset');
 var chart = new Chart(ctx, config);
 let datasets = [];
-let chartType = 'bar';
+let chartType = 'line';
 
 addDataset();
 async function addDataset(){
@@ -162,14 +163,13 @@ async function loadScores(type, name, fleet, division, position, pair, regatta){
     }
 
     let colorNum = Math.floor(Math.random() * colors.length);
-    let borderColor = colors[colorNum];
     datasets.push({
         label: name,
         data: data,
         backgroundColor: colors[colorNum] + "55",
         borderColor: colors[colorNum],
         borderWidth: 2,
-        fill:false,
+        fill: false,
     });
     console.log(datasets)
     updateGraph();
@@ -191,6 +191,15 @@ function updateGraph(){
                 title: {
                     display: true,
                     text: 'Spring 2022 Scores (From Spreadsheet)'
+                }
+            },
+            animations: {
+                tension: {
+                  duration: 1000,
+                  easing: 'linear',
+                  from: 0.7,
+                  to: 0,
+                  loop: true
                 }
             }
         }

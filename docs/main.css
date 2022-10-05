@@ -14,7 +14,7 @@
 }
 /* Dark mode */
 [data-theme="dark"]{
-    --highlight:#fff;
+    --highlight:#eaeaea;
     --dark:#333;
     --medDark:#444;
     --med:#555;
@@ -112,6 +112,48 @@ button{
     cursor:pointer;
     display: grid;
     place-items: center;
+    position:relative;
+}
+
+.tooltip::before,
+.tooltip::after {
+  --scale: 0;
+  --arrow-size: 10px;
+  --tooltip-color: var(--light);
+
+  position: absolute;
+  bottom: -.25rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(var(--translate-y, 0)) scale(var(--scale));
+  transition: 100ms transform;
+  transform-origin: top center;
+}
+
+.tooltip::before {
+  --translate-y: calc(100% + var(--arrow-size));
+
+  content: attr(data-tooltip);
+  color: white;
+  padding: .4rem;
+  border-radius: .3rem;
+  text-align: center;
+  width: max-content;
+  max-width: 10rem;
+  background: var(--tooltip-color);
+}
+
+.tooltip:hover::before,
+.tooltip:hover::after {
+  --scale: 1;
+}
+
+.tooltip::after {
+  --translate-y: var(--arrow-size);
+
+  content: '';
+  border: var(--arrow-size) solid transparent;
+  border-bottom-color: var(--tooltip-color);
+  transform-origin: bottom center;
 }
 
 #save, #loadText, #saveLocal, #saveOfficial{
@@ -514,6 +556,9 @@ button{
         flex-direction: column;
         width: 100%!important;
     }
+    #loadSaveWindow{
+        margin: 30px;
+    }
     #left{
         margin:10px;
     }
@@ -543,5 +588,8 @@ button{
     }
     #countNamesHolder{
         margin:20px;
+    }
+    .tooltip::after, .tooltip::before{
+        display: none;
     }
 }

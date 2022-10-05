@@ -16,13 +16,13 @@
             <a id="title" href="/scores">Create Pairs</a>
             <div id="placeholder"></div>
             <div id="buttons">
-                <button class="icon" id="modeToggle" title="Toggle Dark Mode" type="button"><i class="fa-solid fa-moon fa-lg"></i></button>
-                <button class="icon" id="resetPairs" title="Reset Pairs" type="button"><i class="fa-solid fa-arrows-rotate fa-lg"></i></button>
-                <button class="icon" id="randomPairs" title="Randomize Pairs" type="button"><i class="fa-solid fa-dice-five fa-lg"></i></button>
-                <button class="icon" id="selectAbsent" title="Select Absent People" type="button"><i class="fa-solid fa-user fa-lg"></i></button>
-                <button class="icon" id="boatDisplay" title="Toggle boat type display" type="button"><i class="fa-solid fa-tag fa-lg"></i></button>
-                <button class="icon" id="countButton" title="Toggle boat count window" type="button"><i class="fa-solid fa-sailboat fa-lg"></i></button>
-                <button class="icon" id="infoButton" title="Toggle information window" type="button"><i class="fa-solid fa-info fa-lg"></i></button>
+                <button class="icon tooltip" id="modeToggle" data-tooltip="Toggle dark/light mode" type="button"><i class="fa-solid fa-moon fa-lg"></i></button>
+                <button class="icon tooltip" id="resetPairs" data-tooltip="Reset Pairs" type="button"><i class="fa-solid fa-arrows-rotate fa-lg"></i></button>
+                <button class="icon tooltip" id="randomPairs" data-tooltip="Randomize Pairs" type="button"><i class="fa-solid fa-dice-five fa-lg"></i></button>
+                <button class="icon tooltip" id="selectAbsent" data-tooltip="Select Absent People" type="button"><i class="fa-solid fa-user fa-lg"></i></button>
+                <button class="icon tooltip" id="boatDisplay" data-tooltip="Toggle boat type display" type="button"><i class="fa-solid fa-tag fa-lg"></i></button>
+                <button class="icon tooltip" id="countButton" data-tooltip="Toggle boat count window" type="button"><i class="fa-solid fa-sailboat fa-lg"></i></button>
+                <button class="icon tooltip" id="infoButton" data-tooltip="Toggle information window" type="button"><i class="fa-solid fa-info fa-lg"></i></button>
                 <!-- <button id="squareMode" title="Become square" type="button"><i class="gg-shape-square"></i></button>
                 <button id="picMode" title="Toggle picture mode" type="button"><i class="gg-image"></i></button> -->
             </div>
@@ -67,16 +67,18 @@
         </div>
         <div id="infoWindow">
             <div id="information">
-                INFO HERE<br><br>
+                INFO HERE
+                <br><br>
                 Todo:
                 <ul>
                     <li>Make randomization based on boat count</li>
                     <li>Make randomization based on previous partners</li>
+                    <li>Feature to check all previous parings of a specific person</li>
                 </ul>
             </div>
         </div>
-        <div id="loadSave">
-            <div id="loadText">
+        <div id="loadSave" class="tooltip" data-tooltip="Load or save pairings to the database">
+            <div id="loadText" >
                 Load Saved Pairs
             </div>
         </div>
