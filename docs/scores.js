@@ -170,6 +170,11 @@ async function loadScores(type, name, fleet, division, position, pair, regatta){
         borderColor: colors[colorNum],
         borderWidth: 2,
         fill: false,
+        trendlineLinear: {
+            colorMin: colors[colorNum],
+            lineStyle: "dotted",
+            width: 2
+        },
     });
     console.log(datasets)
     updateGraph();
@@ -201,7 +206,8 @@ function updateGraph(){
                   to: 0,
                   loop: true
                 }
-            }
+            },
+            
         }
     };
     chart.destroy();

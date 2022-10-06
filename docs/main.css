@@ -152,6 +152,7 @@ button{
   width: max-content;
   max-width: 10rem;
   background: var(--tooltip-color);
+  word-wrap: normal;
 }
 
 .tooltip:hover::before,
@@ -403,6 +404,7 @@ button{
     align-items: center;
     justify-content: center;
     gap:10px;
+    position: relative;
 }
 #right .name{
     /* display:inline-block; */

@@ -44,6 +44,9 @@ let betoQuotes = ['Hi',"I'm bad at sailing!"];
 let sabrinaClicks = 0;
 let elliottClicks = 0;
 
+let prevClickName = "";
+let prevClickTime;
+
 var thisPage;
 // console.log(window.location.href.split("/"));
 if(window.location.href.includes("scores")){
@@ -215,8 +218,7 @@ function makeName(name){ // creates single name
             nameEl.appendChild(profilePic);
         }
     }
-    nameEl.classList.add('name');
-    nameEl.classList.add('draggable');
+    nameEl.classList.add('name', 'draggable');
     nameEl.setAttribute("draggable", "true");
     if(locked.includes(name)) nameEl.classList.add('locked');
     if(absent.includes(name)) nameEl.classList.add('absent');
@@ -300,6 +302,25 @@ function makeName(name){ // creates single name
             }
         }) 
     }
+    nameEl.addEventListener('click', async () =>{
+        // console.log(prevClickName);
+        let old = document.querySelector('.name.tooltip');
+        if(old){
+            old.setAttribute('data-tooltip', "");
+            old.classList.remove('tooltip');
+        }
+
+        if(prevClickName == name && Date.now() - prevClickTime < 250){
+            nameEl.classList.add('tooltip');
+            let prevParts = await getPrevPartners(name);
+            prevParts = prevParts.join(", ");
+            console.log("Prevparts: ", prevParts)
+            nameEl.setAttribute('data-tooltip', prevParts);
+        } 
+
+        prevClickName = name;
+        prevClickTime = Date.now();
+    })
 
     if(name == 'Beto'){
         nameEl.addEventListener('click', ()=>{
@@ -689,6 +710,28 @@ async function getBoatCount(){
         countNamesHolder.appendChild(nameEl);
     }
 }
+getPrevPartners("Carter");
+async function getPrevPartners(name){
+    let partners = [];
+
+    options = {method:"POST",headers:{"Content-Type":"application/json"},body: JSON.stringify({})};
+    loadingEl.style.display ='block';
+    const response = await fetch(API_URL + '/getPairsOfficial', options);
+    const pairings = await response.json();
+    loadingEl.style.display ='none';
+
+    for (let i = 0; i < pairings.pairs.length; i++) {
+        // console.log(Object.values(pairings.pairs[i]));
+        if(Object.values(pairings.pairs[i]).indexOf(name) % 2 == 0){
+            if(pairings.pairs[i][Object.values(pairings.pairs[i]).indexOf(name) + 1] != undefined) partners.push(pairings.pairs[i][Object.values(pairings.pairs[i]).indexOf(name) + 1]);
+        }else{
+            if(pairings.pairs[i][Object.values(pairings.pairs[i]).indexOf(name) - 1] != undefined) partners.push(pairings.pairs[i][Object.values(pairings.pairs[i]).indexOf(name) - 1]);
+        }
+    }
+    console.log("Previous partners of ", name, partners);
+    return partners;
+}
+
 countButton.addEventListener('click', () =>{
     countWindow.style.display = 'block';
 })
