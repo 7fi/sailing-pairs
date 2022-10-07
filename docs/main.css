@@ -355,7 +355,7 @@ button{
     display: grid;
     align-items: stretch;
 }
-.pairSlot[boatDisplay="true"]:nth-child(2n - 1):nth-child(-2n + 15)::before{
+.pairSlot[boatDisplay="true"]:nth-child(3n - 2):nth-child(-3n + 21)::before{
     content:"FJ";
 }
 .pairSlot[boatDisplay="true"]:nth-child(2n + 17):nth-child(-2n + 27)::before{

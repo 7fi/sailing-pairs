@@ -512,7 +512,7 @@ if (thisPage == 'main') {
   saveButton.addEventListener('click', async () => {
     if (nameInput.value != '') {
       let pairs = { name: nameInput.value }
-      for (let i = 0; i < slotsLength; i++) {
+      for (let i = 0; i < (slotsLength / 2) * 3; i++) {
         pairs[i] = pairingHolder.children[i].textContent
       }
 
