@@ -1,102 +1,205 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">  
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="main.css">
-    <script src="https://kit.fontawesome.com/2e5caad16b.js" crossorigin="anonymous"></script>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="main.css" />
+    <script
+      src="https://kit.fontawesome.com/2e5caad16b.js"
+      crossorigin="anonymous"
+    ></script>
     <!-- <link href='https://css.gg/css?=|moon|sync|sun|trash|dice-5|shape-square|shape-circle|image|smile-no-mouth|play-list-add|swap' rel='stylesheet'> -->
     <title>BHS Sailing Pairings</title>
-</head>
-<body>
+  </head>
+  <body>
     <div id="window">
-        <div id="loadingEl"></div>
-        <div id="header">
-            <a id="title" class='tooltip' data-tooltip="Click to see spring 2022 scores data!" href="/scores">Create Pairs</a>
-            <div id="placeholder"></div>
-            <div id="buttons">
-                <button class="icon tooltip" id="modeToggle" data-tooltip="Toggle dark/light mode" type="button"><i class="fa-solid fa-moon fa-lg"></i></button>
-                <button class="icon tooltip" id="resetPairs" data-tooltip="Reset pairs" type="button"><i class="fa-solid fa-arrows-rotate fa-lg"></i></button>
-                <button class="icon tooltip" id="randomPairs" data-tooltip="Randomize pairs" type="button"><i class="fa-solid fa-dice-five fa-lg"></i></button>
-                <button class="icon tooltip" id="selectAbsent" data-tooltip="Select absent people" type="button"><i class="fa-solid fa-user fa-lg"></i></button>
-                <button class="icon tooltip" id="selectLocked" data-tooltip="Lock people to slot (not fully implimented yet)" type="button"><i class="fa-solid fa-lock fa-lg"></i></button>
-                <button class="icon tooltip" id="boatDisplay" data-tooltip="Toggle boat type display" type="button"><i class="fa-solid fa-tag fa-lg"></i></button>
-                <button class="icon tooltip" id="countButton" data-tooltip="Toggle boat count window" type="button"><i class="fa-solid fa-sailboat fa-lg"></i></button>
-                <button class="icon tooltip" id="infoButton" data-tooltip="Toggle information window" type="button"><i class="fa-solid fa-info fa-lg"></i></button>
-                <!-- <button id="squareMode" title="Become square" type="button"><i class="gg-shape-square"></i></button>
+      <div id="loadingEl"></div>
+      <div id="header">
+        <a
+          id="title"
+          class="tooltip"
+          data-tooltip="Click to see spring 2022 scores data!"
+          href="/scores"
+          >Create Pairs</a
+        >
+        <div id="placeholder"></div>
+        <div id="buttons">
+          <button
+            class="icon tooltip"
+            id="modeToggle"
+            data-tooltip="Toggle dark/light mode"
+            type="button"
+          >
+            <i class="fa-solid fa-moon fa-lg"></i>
+          </button>
+          <button
+            class="icon tooltip"
+            id="resetPairs"
+            data-tooltip="Reset pairs"
+            type="button"
+          >
+            <i class="fa-solid fa-arrows-rotate fa-lg"></i>
+          </button>
+          <button
+            class="icon tooltip"
+            id="randomPairs"
+            data-tooltip="Randomize pairs"
+            type="button"
+          >
+            <i class="fa-solid fa-dice-five fa-lg"></i>
+          </button>
+          <button
+            class="icon tooltip"
+            id="selectAbsent"
+            data-tooltip="Select absent people"
+            type="button"
+          >
+            <i class="fa-solid fa-user fa-lg"></i>
+          </button>
+          <button
+            class="icon tooltip"
+            id="selectLocked"
+            data-tooltip="Lock people to slot (not fully implimented yet)"
+            type="button"
+          >
+            <i class="fa-solid fa-lock fa-lg"></i>
+          </button>
+          <button
+            class="icon tooltip"
+            id="boatDisplay"
+            data-tooltip="Toggle boat type display"
+            type="button"
+          >
+            <i class="fa-solid fa-tag fa-lg"></i>
+          </button>
+          <button
+            class="icon tooltip"
+            id="countButton"
+            data-tooltip="Toggle boat count window"
+            type="button"
+          >
+            <i class="fa-solid fa-sailboat fa-lg"></i>
+          </button>
+          <button
+            class="icon tooltip"
+            id="infoButton"
+            data-tooltip="Toggle information window"
+            type="button"
+          >
+            <i class="fa-solid fa-info fa-lg"></i>
+          </button>
+          <!-- <button id="squareMode" title="Become square" type="button"><i class="gg-shape-square"></i></button>
                 <button id="picMode" title="Toggle picture mode" type="button"><i class="gg-image"></i></button> -->
-            </div>
         </div>
-        <div id="loadSaveContainer" style="z-index:9; display:none; place-items:center; position:fixed;top:0; left:0; right:0; bottom:0; background-color:#00000055;">
-            <div id="loadSaveWindow">
-                <div id="localSaved">
-                </div>
-                <div id="savedNames">
-                    <div id="loadDropContainer">
-                    </div>
-                </div>
-                <input type="text" id="nameInput" placeholder="Enter Name for Pairings">
-                <div id="saveLeft">
-                    <div id="saveHolder">
-                        <button id="saveLocal" class="tooltip" data-tooltip="Save pairings to this device only">Save Pairs Locally</button>
-                    </div>
-                </div>
-                <div id="saveRight">
-                    <div id="saveHolder">
-                        <button id="save" class="tooltip" data-tooltip="Save pairings to the database">Save Pairs Publicly</button>
-                    </div>
-                </div>
-                <div id="saveBoth">
-                    <div id="saveHolder">
-                        <button id="saveOfficial" class="tooltip" data-tooltip="Save pairings as official practice pairs (Name them 'Day mm/dd') ">Save Pairs Officially</button>
-                    </div>
-                </div>
-                <div id="officialList">
-                </div>
+      </div>
+      <div
+        id="loadSaveContainer"
+        style="
+          z-index: 9;
+          display: none;
+          place-items: center;
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background-color: #00000055;
+        "
+      >
+        <div id="loadSaveWindow">
+          <div id="localSaved"></div>
+          <div id="savedNames">
+            <div id="loadDropContainer"></div>
+          </div>
+          <input
+            type="text"
+            id="nameInput"
+            placeholder="Enter Name for Pairings"
+          />
+          <div id="saveLeft">
+            <div id="saveHolder">
+              <button
+                id="saveLocal"
+                class="tooltip"
+                data-tooltip="Save pairings to this device only"
+              >
+                Save Pairs Locally
+              </button>
             </div>
-        </div>
-        <div id="countWindow">
-            <div id="countNamesHolder">
-                <div class="countName" style="position:sticky;"> Name
-                    <div style="flex-grow:1;"></div>
-                    <div> FJ </div>
-                    <div> C420 </div>
-                    <div> 420E</div>
-                </div>
+          </div>
+          <div id="saveRight">
+            <div id="saveHolder">
+              <button
+                id="save"
+                class="tooltip"
+                data-tooltip="Save pairings to the database"
+              >
+                Save Pairs Publicly
+              </button>
             </div>
-        </div>
-        <div id="infoWindow">
-            <div id="information">
-                <h1>BHS Pairs</h1>
-                Bhs pairs is a website designed to help create pairings for our team. It features a database to store pairings in that can be accessed by anyone at a later date, as well as a way to mark people as absent and randomize based on skippers and crews. You can also store official pairings that will track what kinds of boats people sailed in.
-                <br><br>
-                Todo:
-                <ul>
-                    <li>Make randomization based on boat count</li>
-                    <li>Make randomization based on previous partners</li>
-                    <li>Feature to check all previous parings of a specific person</li>
-                </ul>
+          </div>
+          <div id="saveBoth">
+            <div id="saveHolder">
+              <button
+                id="saveOfficial"
+                class="tooltip"
+                data-tooltip="Save pairings as official practice pairs (Name them 'Day mm/dd') "
+              >
+                Save Pairs Officially
+              </button>
             </div>
+          </div>
+          <div id="officialList"></div>
         </div>
-        <div id="loadSave" class="tooltip" data-tooltip="Load or save pairings to the database">
-            <div id="loadText" >
-                Load/Save Pairs
-            </div>
+      </div>
+      <div id="countWindow">
+        <div id="countNamesHolder">
+          <div class="countName" style="position: sticky">
+            Name
+            <div style="flex-grow: 1"></div>
+            <div>FJ</div>
+            <div>C420</div>
+            <div>420E</div>
+          </div>
         </div>
-        <div id="left">
-            <div id="pairingHolder">
-
-            </div>
+      </div>
+      <div id="infoWindow">
+        <div id="information">
+          <h1>BHS Pairs</h1>
+          Bhs pairs is a website designed to help create pairings for our team.
+          It features a database to store pairings in that can be accessed by
+          anyone at a later date, as well as a way to mark people as absent and
+          randomize based on skippers and crews. You can also store official
+          pairings that will track what kinds of boats people sailed in.
+          <br /><br />
+          Todo:
+          <ul>
+            <li>Make randomization based on boat count</li>
+            <li>Make randomization based on previous partners</li>
+          </ul>
         </div>
-        <div id="right">
-            <div id="listContainer">
-                
-            </div>
-            <img id="betoEl" src="img/scrog.png" style="display: none; float:right; position:absolute;bottom:0;">
-        </div>
+      </div>
+      <div
+        id="loadSave"
+        class="tooltip"
+        data-tooltip="Load or save pairings to the database"
+      >
+        <div id="loadText">Load/Save Pairs</div>
+      </div>
+      <div id="left">
+        <div id="pairingHolder"></div>
+      </div>
+      <div id="right">
+        <div id="listContainer"></div>
+        <img
+          id="betoEl"
+          src="img/scrog.png"
+          style="display: none; float: right; position: absolute; bottom: 0"
+        />
+      </div>
     </div>
 
     <script src="client.js"></script>
-</body>
+  </body>
 </html>
