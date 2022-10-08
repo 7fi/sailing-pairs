@@ -70,7 +70,7 @@ const API_URL = 'https://bhspairs.herokuapp.com' // For deployment
 const people = [
   { name: 'Adam', skipper: true, crew: false },
   { name: 'Alexander', skipper: true, crew: false },
-  { name: 'Andreta', skipper: true, crew: true },
+  { name: 'Andrea', skipper: true, crew: true },
   { name: 'Ava', skipper: true, crew: true },
   { name: 'Ben', skipper: true, crew: false },
   { name: 'Beto', skipper: true, crew: false },
@@ -295,7 +295,7 @@ if (thisPage == 'main') {
       for (let i = 0; i < newNames.length - 1; i++) {
         if (newNames[i] != '' && newNames[i] != undefined) {
           tempNames.splice(tempNames.indexOf(newNames[i]), 1)
-          console.log(tempNames)
+          // console.log(tempNames)
         }
       }
       tempNames.forEach((name) => {
@@ -619,12 +619,12 @@ if (thisPage == 'main') {
       pairs[i] = pairingHolder.children[i].textContent
       pairsArray.push(pairingHolder.children[i].textContent)
     }
-    console.log(pairsArray)
+    // console.log(pairsArray)
     console.log('Duplicates found: ' + [...new Set(findDuplicates(pairsArray))])
     if (findDuplicates(pairsArray) != '') {
-      console.log('Duplicates foundd!!!')
+      // console.log('Duplicates foundd!!!')
     }
-    console.log(pairs)
+    // console.log(pairs)
 
     // let oldpairs = JSON.parse(window.localStorage.getItem('pairs'));
     // if(oldpairs != undefined & oldpairs != null){
@@ -965,6 +965,13 @@ if (thisPage == 'main') {
     getSaved()
     makeNames()
     makePairs()
+    locked = []
+    absent = []
+
+    document.querySelectorAll('.name').forEach((name) => {
+      if (name.classList.contains('absent')) name.classList.remove('absent')
+      if (name.classList.contains('locked')) name.classList.remove('locked')
+    })
   })
 
   boatDisplay.addEventListener('click', () => {
@@ -980,7 +987,16 @@ if (thisPage == 'main') {
 
   // Randomize pairs button
   randomPairs.addEventListener('click', () => {
+    let lockedPairs = []
+    for (let i = 0; i < (slotsLength / 2) * 3; i++) {
+      if (locked.includes(pairingHolder.children[i].textContent)) {
+        console.log(i)
+        lockedPairs.push(pairingHolder.children[i].textContent)
+      } else if (i % 3 != 2) lockedPairs.push('')
+    }
+
     let shuffledNames = [] //names.slice()
+
     people.forEach((person) => {
       if (!absent.includes(person.name) && !locked.includes(person.name)) {
         shuffledNames.push(person.name)
@@ -1037,17 +1053,28 @@ if (thisPage == 'main') {
       ;[crews[currentIndex], crews[randomIndex]] = [crews[randomIndex], crews[currentIndex]]
     }
 
+    console.log(lockedPairs)
     console.log(skippers)
     console.log(crews)
     let newNames = []
 
-    for (let i = 0; i < shuffledNames.length; i++) {
-      if (skippers[i] != undefined) {
-        newNames.push(skippers[i])
+    let skipperIndex = 0
+    let crewIndex = 0
+    for (let i = 0; i < (shuffledNames.length / 2) * 3; i++) {
+      if (lockedPairs[i] != '' && lockedPairs[i] != undefined) {
+        newNames.push(lockedPairs[i])
+        console.log('pushing locked')
+      } else if (skippers[skipperIndex] != undefined && i % 2 == 0) {
+        newNames.push(skippers[skipperIndex])
+        skipperIndex++
+        console.log('pushing skipper')
       }
-      if (crews[i] != undefined) {
-        newNames.push(crews[i])
+      if (crews[crewIndex] != undefined && i % 2 == 1) {
+        newNames.push(crews[crewIndex])
+        crewIndex++
+        console.log('pushing crew')
       }
+      console.log(i, newNames[i])
     }
     makeNames(newNames)
     // console.log("leftover: ", newNames[newNames.length - 1])
