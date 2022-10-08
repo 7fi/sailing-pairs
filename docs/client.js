@@ -550,7 +550,7 @@ if (thisPage == 'main') {
           inputDate = formatDate(new Date(), 0)
         }
         let pairs = { name: nameInput.value, practiceDate: inputDate }
-        for (let i = 0; i < slotsLength; i++) {
+        for (let i = 0; i < (slotsLength / 2) * 3; i++) {
           pairs[i] = pairingHolder.children[i].textContent
         }
 
@@ -840,14 +840,26 @@ if (thisPage == 'main') {
     let fjCount = new Array(names.length).fill(0)
     let c420Count = new Array(names.length).fill(0)
     let e420Count = new Array(names.length).fill(0)
+
+    let fjCut = 16
+    let e420Cut = 28
+    let c420Cut = 32
+
     for (let i = 0; i < pairings.pairs.length; i++) {
-      for (let j = 0; j < 16; j++) {
+      console.log(Object.values(pairings.pairs[i]).length)
+      if (Object.values(pairings.pairs[i]).length > slotsLength + 5) {
+        // console.log('Long List')
+        fjCut = 24
+        e420Cut = 42
+        c420Cut = 48
+      }
+      for (let j = 0; j < fjCut; j++) {
         fjCount[names.indexOf(pairings.pairs[i][j])]++
       }
-      for (let j = 16; j < 28; j++) {
+      for (let j = fjCut; j < e420Cut; j++) {
         e420Count[names.indexOf(pairings.pairs[i][j])]++
       }
-      for (let j = 28; j < 32; j++) {
+      for (let j = e420Cut; j < c420Cut; j++) {
         c420Count[names.indexOf(pairings.pairs[i][j])]++
       }
     }
