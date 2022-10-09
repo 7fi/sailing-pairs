@@ -355,16 +355,16 @@ button{
     display: grid;
     align-items: stretch;
 }
-.pairSlot[boatDisplay="true"]:nth-child(3n - 2):nth-child(-3n + 21)::before{
+.pairSlot[boatDisplay="true"]:nth-child(3n - 2):nth-child(-3n + 22)::before{
     content:"FJ";
 }
-.pairSlot[boatDisplay="true"]:nth-child(2n + 17):nth-child(-2n + 27)::before{
+.pairSlot[boatDisplay="true"]:nth-child(3n + 25):nth-child(-3n + 40)::before{
     content:"420E";
 }
-.pairSlot[boatDisplay="true"]:nth-child(2n + 29):nth-child(-2n + 31)::before{
+.pairSlot[boatDisplay="true"]:nth-child(3n + 43):nth-child(-3n + 46)::before{
     content:"C420";
 }
-.pairSlot[boatDisplay="true"]:nth-last-child(2)::before{
+.pairSlot[boatDisplay="true"]:nth-last-child(3)::before{
     content:"Rotating";
 }
 .pairSlot::before{
@@ -388,7 +388,7 @@ button{
 .pairSlot:nth-child(3n - 1) .name{
     color:var(--highlight1);
 }
-.pairSlot[boatDisplay="false"]:nth-child(3n)::after{
+.pairSlot:nth-child(3n)::after{
     content:"Rotating";
     color:var(--highlight2);
 }
