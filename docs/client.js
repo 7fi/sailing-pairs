@@ -111,43 +111,7 @@ const people = [
 ]
 
 // Name list
-const names = [
-  'Adam',
-  'Alexander',
-  'Andrea',
-  'Ava',
-  'Ben',
-  'Beto',
-  'Carson',
-  'Carter',
-  'Chris',
-  'Cole',
-  'Cyrus',
-  'Elliott',
-  'Fin',
-  'Gretchen F',
-  'Gretchen I',
-  'Holden',
-  'Isaia',
-  'Jaya',
-  'Jeffrey',
-  'Joseph',
-  'Kai',
-  'Luke',
-  'Maura',
-  'Nelson',
-  'Nick',
-  'Nolan',
-  'Owen',
-  'Payton',
-  'Ryan',
-  'Sabrina',
-  'Sharkey',
-  'Stella',
-  'Suraj',
-  'Talia',
-  'Zephyr',
-]
+const names = ['Adam', 'Alexander', 'Andrea', 'Ava', 'Ben', 'Beto', 'Carson', 'Carter', 'Chris', 'Cole', 'Cyrus', 'Elliott', 'Fin', 'Gretchen F', 'Gretchen I', 'Holden', 'Isaia', 'Jaya', 'Jeffrey', 'Joseph', 'Kai', 'Luke', 'Maura', 'Nelson', 'Nick', 'Nolan', 'Owen', 'Payton', 'Ryan', 'Sabrina', 'Sharkey', 'Stella', 'Suraj', 'Talia', 'Zephyr']
 const slotsLength = Math.floor(names.length / 2) * 2
 document.documentElement.style.setProperty('--slotCount', slotsLength / 2)
 if (rotatingSlot) {
@@ -170,14 +134,24 @@ function padTo2Digits(num) {
 }
 
 function formatDate(date, dateOffset) {
-  return [
-    date.getFullYear(),
-    padTo2Digits(date.getMonth() + 1),
-    padTo2Digits(date.getDate() + dateOffset),
-  ].join('-')
+  return [date.getFullYear(), padTo2Digits(date.getMonth() + 1), padTo2Digits(date.getDate() + dateOffset)].join('-')
 }
 
 console.log(formatDate(new Date(), 0))
+
+function compareFn(a, b) {
+  aMonth = parseInt(a.name.split(' ')[1].split('/')[0])
+  aDay = parseInt(a.name.split(' ')[1].split('/')[1])
+  bMonth = parseInt(b.name.split(' ')[1].split('/')[0])
+  bDay = parseInt(b.name.split(' ')[1].split('/')[1])
+  let num = 0
+  if (aMonth < bMonth) num = -1
+  else if (aMonth == bMonth && aDay < bDay) num = -1
+  else if (aMonth == bMonth && aDay > bDay) num = 1
+  else if (aMonth > bMonth) num = 1
+  // else return 0
+  return num
+}
 
 if (thisPage == 'main') {
   makePairs(JSON.parse(window.localStorage.getItem('tempPairs')))
@@ -320,20 +294,7 @@ if (thisPage == 'main') {
       nameEl.textContent = name
     } else {
       nameEl.innerHTML = name
-      let noPics = [
-        'Adam',
-        'Alexander',
-        'Owen',
-        'Cascade',
-        'Cyrus',
-        'Gretchen I',
-        'Gretchen F',
-        'Holden',
-        'Nelson',
-        'Stella',
-        'Suraj',
-        'Zephyr',
-      ]
+      let noPics = ['Adam', 'Alexander', 'Owen', 'Cascade', 'Cyrus', 'Gretchen I', 'Gretchen F', 'Holden', 'Nelson', 'Stella', 'Suraj', 'Zephyr']
       if (!noPics.includes(name)) {
         const profilePic = document.createElement('img')
         profilePic.classList.add('profilePic')
@@ -728,7 +689,8 @@ if (thisPage == 'main') {
     response = await fetch(API_URL + '/getPairsOfficial', options)
     json = await response.json()
     loadingEl.style.display = 'none'
-    console.log(json)
+
+    sorted = Object.values(json.pairs).sort(compareFn)
 
     // if names exist create buttons for them
     if (json.pairs != null) {
@@ -737,13 +699,13 @@ if (thisPage == 'main') {
         officialList.removeChild(officialList.firstChild)
       }
       // loop through names and create button
-      for (let i = 0; i < json.pairs.length; i++) {
+      for (let i = 0; i < sorted.length; i++) {
         const loadNameHolder = document.createElement('div')
         loadNameHolder.classList.add('loadNameHolder')
 
         const loadName = document.createElement('button')
         loadName.classList.add('loadName')
-        loadName.textContent = json.pairs[i].name
+        loadName.textContent = sorted[i].name
         loadName.addEventListener('click', async () => {
           //on click get pairings from server
           options = {
@@ -866,6 +828,7 @@ if (thisPage == 'main') {
     }
     // console.log("Boat count",names,fjCount,c420Count,e420Count);
 
+    let girls = ["Elliott", "Ava", "Sabrina", "Talia"]
     for (let i = 0; i < names.length; i++) {
       const nameEl = document.createElement('div')
       nameEl.classList.add('countName')
@@ -890,10 +853,10 @@ if (thisPage == 'main') {
       e420CountEl.innerHTML = e420Count[i]
       nameEl.appendChild(e420CountEl)
 
-      if (fjCount[i] - c420Count[i] - e420Count[i] < 0) {
+      if (fjCount[i] - c420Count[i] - e420Count[i] < 0 && !girls.includes(names[i])) {
         nameEl.setAttribute('boat-karma', 'positive')
       }
-      if (fjCount[i] - c420Count[i] - e420Count[i] > 0) {
+      if (fjCount[i] - c420Count[i] - e420Count[i] > 0 && !girls.includes(names[i])) {
         nameEl.setAttribute('boat-karma', 'negative')
       }
 
@@ -911,23 +874,30 @@ if (thisPage == 'main') {
     }
     loadingEl.style.display = 'block'
     const response = await fetch(API_URL + '/getPairsOfficial', options)
-    const pairings = await response.json()
+    let pairings = await response.json()
     loadingEl.style.display = 'none'
 
-    for (let i = 0; i < pairings.pairs.length; i++) {
-      // console.log(Object.values(pairings.pairs[i]));
-      if (Object.values(pairings.pairs[i]).indexOf(name) % 2 == 0) {
-        if (
-          pairings.pairs[i][Object.values(pairings.pairs[i]).indexOf(name) + 1] != undefined &&
-          !partners.includes(pairings.pairs[i][Object.values(pairings.pairs[i]).indexOf(name) + 1])
-        )
-          partners.push(pairings.pairs[i][Object.values(pairings.pairs[i]).indexOf(name) + 1])
-      } else {
-        if (
-          pairings.pairs[i][Object.values(pairings.pairs[i]).indexOf(name) - 1] != undefined &&
-          !partners.includes(pairings.pairs[i][Object.values(pairings.pairs[i]).indexOf(name) - 1])
-        )
-          partners.push(pairings.pairs[i][Object.values(pairings.pairs[i]).indexOf(name) - 1])
+    pairings = Object.values(pairings.pairs).sort(compareFn)
+
+    for (let i = 0; i < pairings.length; i++) {
+      if (Object.values(pairings[i]).indexOf(name) % 2 == 0 && Object.values(pairings[i]).indexOf(name) < Object.values(pairings[i]).length - 6) {
+        if (pairings[i][Object.values(pairings[i]).indexOf(name) + 1] != undefined && pairings[i][Object.values(pairings[i]).indexOf(name) + 1] != '') {
+          // && !partners.includes(pairings[i][Object.values(pairings[i]).indexOf(name) + 1])
+          if (Object.values(pairings[i]).length > slotsLength + 5 && Object.values(pairings[i]).indexOf(name) % 3 != 2) {
+            partners.push(pairings[i][Object.values(pairings[i]).indexOf(name) + 1])
+          } else if (Object.values(pairings[i]).length < slotsLength + 5) {
+            partners.push(pairings[i][Object.values(pairings[i]).indexOf(name) + 1])
+          }
+          if (Object.values(pairings[i]).length > slotsLength + 5 && Object.values(pairings[i]).indexOf(name) % 3 != 2 && pairings[i][Object.values(pairings[i]).indexOf(name) + 2] != undefined && pairings[i][Object.values(pairings[i]).indexOf(name) + 2] != '') {
+            console.log('rotated partner:', pairings[i][Object.values(pairings[i]).indexOf(name) + 2])
+            partners.push(pairings[i][Object.values(pairings[i]).indexOf(name) + 2])
+          }
+        }
+      } else if (Object.values(pairings[i]).indexOf(name) % 2 == 1) {
+        if (pairings[i][Object.values(pairings[i]).indexOf(name) - 1] != undefined) partners.push(pairings[i][Object.values(pairings[i]).indexOf(name) - 1])
+      } else if (Object.values(pairings[i]).length > slotsLength + 5 && Object.values(pairings[i]).indexOf(name) % 3 == 2) {
+        console.log('long and rotated slot')
+        if (pairings[i][Object.values(pairings[i]).indexOf(name) - 2] != undefined) partners.push(pairings[i][Object.values(pairings[i]).indexOf(name) - 2])
       }
     }
     console.log('Previous partners of ', name, partners)
