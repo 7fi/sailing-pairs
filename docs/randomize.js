@@ -7,7 +7,7 @@ randomPairs.addEventListener('click', () => {
       lockedPairs.push(pairingHolder.children[i].textContent)
     } else if (i % 3 != 2) lockedPairs.push('')
   }
-  console.log("Locked: ", lockedPairs)
+  console.log('Locked: ', lockedPairs)
 
   let shuffledNames = [] //names.slice()
 
@@ -22,20 +22,14 @@ randomPairs.addEventListener('click', () => {
   while (currentIndex != 0) {
     randomIndex = Math.floor(Math.random() * currentIndex)
     currentIndex--
-    ;[shuffledNames[currentIndex], shuffledNames[randomIndex]] = [
-      shuffledNames[randomIndex],
-      shuffledNames[currentIndex],
-    ]
+    ;[shuffledNames[currentIndex], shuffledNames[randomIndex]] = [shuffledNames[randomIndex], shuffledNames[currentIndex]]
   }
 
   let skippers = []
   let crews = []
   console.log(shuffledNames.length)
   for (let i = 0; i < shuffledNames.length; i++) {
-    if (
-      people[people.findIndex((e) => e.name == shuffledNames[i])].skipper &&
-      !(skippers.length >= shuffledNames.length / 2)
-    ) {
+    if (people[people.findIndex((e) => e.name == shuffledNames[i])].skipper && !(skippers.length >= shuffledNames.length / 2)) {
       skippers.push(shuffledNames[i])
       // console.log(shuffledNames[i], " is a skipper ", people[people.findIndex((e) => e.name == shuffledNames[i])].skipper);
     } else {
@@ -52,10 +46,7 @@ randomPairs.addEventListener('click', () => {
   while (currentIndex != 0) {
     randomIndex = Math.floor(Math.random() * currentIndex)
     currentIndex--
-    ;[skippers[currentIndex], skippers[randomIndex]] = [
-      skippers[randomIndex],
-      skippers[currentIndex],
-    ]
+    ;[skippers[currentIndex], skippers[randomIndex]] = [skippers[randomIndex], skippers[currentIndex]]
   }
 
   //shuffle crews
@@ -74,7 +65,8 @@ randomPairs.addEventListener('click', () => {
 
   let skipperIndex = 0
   let crewIndex = 0
-  for (let i = 0; i < (shuffledNames.length / 2) * 3; i++) {
+  console.log(shuffledNames.length)
+  for (let i = 0; i < shuffledNames.length; i++) {
     if (lockedPairs[i] != '' && lockedPairs[i] != undefined) {
       newNames.push(lockedPairs[i])
       console.log('pushing locked')
@@ -82,23 +74,17 @@ randomPairs.addEventListener('click', () => {
       newNames.push(skippers[skipperIndex])
       skipperIndex++
       console.log('pushing skipper')
-    }else if (crews[crewIndex] != undefined && i % 2 == 1) {
+    } else if (crews[crewIndex] != undefined && i % 2 == 1) {
       newNames.push(crews[crewIndex])
       crewIndex++
       console.log('pushing crew')
     }
     console.log(i, newNames[i])
   }
-  makeNames(newNames)
+  newNames = newNames.slice(0, 34)
+  if (Math.round(newNames.length / 2) != newNames.length / 2) newNames = newNames.slice(0, -1)
   // console.log("leftover: ", newNames[newNames.length - 1])
-
-  // for(let i = 0; i < (newNames.length/2)*3; i++){
-  //     if(i % 3 == 2) newNames.splice(i, 0, "");
-  // }
-
-  // for (let i = 0; i < slotsLength; i++) {
-  //     if()
-  // }
-
+  console.log(newNames)
+  makeNames(newNames)
   makePairs(newNames)
 })

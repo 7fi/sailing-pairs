@@ -90,9 +90,9 @@ const people = [
   { name: 'Gretchen I', skipper: false, crew: true },
   { name: 'Holden', skipper: false, crew: true },
   { name: 'Isaia', skipper: true, crew: true },
-  { name: 'Jaya', skipper: false, crew: true },
-  { name: 'Jeffrey', skipper: false, crew: true },
-  { name: 'Joseph', skipper: false, crew: true },
+  { name: 'Jaya', skipper: true, crew: true },
+  { name: 'Jeffrey', skipper: true, crew: true },
+  { name: 'Joseph', skipper: true, crew: true },
   { name: 'Kai', skipper: false, crew: true },
   { name: 'Luke', skipper: false, crew: true },
   { name: 'Maura', skipper: true, crew: true },
@@ -105,7 +105,7 @@ const people = [
   { name: 'Sabrina', skipper: false, crew: true },
   { name: 'Sharkey', skipper: false, crew: true },
   { name: 'Stella', skipper: false, crew: true },
-  { name: 'Suraj', skipper: false, crew: true },
+  { name: 'Suraj', skipper: true, crew: true },
   { name: 'Talia', skipper: false, crew: true },
   { name: 'Zephyr', skipper: false, crew: true },
 ]
@@ -266,7 +266,7 @@ if (thisPage == 'main') {
     if (inputPairs != undefined) {
       let tempNames = names.slice()
       let newNames = Object.values(inputPairs)
-      for (let i = 0; i < newNames.length - 1; i++) {
+      for (let i = 0; i < newNames.length; i++) {
         if (newNames[i] != '' && newNames[i] != undefined) {
           tempNames.splice(tempNames.indexOf(newNames[i]), 1)
           // console.log(tempNames)
