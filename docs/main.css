@@ -378,7 +378,7 @@ button{
     content:"Skipper";
     color:var(--highlight2);
 }
-.pairSlot:nth-child(3n - 2) .name{  
+.pairSlot:nth-child(3n - 2) .name{
     color:var(--highlight2);
 }
 .pairSlot:nth-child(3n - 1)::after{
@@ -584,9 +584,13 @@ button{
         position: absolute;
         flex-direction: column;
         width: 100%!important;
+        z-index: inherit;
     }
     #loadSaveWindow{
         margin: 30px;
+        height: 90%;
+        overflow: auto;
+        position: absolute;
     }
     #left{
         margin:10px;
