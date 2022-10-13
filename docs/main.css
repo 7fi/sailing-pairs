@@ -617,7 +617,9 @@ button{
         gap:10px;
     }
     .name{
-        font-size: 1.16rem!important;
+        font-size: 1.15rem!important;
+        overflow-x:auto;
+        white-space: nowrap;
     }
     #right .name{
         width: 98%;

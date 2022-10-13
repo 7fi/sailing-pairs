@@ -105,7 +105,7 @@ const people = [
   { name: 'Sabrina', skipper: false, crew: true },
   { name: 'Sharkey', skipper: false, crew: true },
   { name: 'Stella', skipper: false, crew: true },
-  { name: 'Suraj', skipper: true, crew: true },
+  { name: 'Suraj', skipper: false, crew: true },
   { name: 'Talia', skipper: false, crew: true },
   { name: 'Zephyr', skipper: false, crew: true },
 ]
@@ -548,9 +548,9 @@ if (thisPage == 'main') {
         pairs[i] = pairingHolder.children[i].textContent
         pairsArray.push(pairingHolder.children[i].textContent)
       }
-      console.log(pairsArray)
-      console.log('Duplicates found: ' + [...new Set(findDuplicates(pairsArray))])
-      if (findDuplicates(pairsArray) != '') {
+      // console.log(pairsArray)
+      // console.log('Duplicates found: ' + [...new Set(findDuplicates(pairsArray))])
+      if (findDuplicates(pairsArray) != ['']) {
         console.log('Duplicates foundd!!!')
       }
       console.log(pairs)
@@ -582,8 +582,8 @@ if (thisPage == 'main') {
       pairsArray.push(pairingHolder.children[i].textContent)
     }
     // console.log(pairsArray)
-    console.log('Duplicates found: ' + [...new Set(findDuplicates(pairsArray))])
-    if (findDuplicates(pairsArray) != '') {
+    // console.log('Duplicates found: ' + [...new Set(findDuplicates(pairsArray))])
+    if (findDuplicates(pairsArray) != ['']) {
       // console.log('Duplicates foundd!!!')
     }
     // console.log(pairs)

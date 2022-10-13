@@ -7,7 +7,7 @@ randomPairs.addEventListener('click', () => {
       lockedPairs.push(pairingHolder.children[i].textContent)
     } else if (i % 3 != 2) lockedPairs.push('')
   }
-  console.log('Locked: ', lockedPairs)
+  // console.log('Locked: ', lockedPairs)
 
   let shuffledNames = [] //names.slice()
 
@@ -27,7 +27,6 @@ randomPairs.addEventListener('click', () => {
 
   let skippers = []
   let crews = []
-  console.log(shuffledNames.length)
   for (let i = 0; i < shuffledNames.length; i++) {
     if (people[people.findIndex((e) => e.name == shuffledNames[i])].skipper && !(skippers.length >= shuffledNames.length / 2)) {
       skippers.push(shuffledNames[i])
@@ -58,14 +57,13 @@ randomPairs.addEventListener('click', () => {
     ;[crews[currentIndex], crews[randomIndex]] = [crews[randomIndex], crews[currentIndex]]
   }
 
-  console.log(lockedPairs)
-  console.log(skippers)
-  console.log(crews)
+  // console.log(lockedPairs)
+  // console.log(skippers)
+  // console.log(crews)
   let newNames = []
 
   let skipperIndex = 0
   let crewIndex = 0
-  console.log(shuffledNames.length)
   for (let i = 0; i < shuffledNames.length; i++) {
     if (lockedPairs[i] != '' && lockedPairs[i] != undefined) {
       newNames.push(lockedPairs[i])
@@ -73,18 +71,17 @@ randomPairs.addEventListener('click', () => {
     } else if (skippers[skipperIndex] != undefined && i % 2 == 0) {
       newNames.push(skippers[skipperIndex])
       skipperIndex++
-      console.log('pushing skipper')
+      // console.log('pushing skipper')
     } else if (crews[crewIndex] != undefined && i % 2 == 1) {
       newNames.push(crews[crewIndex])
       crewIndex++
-      console.log('pushing crew')
+      // console.log('pushing crew')
     }
-    console.log(i, newNames[i])
+    // console.log(i, newNames[i])
   }
   newNames = newNames.slice(0, 34)
   if (Math.round(newNames.length / 2) != newNames.length / 2) newNames = newNames.slice(0, -1)
   // console.log("leftover: ", newNames[newNames.length - 1])
-  console.log(newNames)
   makeNames(newNames)
   makePairs(newNames)
 })
