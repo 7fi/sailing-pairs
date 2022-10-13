@@ -37,7 +37,7 @@ let selAbsent = false
 let selLocked = false
 let absent = []
 let locked = []
-let boatDisplayVal = 'false'
+let boatDisplayVal = 'true'
 
 let betoClicks = 0
 // let betoQuotes = ['Hi',"I'm bad at sailing!"];
