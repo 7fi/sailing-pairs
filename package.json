@@ -18,7 +18,9 @@
   },
   "homepage": "https://github.com/7fi/sailing-pairs#readme",
   "dependencies": {
+    "axios": "^1.1.2",
     "chartjs-plugin-trendline": "^2.0.0",
+    "cheerio": "^1.0.0-rc.12",
     "cors": "^2.8.5",
     "dotenv": "^16.0.1",
     "express": "^4.17.3",
@@ -26,6 +28,6 @@
     "mongoose": "^6.3.0"
   },
   "devDependencies": {
-    "nodemon": "^2.0.15"
+    "nodemon": "^2.0.20"
   }
 }

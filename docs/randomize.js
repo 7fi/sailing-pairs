@@ -7,6 +7,7 @@ randomPairs.addEventListener('click', () => {
       lockedPairs.push(pairingHolder.children[i].textContent)
     } else if (i % 3 != 2) lockedPairs.push('')
   }
+  console.log("Locked: ", lockedPairs)
 
   let shuffledNames = [] //names.slice()
 
@@ -81,8 +82,7 @@ randomPairs.addEventListener('click', () => {
       newNames.push(skippers[skipperIndex])
       skipperIndex++
       console.log('pushing skipper')
-    }
-    if (crews[crewIndex] != undefined && i % 2 == 1) {
+    }else if (crews[crewIndex] != undefined && i % 2 == 1) {
       newNames.push(crews[crewIndex])
       crewIndex++
       console.log('pushing crew')

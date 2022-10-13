@@ -828,7 +828,7 @@ if (thisPage == 'main') {
     }
     // console.log("Boat count",names,fjCount,c420Count,e420Count);
 
-    let girls = ["Elliott", "Ava", "Sabrina", "Talia"]
+    let girls = ['Elliott', 'Ava', 'Sabrina', 'Talia']
     for (let i = 0; i < names.length; i++) {
       const nameEl = document.createElement('div')
       nameEl.classList.add('countName')
@@ -880,24 +880,42 @@ if (thisPage == 'main') {
     pairings = Object.values(pairings.pairs).sort(compareFn)
 
     for (let i = 0; i < pairings.length; i++) {
-      if (Object.values(pairings[i]).indexOf(name) % 2 == 0 && Object.values(pairings[i]).indexOf(name) < Object.values(pairings[i]).length - 6) {
-        if (pairings[i][Object.values(pairings[i]).indexOf(name) + 1] != undefined && pairings[i][Object.values(pairings[i]).indexOf(name) + 1] != '') {
-          // && !partners.includes(pairings[i][Object.values(pairings[i]).indexOf(name) + 1])
-          if (Object.values(pairings[i]).length > slotsLength + 5 && Object.values(pairings[i]).indexOf(name) % 3 != 2) {
-            partners.push(pairings[i][Object.values(pairings[i]).indexOf(name) + 1])
-          } else if (Object.values(pairings[i]).length < slotsLength + 5) {
-            partners.push(pairings[i][Object.values(pairings[i]).indexOf(name) + 1])
+      let nameIndex = Object.values(pairings[i]).indexOf(name)
+      let largeCut = 39
+      let pairLength = Object.values(pairings[i]).length
+      console.log(pairings[i].name, pairLength)
+
+      if (Object.values(pairings[i]).includes(name)) {
+        if (pairLength > largeCut && nameIndex < pairLength - 6) {
+          // if big pairs and not rotating slots
+          //if skipper slot and isnt empty crew
+          if (nameIndex % 3 == 0 && pairings[i][nameIndex + 1] != undefined && pairings[i][nameIndex + 1] != '') {
+            partners.push(pairings[i][nameIndex + 1])
+
+            //if rotating slot is not empty
+            if (pairings[i][nameIndex + 2] != undefined && pairings[i][nameIndex + 2] != '') {
+              partners.push(pairings[i][nameIndex + 2])
+            }
+
+            //if crew slot and skipper is not empty
+          } else if (nameIndex % 3 == 1 && pairings[i][nameIndex - 1] != undefined && pairings[i][nameIndex - 1] != '') {
+            partners.push(pairings[i][nameIndex - 1])
+
+            //if rotating slot and skipper is not empty
+          } else if (nameIndex % 3 == 2 && pairings[i][nameIndex - 2] != undefined && pairings[i][nameIndex - 2] != '') {
+            partners.push(pairings[i][nameIndex - 2])
           }
-          if (Object.values(pairings[i]).length > slotsLength + 5 && Object.values(pairings[i]).indexOf(name) % 3 != 2 && pairings[i][Object.values(pairings[i]).indexOf(name) + 2] != undefined && pairings[i][Object.values(pairings[i]).indexOf(name) + 2] != '') {
-            console.log('rotated partner:', pairings[i][Object.values(pairings[i]).indexOf(name) + 2])
-            partners.push(pairings[i][Object.values(pairings[i]).indexOf(name) + 2])
+          // otherwise if short pairs and not rotating slots
+        } else if (pairLength < largeCut && nameIndex < pairLength - 6) {
+          //if skipper slot and isnt empty crew
+          if (nameIndex % 2 == 0 && pairings[i][nameIndex + 1] != undefined && pairings[i][nameIndex + 1] != '') {
+            partners.push(pairings[i][nameIndex + 1])
+
+            //if crew slot and skipper is not empty
+          } else if (nameIndex % 2 == 1 && pairings[i][nameIndex - 1] != undefined && pairings[i][nameIndex - 1] != '') {
+            partners.push(pairings[i][nameIndex - 1])
           }
         }
-      } else if (Object.values(pairings[i]).indexOf(name) % 2 == 1) {
-        if (pairings[i][Object.values(pairings[i]).indexOf(name) - 1] != undefined) partners.push(pairings[i][Object.values(pairings[i]).indexOf(name) - 1])
-      } else if (Object.values(pairings[i]).length > slotsLength + 5 && Object.values(pairings[i]).indexOf(name) % 3 == 2) {
-        console.log('long and rotated slot')
-        if (pairings[i][Object.values(pairings[i]).indexOf(name) - 2] != undefined) partners.push(pairings[i][Object.values(pairings[i]).indexOf(name) - 2])
       }
     }
     console.log('Previous partners of ', name, partners)
@@ -1006,7 +1024,7 @@ function switchMode() {
   }
 
   lightMode = !lightMode
-  console.log(lightMode, 'HI')
+  // console.log(lightMode, 'HI')
 }
 function setTheme(theme) {
   document.documentElement.setAttribute('data-theme', theme)
