@@ -406,23 +406,23 @@ if (thisPage == 'main') {
       }
 
       if (prevClickName == name && Date.now() - prevClickTime < 250) {
-        nameEl.classList.add('tooltip')
+        // nameEl.classList.add('tooltip')
         let prevParts = await getPrevPartners(name)
-        if (!mobile) {
-          nameEl.setAttribute('data-tooltip', prevParts.join(', '))
-        } else {
-          while (prevPairsHolder.firstChild) {
-            prevPairsHolder.removeChild(prevPairsHolder.firstChild)
-          }
-          prevPairs.style.display = 'block'
-          selectedName.textContent = name
-          prevParts.forEach((partner) => {
-            const nameEl = document.createElement('div')
-            nameEl.classList.add('name')
-            nameEl.innerHTML = partner
-            prevPairsHolder.appendChild(nameEl)
-          })
+        // if (!mobile) {
+        //   nameEl.setAttribute('data-tooltip', prevParts.join(', '))
+        // } else {
+        while (prevPairsHolder.firstChild) {
+          prevPairsHolder.removeChild(prevPairsHolder.firstChild)
         }
+        prevPairs.style.display = 'block'
+        selectedName.textContent = name
+        prevParts.forEach((partner) => {
+          const nameEl = document.createElement('div')
+          nameEl.classList.add('name')
+          nameEl.innerHTML = partner
+          prevPairsHolder.appendChild(nameEl)
+        })
+        // }
       }
 
       prevClickName = name
