@@ -30,6 +30,11 @@ const picModeButton = document.getElementById('picMode')
 const boatDisplay = document.getElementById('boatDisplay')
 const betoEl = document.getElementById('betoEl')
 
+const prevPairs = document.getElementById('prevPairs')
+const prevPairsWindow = document.getElementById('prevPairsWindow')
+const prevPairsHolder = document.getElementById('prevPairsHolder')
+const selectedName = document.getElementById('selectedName')
+
 let lightMode = true
 let square = false
 let picMode = false
@@ -403,26 +408,27 @@ if (thisPage == 'main') {
       if (prevClickName == name && Date.now() - prevClickTime < 250) {
         nameEl.classList.add('tooltip')
         let prevParts = await getPrevPartners(name)
-        nameEl.setAttribute('data-tooltip', prevParts.join(', '))
+        if (!mobile) {
+          nameEl.setAttribute('data-tooltip', prevParts.join(', '))
+        } else {
+          while (prevPairsHolder.firstChild) {
+            prevPairsHolder.removeChild(prevPairsHolder.firstChild)
+          }
+          prevPairs.style.display = 'block'
+          selectedName.textContent = name
+          prevParts.forEach((partner) => {
+            const nameEl = document.createElement('div')
+            nameEl.classList.add('name')
+            nameEl.innerHTML = partner
+            prevPairsHolder.appendChild(nameEl)
+          })
+        }
       }
 
       prevClickName = name
       prevClickTime = Date.now()
     })
 
-    // if(name == 'Beto'){
-    //     nameEl.addEventListener('click', ()=>{
-    //         betoClicks++;
-    //         if(betoClicks == 10){
-    //             betoClicks = 0;
-    //             console.log('Beto secret');
-    //             console.log(betoQuotes[Math.round(Math.random(betoQuotes.length - 1))]);
-    //             // betoEl.before = betoQuotes[Math.round(Math.random(betoQuotes.length - 1))];
-    //             // betoEl.target.setAttribute('data-before', betoQuotes[Math.round(Math.random(betoQuotes.length - 1))]);
-    //             betoEl.style.display = 'block';
-    //         }
-    //     })
-    // }
     // if(name == 'Sabrina'){
     //     nameEl.addEventListener('click', ()=>{
     //         betoClicks++;
@@ -587,14 +593,6 @@ if (thisPage == 'main') {
       // console.log('Duplicates foundd!!!')
     }
     // console.log(pairs)
-
-    // let oldpairs = JSON.parse(window.localStorage.getItem('pairs'));
-    // if(oldpairs != undefined & oldpairs != null){
-    //     oldpairs.push(pairs);
-    // }else{
-    //     oldpairs = [];
-    //     oldpairs.push(pairs);
-    // }
 
     window.localStorage.setItem('tempPairs', JSON.stringify(pairs))
   }
@@ -927,6 +925,9 @@ if (thisPage == 'main') {
   })
   countWindow.addEventListener('click', (e) => {
     if (e.target == countWindow) countWindow.style.display = 'none'
+  })
+  prevPairs.addEventListener('click', (e) => {
+    if (e.target == prevPairs) prevPairs.style.display = 'none'
   })
 
   loadText.addEventListener('click', () => {
