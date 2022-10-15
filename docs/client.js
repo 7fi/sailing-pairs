@@ -55,12 +55,13 @@ let prevClickTime
 let rotatingSlot = true
 
 var thisPage
-console.log(window.location.href.split('/')[3])
+console.log(window.location.href.split('/'))
 if (window.location.href.includes('scores')) {
   thisPage = 'scores'
 } else {
   thisPage = 'main'
 }
+
 /*else if(window.location.href.split("/")[window.location.href.split("/").length - 1] != ""){
     console.log(window.location.href.split("/")[window.location.href.split("/").length - 1]);
 } */
@@ -159,6 +160,64 @@ function compareFn(a, b) {
 }
 
 if (thisPage == 'main') {
+  parseUrl()
+  async function parseUrl() {
+    const urlArgs = window.location.search.split('/', 3)
+    console.log(urlArgs)
+    let pairingName
+    if (urlArgs.length > 2) pairingName = urlArgs[1] + '/' + urlArgs[2]
+    else pairingName = urlArgs[1]
+    pairingName = pairingName.replace('%20', ' ')
+    if (urlArgs[0] == '?p') {
+      options = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: pairingName }),
+      }
+      loadingEl.style.display = 'block'
+      const response = await fetch(API_URL + '/getPairs', options)
+      const json = await response.json()
+      loadingEl.style.display = 'none'
+      console.log(json)
+
+      getSaved()
+      // if pairs exist create them
+      if (json.pairs != null) {
+        makeNames(json.pairs)
+        makePairs(json.pairs)
+        nameInput.value = ''
+      } else {
+        makeNames()
+        makePairs()
+        alert('No pairs saved under this name.')
+        window.location.href = window.location.href.split('/?')[0]
+      }
+    } else if (urlArgs[0] == '?o') {
+      options = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: pairingName }),
+      }
+      loadingEl.style.display = 'block'
+      const response = await fetch(API_URL + '/getPairsOfficialOne', options)
+      const json = await response.json()
+      loadingEl.style.display = 'none'
+      console.log(json)
+
+      getSaved()
+      // if pairs exist create them
+      if (json.pairs != null) {
+        makeNames(json.pairs)
+        makePairs(json.pairs)
+        nameInput.value = ''
+      } else {
+        makeNames()
+        makePairs()
+        alert('No pairs saved under this name.')
+      }
+      loadSaveContainer.style.display = 'none'
+    }
+  }
   makePairs(JSON.parse(window.localStorage.getItem('tempPairs')))
   makeNames(JSON.parse(window.localStorage.getItem('tempPairs')))
   function makePairs(inputPairs) {
