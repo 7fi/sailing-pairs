@@ -732,7 +732,20 @@ if (thisPage == 'main') {
             console.log(json)
             getSaved()
           })
+
+          const copyLink = document.createElement('button')
+          copyLink.classList.add('loadDel')
+          const copyLinkIcon = document.createElement('i')
+          copyLinkIcon.classList.add('fa-copy', 'fa-solid', 'fa-lg')
+          copyLink.appendChild(copyLinkIcon)
+          copyLink.addEventListener('click', () => {
+            let tempName = loadName.textContent.replace(' ', '%20')
+            let link = 'https://www.bhspairs.cf/?p/' + tempName
+            navigator.clipboard.writeText(link)
+          })
+
           loadNameHolder.appendChild(loadName)
+          loadNameHolder.appendChild(copyLink)
           loadNameHolder.appendChild(loadDel)
         } else {
           loadNameHolder.appendChild(loadName)
@@ -789,8 +802,21 @@ if (thisPage == 'main') {
           }
           loadSaveContainer.style.display = 'none'
         })
-
         loadNameHolder.appendChild(loadName)
+        if (!mobile) {
+          const copyLink = document.createElement('button')
+          copyLink.classList.add('loadDel')
+          const copyLinkIcon = document.createElement('i')
+          copyLinkIcon.classList.add('fa-copy', 'fa-solid', 'fa-lg')
+          copyLink.appendChild(copyLinkIcon)
+          copyLink.addEventListener('click', () => {
+            let tempName = loadName.textContent.replace(' ', '%20')
+            let link = 'https://www.bhspairs.cf/?o/' + tempName
+            navigator.clipboard.writeText(link)
+          })
+          loadNameHolder.appendChild(copyLink)
+        }
+
         officialList.appendChild(loadNameHolder)
       }
     }
