@@ -1,19 +1,17 @@
-// Randomize pairs button
-randomPairs.addEventListener('click', () => {
+randomPairs.addEventListener('click', async () => {
+  //Create locked pair list with blank slots
   let lockedPairs = []
   for (let i = 0; i < slotsLength / 3; i++) {
-    for (let j = 0; j < 3; j++) {
-      if (pairingHolder.children[i].children[j] != undefined && pairingHolder.children[i].children[j].children[0]) {
-        if (locked.includes(pairingHolder.children[i].children[j].children[0].textContent)) {
-          lockedPairs.push(pairingHolder.children[i].children[j].children[0].textContent)
-        } else if (i % 3 != 2) lockedPairs.push('')
-      }
+    for (let j = 1; j < 4; j++) {
+      if (locked.includes(pairingHolder.children[i].children[j].innerHTML)) {
+        console.log(i)
+        lockedPairs.push(pairingHolder.children[i].children[j].innerHTML)
+      } else if (i % 3 != 2) lockedPairs.push('')
     }
   }
-  // console.log('Locked: ', lockedPairs)
 
-  let shuffledNames = [] //names.slice()
-
+  //Get list of non absent people
+  let shuffledNames = []
   people.forEach((person) => {
     if (!absent.includes(person.name) && !locked.includes(person.name)) {
       shuffledNames.push(person.name)
@@ -38,11 +36,7 @@ randomPairs.addEventListener('click', () => {
       crews.push(shuffledNames[i])
     }
   }
-  // console.log(shuffledNames);
-  // console.log(skippers);
-  // console.log(crews);
-
-  //shuffle skippers
+  console.log(skippers, crews)
   ;(currentIndex = skippers.length), randomIndex
 
   while (currentIndex != 0) {
@@ -59,32 +53,47 @@ randomPairs.addEventListener('click', () => {
     currentIndex--
     ;[crews[currentIndex], crews[randomIndex]] = [crews[randomIndex], crews[currentIndex]]
   }
+  console.log(skippers, crews)
 
-  // console.log(lockedPairs)
-  // console.log(skippers)
-  // console.log(crews)
-  let newNames = []
+  //Shuffle skippers here
 
-  let skipperIndex = 0
-  let crewIndex = 0
-  for (let i = 0; i < shuffledNames.length; i++) {
-    if (lockedPairs[i] != '' && lockedPairs[i] != undefined) {
-      newNames.push(lockedPairs[i])
-      console.log('pushing locked')
-    } else if (skippers[skipperIndex] != undefined && i % 2 == 0) {
-      newNames.push(skippers[skipperIndex])
-      skipperIndex++
-      // console.log('pushing skipper')
-    } else if (crews[crewIndex] != undefined && i % 2 == 1) {
-      newNames.push(crews[crewIndex])
-      crewIndex++
-      // console.log('pushing crew')
-    }
-    // console.log(i, newNames[i])
+  options = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({}),
   }
-  newNames = newNames.slice(0, 34)
-  if (Math.round(newNames.length / 2) != newNames.length / 2) newNames = newNames.slice(0, -1)
-  // console.log("leftover: ", newNames[newNames.length - 1])
+  loadingEl.style.display = 'block'
+  const response = await fetch(API_URL + '/getPairsOfficial', options)
+  let pairings = await response.json()
+
+  let newNames = []
+  for (let i = 0; i < slotsLength / 3; i++) {
+    // find crew for given skipper
+    newNames.push(skippers[0])
+    let prevPairs = await getPrevPartners(skippers[0], pairings)
+    console.log(prevPairs)
+    let crew
+    for (let j = 0; j < crews.length; j++) {
+      if (!prevPairs.includes(crews[j])) {
+        crew = crews[j]
+        break
+      }
+    }
+    if (crew == undefined) {
+      let frequency = {}
+      for (let i = 0; i < prevPairs.length; i++) {
+        frequency[prevPairs[i]] = prevPairs.filter((x) => x === prevPairs[i]).length
+      }
+      console.log('Frequency', frequency)
+    } else {
+      newNames.push(crew)
+      crews.splice(crews.indexOf(crew), 1)
+      console.log('Crews:', crews)
+    }
+    skippers.splice(skippers.indexOf(skippers[0]), 1)
+    console.log('skippers:', skippers)
+  }
+
   makeNames(newNames)
   makePairs(newNames)
 })

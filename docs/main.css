@@ -139,6 +139,7 @@ button{
   transform-origin: top center;
   font-weight: 700;
   z-index: 99999!important;
+  pointer-events: none;
 }
 
 .tooltip::before {

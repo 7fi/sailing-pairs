@@ -139,8 +139,6 @@ function formatDate(date, dateOffset) {
   return [date.getFullYear(), padTo2Digits(date.getMonth() + 1), padTo2Digits(date.getDate() + dateOffset)].join('-')
 }
 
-console.log(formatDate(new Date(), 0))
-
 function compareFn(a, b) {
   aMonth = parseInt(a.name.split(' ')[1].split('/')[0])
   aDay = parseInt(a.name.split(' ')[1].split('/')[1])
@@ -190,7 +188,15 @@ if (thisPage == 'main') {
     if (nameInput.value != '') {
       let pairs = { name: nameInput.value }
       for (let i = 0; i < slotsLength; i++) {
-        pairs[i] = pairingHolder.children[i].textContent
+        if (i % 3 == 0) {
+          for (let j = 0; j < 3; j++) {
+            if (pairingHolder.children[i / 3].children[j + 1] != undefined && pairingHolder.children[i / 3].children[j + 1].children[0]) {
+              pairs[i + j] = pairingHolder.children[i / 3].children[j + 1].children[0].textContent
+            } else {
+              pairs[i + j] = ''
+            }
+          }
+        }
       }
 
       console.log(pairs)
@@ -216,6 +222,7 @@ if (thisPage == 'main') {
       alert('Please Enter Your Name')
     }
   })
+  /*{0: 'Owen', 1: 'Talia', 2: '', 3: 'Nick', 4: 'Fin', 5: '', 6: 'Joseph', 7: 'Holden', 8: '', 9: 'Nelson', 10: 'Cyrus', 11: '', 12: 'Suraj', 13: 'Sharkey', 14: '', 15: 'Adam', 16: 'Gretchen I', 17: '', 18: 'Luke', 19: 'Payton', 20: '', 21: 'Chris', 22: 'Andrea', 23: '', 24: 'Elliott', 25: 'Carson', 26: '', 27: 'Carter', 28: 'Gretchen F', 29: '', 30: 'Jeffrey', 31: 'Stella', 32: '', 33: 'Isaia', 34: 'Maura', 35: '', 36: 'Nolan', 37: 'Kai', 38: '', 39: '', 40: '', 41: '', 42: '', 43: '', 44: '', 45: '', 46: '', 47: '', 48: '', 49: '', 50: '', name: 'temp'} */
   saveButtonOfficial.addEventListener('click', async () => {
     if (nameInput.value != '') {
       if (confirm('Are you sure you want to save these pairings officially?')) {
@@ -228,7 +235,15 @@ if (thisPage == 'main') {
         }
         let pairs = { name: nameInput.value, practiceDate: inputDate }
         for (let i = 0; i < slotsLength; i++) {
-          pairs[i] = pairingHolder.children[i].textContent
+          if (i % 3 == 0) {
+            for (let j = 0; j < 3; j++) {
+              if (pairingHolder.children[i / 3].children[j + 1] != undefined && pairingHolder.children[i / 3].children[j + 1].children[0]) {
+                pairs[i + j] = pairingHolder.children[i / 3].children[j + 1].children[0].textContent
+              } else {
+                pairs[i + j] = ''
+              }
+            }
+          }
         }
 
         console.log(pairs)
@@ -258,15 +273,16 @@ if (thisPage == 'main') {
   saveButtonLocal.addEventListener('click', () => {
     if (nameInput.value != '') {
       let pairs = { name: nameInput.value }
-      let pairsArray = []
       for (let i = 0; i < slotsLength; i++) {
-        pairs[i] = pairingHolder.children[i].textContent
-        pairsArray.push(pairingHolder.children[i].textContent)
-      }
-      // console.log(pairsArray)
-      // console.log('Duplicates found: ' + [...new Set(findDuplicates(pairsArray))])
-      if (findDuplicates(pairsArray) != ['']) {
-        console.log('Duplicates foundd!!!')
+        if (i % 3 == 0) {
+          for (let j = 0; j < 3; j++) {
+            if (pairingHolder.children[i / 3].children[j + 1] != undefined && pairingHolder.children[i / 3].children[j + 1].children[0]) {
+              pairs[i + j] = pairingHolder.children[i / 3].children[j + 1].children[0].textContent
+            } else {
+              pairs[i + j] = ''
+            }
+          }
+        }
       }
       console.log(pairs)
       nameInput.value = ''
@@ -327,6 +343,8 @@ if (thisPage == 'main') {
     makePairs()
     locked = []
     absent = []
+
+    saveTemp()
 
     document.querySelectorAll('.name').forEach((name) => {
       if (name.classList.contains('absent')) name.classList.remove('absent')
@@ -411,7 +429,7 @@ function makePairs(inputPairs) {
     pairingHolder.removeChild(pairingHolder.firstChild)
   }
   let newNames
-  console.log(inputPairs)
+  // console.log(inputPairs)
   if (inputPairs != undefined) {
     let newInput = Object.values(inputPairs)
     if (newInput.length <= slotsLength - 6) {
@@ -425,7 +443,7 @@ function makePairs(inputPairs) {
       newNames = Object.values(inputPairs)
     }
   }
-  console.log(newNames)
+  // console.log(newNames)
   // Creates all pair slots
   for (let i = 0; i < slotsLength; i++) {
     if (i % 3 == 0) {
@@ -476,9 +494,8 @@ function makePairs(inputPairs) {
       pairingHolder.appendChild(pairSlotHolder)
     }
   }
-  // saveTemp()
+  saveTemp()
 }
-// makeNames();
 function makeNames(inputPairs) {
   // makes name list without the input parings
   while (nameList.firstChild) {
@@ -489,7 +506,7 @@ function makeNames(inputPairs) {
   if (inputPairs != undefined) {
     let tempNames = names.slice()
     let newNames = Object.values(inputPairs)
-    console.log('newnames', newNames)
+    // console.log('newnames', newNames)
     let len = newNames.length
     if (Object.values(inputPairs).length > slotsLength - 6) len--
     for (let i = 0; i < len; i++) {
@@ -928,18 +945,12 @@ async function getBoatCount() {
   let c420Count = new Array(names.length).fill(0)
   let e420Count = new Array(names.length).fill(0)
 
-  let fjCut = 16
-  let e420Cut = 28
-  let c420Cut = 32
+  let fjCut = 24
+  let e420Cut = 42
+  let c420Cut = 48
 
   for (let i = 0; i < pairings.pairs.length; i++) {
     console.log(Object.values(pairings.pairs[i]).length)
-    if (Object.values(pairings.pairs[i]).length < slotsLength - 6) {
-      // console.log('Long List')
-      fjCut = 24
-      e420Cut = 42
-      c420Cut = 48
-    }
     for (let j = 0; j < fjCut; j++) {
       fjCount[names.indexOf(pairings.pairs[i][j])]++
     }
@@ -988,57 +999,43 @@ async function getBoatCount() {
   }
 }
 
-async function getPrevPartners(name) {
+async function getPrevPartners(name, pairings) {
   let partners = []
 
-  options = {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({}),
+  if (pairings == undefined) {
+    options = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({}),
+    }
+    loadingEl.style.display = 'block'
+    const response = await fetch(API_URL + '/getPairsOfficial', options)
+    pairings = await response.json()
   }
-  loadingEl.style.display = 'block'
-  const response = await fetch(API_URL + '/getPairsOfficial', options)
-  let pairings = await response.json()
   loadingEl.style.display = 'none'
 
   pairings = Object.values(pairings.pairs).sort(compareFn)
 
   for (let i = 0; i < pairings.length; i++) {
     let nameIndex = Object.values(pairings[i]).indexOf(name)
-    let largeCut = 39
-    let pairLength = Object.values(pairings[i]).length
-    console.log(pairings[i].name, pairLength)
 
     if (Object.values(pairings[i]).includes(name)) {
-      if (pairLength > largeCut && nameIndex < pairLength - 6) {
-        // if big pairs and not rotating slots
-        //if skipper slot and isnt empty crew
-        if (nameIndex % 3 == 0 && pairings[i][nameIndex + 1] != undefined && pairings[i][nameIndex + 1] != '') {
-          partners.push(pairings[i][nameIndex + 1])
+      //if skipper slot and isnt empty crew
+      if (nameIndex % 3 == 0 && pairings[i][nameIndex + 1] != undefined && pairings[i][nameIndex + 1] != '') {
+        partners.push(pairings[i][nameIndex + 1])
 
-          //if rotating slot is not empty
-          if (pairings[i][nameIndex + 2] != undefined && pairings[i][nameIndex + 2] != '') {
-            partners.push(pairings[i][nameIndex + 2])
-          }
-
-          //if crew slot and skipper is not empty
-        } else if (nameIndex % 3 == 1 && pairings[i][nameIndex - 1] != undefined && pairings[i][nameIndex - 1] != '') {
-          partners.push(pairings[i][nameIndex - 1])
-
-          //if rotating slot and skipper is not empty
-        } else if (nameIndex % 3 == 2 && pairings[i][nameIndex - 2] != undefined && pairings[i][nameIndex - 2] != '') {
-          partners.push(pairings[i][nameIndex - 2])
+        //if rotating slot is not empty
+        if (pairings[i][nameIndex + 2] != undefined && pairings[i][nameIndex + 2] != '') {
+          partners.push(pairings[i][nameIndex + 2])
         }
-        // otherwise if short pairs and not rotating slots
-      } else if (pairLength < largeCut && nameIndex < pairLength - 6) {
-        //if skipper slot and isnt empty crew
-        if (nameIndex % 2 == 0 && pairings[i][nameIndex + 1] != undefined && pairings[i][nameIndex + 1] != '') {
-          partners.push(pairings[i][nameIndex + 1])
 
-          //if crew slot and skipper is not empty
-        } else if (nameIndex % 2 == 1 && pairings[i][nameIndex - 1] != undefined && pairings[i][nameIndex - 1] != '') {
-          partners.push(pairings[i][nameIndex - 1])
-        }
+        //if crew slot and skipper is not empty
+      } else if (nameIndex % 3 == 1 && pairings[i][nameIndex - 1] != undefined && pairings[i][nameIndex - 1] != '') {
+        partners.push(pairings[i][nameIndex - 1])
+
+        //if rotating slot and skipper is not empty
+      } else if (nameIndex % 3 == 2 && pairings[i][nameIndex - 2] != undefined && pairings[i][nameIndex - 2] != '') {
+        partners.push(pairings[i][nameIndex - 2])
       }
     }
   }
