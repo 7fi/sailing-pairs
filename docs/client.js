@@ -52,8 +52,6 @@ let elliottClicks = 0
 let prevClickName = ''
 let prevClickTime
 
-let rotatingSlot = true
-
 var thisPage
 console.log(window.location.href.split('/'))
 if (window.location.href.includes('scores')) {
@@ -85,12 +83,14 @@ const people = [
     name: 'Carter',
     skipper: true,
     crew: false,
+    weight: 152,
+    picks: ['Sabrina', 'Elliott', 'Talia', 'Jaya'],
     pic: 'https://35b7f1d7d0790b02114c-1b8897185d70b198c119e1d2b7efd8a2.ssl.cf1.rackcdn.com/roster_full_photos/83071916/original/d436c99f-76cc-4838-a257-a84324c2599d.jpg',
   },
   { name: 'Chris', skipper: false, crew: true },
   { name: 'Cole', skipper: false, crew: true },
   { name: 'Cyrus', skipper: false, crew: true },
-  { name: 'Elliott', skipper: true, crew: true },
+  { name: 'Elliott', skipper: true, crew: true, weight: 135 },
   { name: 'Fin', skipper: false, crew: true },
   { name: 'Gretchen F', skipper: false, crew: true },
   { name: 'Gretchen I', skipper: false, crew: true },
@@ -108,7 +108,7 @@ const people = [
   { name: 'Owen', skipper: true, crew: false },
   { name: 'Payton', skipper: false, crew: true },
   { name: 'Ryan', skipper: true, crew: false },
-  { name: 'Sabrina', skipper: false, crew: true },
+  { name: 'Sabrina', skipper: false, crew: true, weight: 105 },
   { name: 'Sharkey', skipper: false, crew: true },
   { name: 'Stella', skipper: false, crew: true },
   { name: 'Suraj', skipper: false, crew: true },
@@ -118,13 +118,9 @@ const people = [
 
 // Name list
 const names = ['Adam', 'Alexander', 'Andrea', 'Ava', 'Ben', 'Beto', 'Carson', 'Carter', 'Chris', 'Cole', 'Cyrus', 'Elliott', 'Fin', 'Gretchen F', 'Gretchen I', 'Holden', 'Isaia', 'Jaya', 'Jeffrey', 'Joseph', 'Kai', 'Luke', 'Maura', 'Nelson', 'Nick', 'Nolan', 'Owen', 'Payton', 'Ryan', 'Sabrina', 'Sharkey', 'Stella', 'Suraj', 'Talia', 'Zephyr']
-const slotsLength = Math.floor(names.length / 2) * 2
-document.documentElement.style.setProperty('--slotCount', slotsLength / 2)
-if (rotatingSlot) {
-  document.documentElement.style.setProperty('--colCount', 3)
-} else {
-  document.documentElement.style.setProperty('--colCount', 2)
-}
+const slotsLength = Math.floor(names.length / 2) * 3
+document.documentElement.style.setProperty('--slotCount', slotsLength / 3)
+document.documentElement.style.setProperty('--colCount', 3)
 console.log(slotsLength, 'slotsLength')
 
 const currentTheme = localStorage.getItem('theme') ? localStorage.getItem('theme') : null
@@ -161,357 +157,11 @@ function compareFn(a, b) {
 
 if (thisPage == 'main') {
   parseUrl()
-  async function parseUrl() {
-    const urlArgs = window.location.search.split('/', 3)
-    console.log(urlArgs)
-    let pairingName
-    if (urlArgs.length > 2) pairingName = urlArgs[1] + '/' + urlArgs[2]
-    else pairingName = urlArgs[1]
-    pairingName = pairingName.replace('%20', ' ')
-    if (urlArgs[0] == '?p') {
-      options = {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: pairingName }),
-      }
-      loadingEl.style.display = 'block'
-      const response = await fetch(API_URL + '/getPairs', options)
-      const json = await response.json()
-      loadingEl.style.display = 'none'
-      console.log(json)
-
-      getSaved()
-      // if pairs exist create them
-      if (json.pairs != null) {
-        makeNames(json.pairs)
-        makePairs(json.pairs)
-        nameInput.value = ''
-      } else {
-        makeNames()
-        makePairs()
-        alert('No pairs saved under this name.')
-        window.location.href = window.location.href.split('/?')[0]
-      }
-    } else if (urlArgs[0] == '?o') {
-      options = {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: pairingName }),
-      }
-      loadingEl.style.display = 'block'
-      const response = await fetch(API_URL + '/getPairsOfficialOne', options)
-      const json = await response.json()
-      loadingEl.style.display = 'none'
-      console.log(json)
-
-      getSaved()
-      // if pairs exist create them
-      if (json.pairs != null) {
-        makeNames(json.pairs)
-        makePairs(json.pairs)
-        nameInput.value = ''
-      } else {
-        makeNames()
-        makePairs()
-        alert('No pairs saved under this name.')
-      }
-      loadSaveContainer.style.display = 'none'
-    }
-  }
   makePairs(JSON.parse(window.localStorage.getItem('tempPairs')))
   makeNames(JSON.parse(window.localStorage.getItem('tempPairs')))
-  function makePairs(inputPairs) {
-    // Creates pair slots either empty or populated with inputPairs object
-    // deletes all previous pair slots
-    while (pairingHolder.firstChild) {
-      pairingHolder.removeChild(pairingHolder.firstChild)
-    }
-    let newNames
-    console.log(inputPairs)
-    if (inputPairs != undefined) {
-      let newInput = Object.values(inputPairs)
-      if (newInput.length <= slotsLength + 4) {
-        newNames = newInput.slice(0, slotsLength)
-        for (let i = 0; i < (slotsLength / 2) * 3; i++) {
-          if (i % 3 == 2) {
-            newNames.splice(i, 0, '')
-          }
-        }
-      } else {
-        newNames = Object.values(inputPairs)
-      }
-    }
-    // console.log(newNames);
-    // Creates all pair slots
-    if (!rotatingSlot) {
-      for (let i = 0; i < slotsLength; i++) {
-        const pairSlotEl = document.createElement('div')
-        pairSlotEl.classList.add('pairSlot')
-        pairSlotEl.setAttribute('boatDisplay', boatDisplayVal)
 
-        //If input pairing supplied then populate with new name
-        if (inputPairs != undefined && inputPairs[i] != '' && inputPairs[i] != undefined) {
-          const nameEl = makeName(inputPairs[i])
-          pairSlotEl.appendChild(nameEl)
-        }
-
-        //add event listeners
-        pairSlotEl.addEventListener('click', (e) => {
-          const tempSelected = document.querySelector('.selected')
-          if (tempSelected != null || tempSelected != undefined) {
-            pairSlotEl.append(tempSelected)
-            if (e.target != tempSelected) {
-              tempSelected.classList.remove('selected')
-              console.log('Removed 3')
-            }
-          }
-        })
-        pairSlotEl.addEventListener('dragover', (e) => {
-          e.preventDefault()
-          if (!mobile) {
-            const draggingEl = document.querySelector('.dragging')
-            // console.log(pref[names.indexOf(draggingEl.textContent)]);
-            if (pairSlotEl.childElementCount < 2) {
-              //&& pref[names.indexOf(draggingEl.textContent)]
-              pairSlotEl.appendChild(draggingEl)
-            }
-          }
-        })
-        pairingHolder.appendChild(pairSlotEl)
-      }
-    } else {
-      for (let i = 0; i < (slotsLength / 2) * 3; i++) {
-        const pairSlotEl = document.createElement('div')
-        pairSlotEl.classList.add('pairSlot')
-        pairSlotEl.setAttribute('boatDisplay', boatDisplayVal)
-
-        //If input pairing supplied then populate with new name  && i % 3 != 2
-        if (inputPairs != undefined && newNames[i] != '' && newNames[i] != undefined) {
-          const nameEl = makeName(newNames[i])
-          pairSlotEl.appendChild(nameEl)
-        }
-
-        //add event listeners
-        pairSlotEl.addEventListener('click', (e) => {
-          const tempSelected = document.querySelector('.selected')
-          if (tempSelected != null || tempSelected != undefined) {
-            pairSlotEl.append(tempSelected)
-            if (e.target != tempSelected) {
-              tempSelected.classList.remove('selected')
-              // console.log("Removed 3")
-              saveTemp()
-            }
-          }
-        })
-        pairSlotEl.addEventListener('dragover', (e) => {
-          e.preventDefault()
-          if (!mobile) {
-            const draggingEl = document.querySelector('.dragging')
-            // console.log(pref[names.indexOf(draggingEl.textContent)]);
-            if (pairSlotEl.childElementCount < 2) {
-              //&& pref[names.indexOf(draggingEl.textContent)]
-              pairSlotEl.appendChild(draggingEl)
-            }
-          }
-        })
-        pairingHolder.appendChild(pairSlotEl)
-      }
-    }
-    saveTemp()
-  }
-  // makeNames();
-  function makeNames(inputPairs) {
-    // makes name list without the input parings
-    while (nameList.firstChild) {
-      // removed all previous names
-      nameList.removeChild(nameList.firstChild)
-    }
-    // if input pairs supplied then dont create those names
-    if (inputPairs != undefined) {
-      let tempNames = names.slice()
-      let newNames = Object.values(inputPairs)
-      for (let i = 0; i < newNames.length; i++) {
-        if (newNames[i] != '' && newNames[i] != undefined) {
-          tempNames.splice(tempNames.indexOf(newNames[i]), 1)
-          // console.log(tempNames)
-        }
-      }
-      tempNames.forEach((name) => {
-        const nameEl = makeName(name)
-        nameList.appendChild(nameEl)
-        if (absent.includes(nameEl.innerHTML)) {
-          nameEl.classList.add('absent')
-        }
-      })
-    } else {
-      // otherwise make all names
-      names.forEach((name) => {
-        const nameEl = makeName(name)
-        nameList.appendChild(nameEl)
-      })
-    }
-  }
-  function makeName(name) {
-    // creates single name
-    const nameEl = document.createElement('button')
-    if (picMode == false) {
-      nameEl.textContent = name
-    } else {
-      nameEl.innerHTML = name
-      let noPics = ['Adam', 'Alexander', 'Owen', 'Cascade', 'Cyrus', 'Gretchen I', 'Gretchen F', 'Holden', 'Nelson', 'Stella', 'Suraj', 'Zephyr']
-      if (!noPics.includes(name)) {
-        const profilePic = document.createElement('img')
-        profilePic.classList.add('profilePic')
-        profilePic.src = '/img/ppl/' + name + '.png'
-        // if(name == "Carter"){
-        //     profilePic.src = people[7].pic;
-        // }
-        nameEl.appendChild(profilePic)
-      }
-    }
-    nameEl.classList.add('name', 'draggable')
-    nameEl.setAttribute('draggable', 'true')
-    if (locked.includes(name)) nameEl.classList.add('locked')
-    if (absent.includes(name)) nameEl.classList.add('absent')
-
-    if (!mobile) {
-      // if on desktop
-      //Event listeners for dragging
-      nameEl.addEventListener('dragstart', () => {
-        nameEl.classList.add('dragging')
-      })
-
-      nameEl.addEventListener('dragend', async () => {
-        for (let i = 0; i < slotsLength; i++) {
-          const cur = pairingHolder.children[i]
-          //console.log(cur)
-          if (cur.childElementCount > 1) {
-            nameList.appendChild(cur.children[0])
-          }
-        }
-
-        nameEl.classList.remove('dragging')
-        saveTemp()
-        console.log('dragend: ', nameEl.textContent)
-      })
-
-      nameEl.addEventListener('click', async () => {
-        if (selAbsent) {
-          if (!absent.includes(nameEl.innerHTML)) {
-            absent.push(nameEl.innerHTML)
-            nameEl.classList.add('absent')
-            nameList.appendChild(nameEl)
-          } else {
-            absent.splice(absent.indexOf(nameEl.innerHTML), 1)
-            nameEl.classList.remove('absent')
-          }
-          //console.log(absent);
-        } else if (selLocked) {
-          if (!locked.includes(nameEl.innerHTML)) {
-            locked.push(nameEl.innerHTML)
-            nameEl.classList.add('locked')
-          } else {
-            locked.splice(locked.indexOf(nameEl.innerHTML), 1)
-            nameEl.classList.remove('locked')
-          }
-        }
-      })
-    } else {
-      // otherwise mobile
-      nameEl.addEventListener('click', async () => {
-        if (!selAbsent && !selLocked) {
-          const tempSelected = document.querySelector('.selected')
-          if (tempSelected != null || tempSelected != undefined) {
-            nameEl.parentElement.append(tempSelected)
-            nameList.appendChild(nameEl)
-            tempSelected.classList.remove('selected')
-          } else {
-            nameEl.classList.add('selected')
-          }
-        } else if (selAbsent) {
-          if (!absent.includes(nameEl.innerHTML)) {
-            absent.push(nameEl.innerHTML)
-            nameEl.classList.add('absent')
-          } else {
-            absent.splice(absent.indexOf(nameEl.innerHTML), 1)
-            nameEl.classList.remove('absent')
-          }
-          //console.log(absent);
-        } else {
-          if (!locked.includes(nameEl.innerHTML)) {
-            locked.push(nameEl.innerHTML)
-            nameEl.classList.add('locked')
-          } else {
-            locked.splice(locked.indexOf(nameEl.innerHTML), 1)
-            nameEl.classList.remove('locked')
-          }
-        }
-
-        for (let i = 0; i < slotsLength; i++) {
-          const cur = pairingHolder.children[i]
-          //console.log(cur)
-          if (cur.childElementCount > 1) {
-            nameList.appendChild(cur.children[0])
-          }
-        }
-      })
-    }
-    nameEl.addEventListener('click', async () => {
-      // console.log(prevClickName);
-      let old = document.querySelector('.name.tooltip')
-      if (old) {
-        old.setAttribute('data-tooltip', '')
-        old.classList.remove('tooltip')
-      }
-
-      if (prevClickName == name && Date.now() - prevClickTime < 250) {
-        // nameEl.classList.add('tooltip')
-        let prevParts = await getPrevPartners(name)
-        // if (!mobile) {
-        //   nameEl.setAttribute('data-tooltip', prevParts.join(', '))
-        // } else {
-        while (prevPairsHolder.firstChild) {
-          prevPairsHolder.removeChild(prevPairsHolder.firstChild)
-        }
-        prevPairs.style.display = 'block'
-        selectedName.textContent = name
-        prevParts.forEach((partner) => {
-          const nameEl = document.createElement('div')
-          nameEl.classList.add('name')
-          nameEl.innerHTML = partner
-          prevPairsHolder.appendChild(nameEl)
-        })
-        // }
-      }
-
-      prevClickName = name
-      prevClickTime = Date.now()
-    })
-
-    // if(name == 'Sabrina'){
-    //     nameEl.addEventListener('click', ()=>{
-    //         betoClicks++;
-    //         if(betoClicks == 10){
-    //             betoClicks = 0;
-    //             console.log('Sabrina secret');
-    //             location.href = 'https://smachef.wordpress.com'
-    //         }
-    //     })
-    // }
-    // if(name == 'Elliott'){
-    //     nameEl.addEventListener('click', ()=>{
-    //         elliottClicks++;
-    //         if(elliottClicks == 10){
-    //             elliottClicks = 0;
-    //             console.log('Elliott secret');
-    //             location.href = 'https://open.spotify.com/track/2QhURnm7mQDxBb5jWkbDug?si=806e79489ecd49bb'
-    //             // location.href = 'https://exoplanetresearch.netlify.app/'
-    //         }
-    //     })
-    // }
-
-    return nameEl
-  }
+  getSaved()
+  getBoatCount()
 
   // dragging on desktop
   nameList.addEventListener('dragover', (e) => {
@@ -539,7 +189,7 @@ if (thisPage == 'main') {
   saveButton.addEventListener('click', async () => {
     if (nameInput.value != '') {
       let pairs = { name: nameInput.value }
-      for (let i = 0; i < (slotsLength / 2) * 3; i++) {
+      for (let i = 0; i < slotsLength; i++) {
         pairs[i] = pairingHolder.children[i].textContent
       }
 
@@ -577,7 +227,7 @@ if (thisPage == 'main') {
           inputDate = formatDate(new Date(), 0)
         }
         let pairs = { name: nameInput.value, practiceDate: inputDate }
-        for (let i = 0; i < (slotsLength / 2) * 3; i++) {
+        for (let i = 0; i < slotsLength; i++) {
           pairs[i] = pairingHolder.children[i].textContent
         }
 
@@ -639,371 +289,6 @@ if (thisPage == 'main') {
       alert('Please Enter Your Name')
     }
   })
-  function saveTemp() {
-    let pairs = { name: 'temp' }
-    let pairsArray = []
-    for (let i = 0; i < (slotsLength / 2) * 3; i++) {
-      pairs[i] = pairingHolder.children[i].textContent
-      pairsArray.push(pairingHolder.children[i].textContent)
-    }
-    // console.log(pairsArray)
-    // console.log('Duplicates found: ' + [...new Set(findDuplicates(pairsArray))])
-    if (findDuplicates(pairsArray) != ['']) {
-      // console.log('Duplicates foundd!!!')
-    }
-    // console.log(pairs)
-
-    window.localStorage.setItem('tempPairs', JSON.stringify(pairs))
-  }
-
-  getSaved()
-  //Gets list of saved paring names from server
-  async function getSaved() {
-    //Gets names from server
-    options = {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({}),
-    }
-    loadingEl.style.display = 'block'
-    let response = await fetch(API_URL + '/getNames', options)
-    let json = await response.json()
-    loadingEl.style.display = 'none'
-    console.log(json)
-
-    // if names exist create buttons for them
-    if (json.pairs != null) {
-      while (loadHolder.firstChild) {
-        // remove old buttons
-        loadHolder.removeChild(loadHolder.firstChild)
-      }
-      // loop through names and create button
-      for (let i = 0; i < json.pairs.length; i++) {
-        const loadNameHolder = document.createElement('div')
-        loadNameHolder.classList.add('loadNameHolder')
-
-        const loadName = document.createElement('button')
-        loadName.classList.add('loadName')
-        loadName.textContent = json.pairs[i].name
-        loadName.addEventListener('click', async () => {
-          //on click get pairings from server
-          options = {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name: loadName.textContent }),
-          }
-          loadingEl.style.display = 'block'
-          const response = await fetch(API_URL + '/getPairs', options)
-          const json = await response.json()
-          loadingEl.style.display = 'none'
-          console.log(json)
-
-          getSaved()
-          // if pairs exist create them
-          if (json.pairs != null) {
-            makeNames(json.pairs)
-            makePairs(json.pairs)
-            nameInput.value = ''
-          } else {
-            makeNames()
-            makePairs()
-            alert('No pairs saved under this name.')
-          }
-        })
-
-        //Delete button
-        if (!mobile) {
-          const loadDel = document.createElement('button')
-          loadDel.classList.add('loadDel')
-          const loadDelIcon = document.createElement('i')
-          loadDelIcon.classList.add('fa-trash', 'fa-solid', 'fa-lg')
-          loadDel.appendChild(loadDelIcon)
-          loadDel.addEventListener('click', async () => {
-            //send deletion request to server
-            options = {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ name: loadName.textContent }),
-            }
-            loadingEl.style.display = 'block'
-            const response = await fetch(API_URL + '/delPair', options)
-            const json = await response.json()
-            loadingEl.style.display = 'none'
-            console.log(json)
-            getSaved()
-          })
-
-          const copyLink = document.createElement('button')
-          copyLink.classList.add('loadDel')
-          const copyLinkIcon = document.createElement('i')
-          copyLinkIcon.classList.add('fa-copy', 'fa-solid', 'fa-lg')
-          copyLink.appendChild(copyLinkIcon)
-          copyLink.addEventListener('click', () => {
-            let tempName = loadName.textContent.replace(' ', '%20')
-            let link = 'https://www.bhspairs.cf/?p/' + tempName
-            navigator.clipboard.writeText(link)
-          })
-
-          loadNameHolder.appendChild(loadName)
-          loadNameHolder.appendChild(copyLink)
-          loadNameHolder.appendChild(loadDel)
-        } else {
-          loadNameHolder.appendChild(loadName)
-        }
-        loadHolder.appendChild(loadNameHolder)
-      }
-    }
-
-    //Gets names from server
-    loadingEl.style.display = 'block'
-    response = await fetch(API_URL + '/getPairsOfficial', options)
-    json = await response.json()
-    loadingEl.style.display = 'none'
-
-    sorted = Object.values(json.pairs).sort(compareFn)
-
-    // if names exist create buttons for them
-    if (json.pairs != null) {
-      while (officialList.firstChild) {
-        // remove old buttons
-        officialList.removeChild(officialList.firstChild)
-      }
-      // loop through names and create button
-      for (let i = 0; i < sorted.length; i++) {
-        const loadNameHolder = document.createElement('div')
-        loadNameHolder.classList.add('loadNameHolder')
-
-        const loadName = document.createElement('button')
-        loadName.classList.add('loadName')
-        loadName.textContent = sorted[i].name
-        loadName.addEventListener('click', async () => {
-          //on click get pairings from server
-          options = {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name: loadName.textContent }),
-          }
-          loadingEl.style.display = 'block'
-          const response = await fetch(API_URL + '/getPairsOfficialOne', options)
-          const json = await response.json()
-          loadingEl.style.display = 'none'
-          console.log(json)
-
-          getSaved()
-          // if pairs exist create them
-          if (json.pairs != null) {
-            makeNames(json.pairs)
-            makePairs(json.pairs)
-            nameInput.value = ''
-          } else {
-            makeNames()
-            makePairs()
-            alert('No pairs saved under this name.')
-          }
-          loadSaveContainer.style.display = 'none'
-        })
-        loadNameHolder.appendChild(loadName)
-        if (!mobile) {
-          const copyLink = document.createElement('button')
-          copyLink.classList.add('loadDel')
-          const copyLinkIcon = document.createElement('i')
-          copyLinkIcon.classList.add('fa-copy', 'fa-solid', 'fa-lg')
-          copyLink.appendChild(copyLinkIcon)
-          copyLink.addEventListener('click', () => {
-            let tempName = loadName.textContent.replace(' ', '%20')
-            let link = 'https://www.bhspairs.cf/?o/' + tempName
-            navigator.clipboard.writeText(link)
-          })
-          loadNameHolder.appendChild(copyLink)
-        }
-
-        officialList.appendChild(loadNameHolder)
-      }
-    }
-
-    let curPairs = JSON.parse(window.localStorage.getItem('pairs'))
-    console.log(curPairs)
-    if (curPairs != null) {
-      while (localSaved.firstChild) {
-        // remove old buttons
-        localSaved.removeChild(localSaved.firstChild)
-      }
-      // loop through names and create button
-      for (let i = 0; i < curPairs.length; i++) {
-        const loadNameHolder = document.createElement('div')
-        loadNameHolder.classList.add('loadNameHolder')
-
-        const loadName = document.createElement('button')
-        loadName.classList.add('loadName')
-        loadName.textContent = curPairs[i].name
-        loadName.addEventListener('click', async () => {
-          getSaved()
-          // if pairs exist create them
-          if (curPairs[i] != null) {
-            makeNames(curPairs[i])
-            makePairs(curPairs[i])
-            nameInput.value = ''
-          } else {
-            makeNames()
-            makePairs()
-            alert('No pairs saved under this name.')
-          }
-        })
-
-        //Delete button
-        if (!mobile) {
-          const loadDel = document.createElement('button')
-          loadDel.classList.add('loadDel')
-          const loadDelIcon = document.createElement('i')
-          loadDelIcon.classList.add('fa-trash', 'fa-solid', 'fa-lg')
-          loadDel.appendChild(loadDelIcon)
-          loadDel.addEventListener('click', async () => {
-            curPairs.splice(i, 1)
-            console.log(curPairs)
-            window.localStorage.setItem('pairs', JSON.stringify(curPairs))
-            getSaved()
-          })
-          loadNameHolder.appendChild(loadDel)
-        }
-        loadNameHolder.appendChild(loadName)
-        localSaved.appendChild(loadNameHolder)
-      }
-    }
-  }
-
-  getBoatCount()
-  async function getBoatCount() {
-    options = {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({}),
-    }
-    loadingEl.style.display = 'block'
-    const response = await fetch(API_URL + '/getPairsOfficial', options)
-    const pairings = await response.json()
-    loadingEl.style.display = 'none'
-
-    let fjCount = new Array(names.length).fill(0)
-    let c420Count = new Array(names.length).fill(0)
-    let e420Count = new Array(names.length).fill(0)
-
-    let fjCut = 16
-    let e420Cut = 28
-    let c420Cut = 32
-
-    for (let i = 0; i < pairings.pairs.length; i++) {
-      console.log(Object.values(pairings.pairs[i]).length)
-      if (Object.values(pairings.pairs[i]).length > slotsLength + 5) {
-        // console.log('Long List')
-        fjCut = 24
-        e420Cut = 42
-        c420Cut = 48
-      }
-      for (let j = 0; j < fjCut; j++) {
-        fjCount[names.indexOf(pairings.pairs[i][j])]++
-      }
-      for (let j = fjCut; j < e420Cut; j++) {
-        e420Count[names.indexOf(pairings.pairs[i][j])]++
-      }
-      for (let j = e420Cut; j < c420Cut; j++) {
-        c420Count[names.indexOf(pairings.pairs[i][j])]++
-      }
-    }
-    // console.log("Boat count",names,fjCount,c420Count,e420Count);
-
-    let girls = ['Elliott', 'Ava', 'Sabrina', 'Talia']
-    for (let i = 0; i < names.length; i++) {
-      const nameEl = document.createElement('div')
-      nameEl.classList.add('countName')
-      nameEl.innerHTML = names[i]
-
-      const gapEl = document.createElement('div')
-      gapEl.style.flexGrow = 1
-      nameEl.appendChild(gapEl)
-
-      const fjCountEl = document.createElement('div')
-      fjCountEl.classList.add('boatCount')
-      fjCountEl.innerHTML = fjCount[i]
-      nameEl.appendChild(fjCountEl)
-
-      const c420CountEl = document.createElement('div')
-      c420CountEl.classList.add('boatCount')
-      c420CountEl.innerHTML = c420Count[i]
-      nameEl.appendChild(c420CountEl)
-
-      const e420CountEl = document.createElement('div')
-      e420CountEl.classList.add('boatCount')
-      e420CountEl.innerHTML = e420Count[i]
-      nameEl.appendChild(e420CountEl)
-
-      if (fjCount[i] - c420Count[i] - e420Count[i] < 0 && !girls.includes(names[i])) {
-        nameEl.setAttribute('boat-karma', 'positive')
-      }
-      if (fjCount[i] - c420Count[i] - e420Count[i] > 0 && !girls.includes(names[i])) {
-        nameEl.setAttribute('boat-karma', 'negative')
-      }
-
-      countNamesHolder.appendChild(nameEl)
-    }
-  }
-
-  async function getPrevPartners(name) {
-    let partners = []
-
-    options = {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({}),
-    }
-    loadingEl.style.display = 'block'
-    const response = await fetch(API_URL + '/getPairsOfficial', options)
-    let pairings = await response.json()
-    loadingEl.style.display = 'none'
-
-    pairings = Object.values(pairings.pairs).sort(compareFn)
-
-    for (let i = 0; i < pairings.length; i++) {
-      let nameIndex = Object.values(pairings[i]).indexOf(name)
-      let largeCut = 39
-      let pairLength = Object.values(pairings[i]).length
-      console.log(pairings[i].name, pairLength)
-
-      if (Object.values(pairings[i]).includes(name)) {
-        if (pairLength > largeCut && nameIndex < pairLength - 6) {
-          // if big pairs and not rotating slots
-          //if skipper slot and isnt empty crew
-          if (nameIndex % 3 == 0 && pairings[i][nameIndex + 1] != undefined && pairings[i][nameIndex + 1] != '') {
-            partners.push(pairings[i][nameIndex + 1])
-
-            //if rotating slot is not empty
-            if (pairings[i][nameIndex + 2] != undefined && pairings[i][nameIndex + 2] != '') {
-              partners.push(pairings[i][nameIndex + 2])
-            }
-
-            //if crew slot and skipper is not empty
-          } else if (nameIndex % 3 == 1 && pairings[i][nameIndex - 1] != undefined && pairings[i][nameIndex - 1] != '') {
-            partners.push(pairings[i][nameIndex - 1])
-
-            //if rotating slot and skipper is not empty
-          } else if (nameIndex % 3 == 2 && pairings[i][nameIndex - 2] != undefined && pairings[i][nameIndex - 2] != '') {
-            partners.push(pairings[i][nameIndex - 2])
-          }
-          // otherwise if short pairs and not rotating slots
-        } else if (pairLength < largeCut && nameIndex < pairLength - 6) {
-          //if skipper slot and isnt empty crew
-          if (nameIndex % 2 == 0 && pairings[i][nameIndex + 1] != undefined && pairings[i][nameIndex + 1] != '') {
-            partners.push(pairings[i][nameIndex + 1])
-
-            //if crew slot and skipper is not empty
-          } else if (nameIndex % 2 == 1 && pairings[i][nameIndex - 1] != undefined && pairings[i][nameIndex - 1] != '') {
-            partners.push(pairings[i][nameIndex - 1])
-          }
-        }
-      }
-    }
-    console.log('Previous partners of ', name, partners)
-    return partners
-  }
 
   countButton.addEventListener('click', () => {
     countWindow.style.display = 'block'
@@ -1055,37 +340,711 @@ if (thisPage == 'main') {
     } else {
       boatDisplayVal = 'true'
     }
-    document.querySelectorAll('.pairSlot').forEach((slot) => {
+    document.querySelectorAll('.pairSlotHolder').forEach((slot) => {
       slot.setAttribute('boatDisplay', boatDisplayVal)
     })
   })
-
-  // picModeButton.addEventListener('click', () => {
-  //     if(picMode){
-  //         document.getElementById('pairingHolder').classList.remove('pairingHolderPic');
-  //     }else{
-  //         document.getElementById('pairingHolder').classList.add('pairingHolderPic');
-  //     }
-  //     picMode = !picMode;
-  //     let pairs = {name:nameInput.value};
-  //     for (let i = 0; i < names.length; i++) {
-  //         pairs[i] = pairingHolder.children[i].textContent;
-  //     }
-  //     makeNames(pairs);
-  //     makePairs(pairs);
-  //     console.log(picMode);
-  // })
 }
-// squareMode.addEventListener('click', () => {
-//     if(square){
-//         document.documentElement.style.setProperty('--radius', '7px');
-//         squareMode.children[0].classList.replace('gg-shape-circle','gg-shape-square');
-//     }else{
-//         document.documentElement.style.setProperty('--radius', '0px');
-//         squareMode.children[0].classList.replace('gg-shape-square','gg-shape-circle');
-//     }
-//     square = !square;
-// });
+
+async function parseUrl() {
+  const urlArgs = window.location.search.split('/', 3)
+  console.log(urlArgs)
+  let pairingName
+  if (urlArgs.length > 2) pairingName = urlArgs[1] + '/' + urlArgs[2]
+  else pairingName = urlArgs[1]
+  if (pairingName != undefined) pairingName = pairingName.replace('%20', ' ')
+  if (urlArgs[0] == '?p') {
+    options = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: pairingName }),
+    }
+    loadingEl.style.display = 'block'
+    const response = await fetch(API_URL + '/getPairs', options)
+    const json = await response.json()
+    loadingEl.style.display = 'none'
+    console.log(json)
+
+    getSaved()
+    // if pairs exist create them
+    if (json.pairs != null) {
+      makeNames(json.pairs)
+      makePairs(json.pairs)
+      nameInput.value = ''
+    } else {
+      makeNames()
+      makePairs()
+      alert('No pairs saved under this name.')
+      window.location.href = window.location.href.split('/?')[0]
+    }
+  } else if (urlArgs[0] == '?o') {
+    options = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: pairingName }),
+    }
+    loadingEl.style.display = 'block'
+    const response = await fetch(API_URL + '/getPairsOfficialOne', options)
+    const json = await response.json()
+    loadingEl.style.display = 'none'
+    console.log(json)
+
+    getSaved()
+    // if pairs exist create them
+    if (json.pairs != null) {
+      makeNames(json.pairs)
+      makePairs(json.pairs)
+      nameInput.value = ''
+    } else {
+      makeNames()
+      makePairs()
+      alert('No pairs saved under this name.')
+    }
+    loadSaveContainer.style.display = 'none'
+  }
+}
+
+function makePairs(inputPairs) {
+  // Creates pair slots either empty or populated with inputPairs object
+  // deletes all previous pair slots
+  while (pairingHolder.firstChild) {
+    pairingHolder.removeChild(pairingHolder.firstChild)
+  }
+  let newNames
+  console.log(inputPairs)
+  if (inputPairs != undefined) {
+    let newInput = Object.values(inputPairs)
+    if (newInput.length <= slotsLength - 6) {
+      newNames = newInput.slice(0, (slotsLength / 3) * 2)
+      for (let i = 0; i < newNames.length; i++) {
+        if (i % 3 == 2) {
+          newNames.splice(i, 0, '')
+        }
+      }
+    } else {
+      newNames = Object.values(inputPairs)
+    }
+  }
+  console.log(newNames)
+  // Creates all pair slots
+  for (let i = 0; i < slotsLength; i++) {
+    if (i % 3 == 0) {
+      const pairSlotHolder = document.createElement('div')
+      pairSlotHolder.classList.add('pairSlotHolder')
+      pairSlotHolder.setAttribute('boatDisplay', boatDisplayVal)
+
+      const pairSlotDrag = document.createElement('div')
+      pairSlotDrag.classList.add('pairDrag', 'draggable')
+      // pairSlotDrag.addEventListener('dragend')
+      pairSlotHolder.appendChild(pairSlotDrag)
+
+      for (let j = 0; j < 3; j++) {
+        const pairSlotEl = document.createElement('div')
+        pairSlotEl.classList.add('pairSlot')
+
+        //If input pairing supplied then populate with new name  && i % 3 != 2
+        if (inputPairs != undefined && newNames[i + j] != '' && newNames[i + j] != undefined) {
+          const nameEl = makeName(newNames[i + j])
+          pairSlotEl.appendChild(nameEl)
+        }
+
+        //add event listeners
+        pairSlotEl.addEventListener('click', (e) => {
+          const tempSelected = document.querySelector('.selected')
+          if (tempSelected != null || tempSelected != undefined) {
+            pairSlotEl.append(tempSelected)
+            if (e.target != tempSelected) {
+              tempSelected.classList.remove('selected')
+              // console.log("Removed 3")
+              saveTemp()
+            }
+          }
+        })
+        pairSlotEl.addEventListener('dragover', (e) => {
+          e.preventDefault()
+          if (!mobile) {
+            const draggingEl = document.querySelector('.dragging')
+            // console.log(pref[names.indexOf(draggingEl.textContent)]);
+            if (pairSlotEl.childElementCount < 2) {
+              //&& pref[names.indexOf(draggingEl.textContent)]
+              pairSlotEl.appendChild(draggingEl)
+            }
+          }
+        })
+        pairSlotHolder.appendChild(pairSlotEl)
+      }
+      pairingHolder.appendChild(pairSlotHolder)
+    }
+  }
+  // saveTemp()
+}
+// makeNames();
+function makeNames(inputPairs) {
+  // makes name list without the input parings
+  while (nameList.firstChild) {
+    // removed all previous names
+    nameList.removeChild(nameList.firstChild)
+  }
+  // if input pairs supplied then dont create those names
+  if (inputPairs != undefined) {
+    let tempNames = names.slice()
+    let newNames = Object.values(inputPairs)
+    console.log('newnames', newNames)
+    let len = newNames.length
+    if (Object.values(inputPairs).length > slotsLength - 6) len--
+    for (let i = 0; i < len; i++) {
+      if (newNames[i] != '' && newNames[i] != undefined) {
+        tempNames.splice(tempNames.indexOf(newNames[i]), 1)
+        // console.log(tempNames)
+      }
+    }
+    console.log('Tempnames:', tempNames)
+    tempNames.forEach((name) => {
+      const nameEl = makeName(name)
+      nameList.appendChild(nameEl)
+      if (absent.includes(nameEl.innerHTML)) {
+        nameEl.classList.add('absent')
+      }
+    })
+  } else {
+    // otherwise make all names
+    names.forEach((name) => {
+      const nameEl = makeName(name)
+      nameList.appendChild(nameEl)
+    })
+  }
+}
+function makeName(name) {
+  // creates single name
+  const nameEl = document.createElement('button')
+  if (picMode == false) {
+    nameEl.textContent = name
+  } else {
+    nameEl.innerHTML = name
+    let noPics = ['Adam', 'Alexander', 'Owen', 'Cascade', 'Cyrus', 'Gretchen I', 'Gretchen F', 'Holden', 'Nelson', 'Stella', 'Suraj', 'Zephyr']
+    if (!noPics.includes(name)) {
+      const profilePic = document.createElement('img')
+      profilePic.classList.add('profilePic')
+      profilePic.src = '/img/ppl/' + name + '.png'
+      // if(name == "Carter"){
+      //     profilePic.src = people[7].pic;
+      // }
+      nameEl.appendChild(profilePic)
+    }
+  }
+  nameEl.classList.add('name', 'draggable')
+  nameEl.setAttribute('draggable', 'true')
+  if (locked.includes(name)) nameEl.classList.add('locked')
+  if (absent.includes(name)) nameEl.classList.add('absent')
+
+  if (!mobile) {
+    // if on desktop
+    //Event listeners for dragging
+    nameEl.addEventListener('dragstart', () => {
+      nameEl.classList.add('dragging')
+    })
+
+    nameEl.addEventListener('dragend', async () => {
+      for (let i = 0; i < slotsLength / 3; i++) {
+        for (let j = 1; j < 4; j++) {
+          const cur = pairingHolder.children[i].children[j]
+          //console.log(cur)
+          if (cur.childElementCount > 1) {
+            nameList.appendChild(cur.children[0])
+          }
+        }
+      }
+
+      nameEl.classList.remove('dragging')
+      saveTemp()
+      console.log('dragend: ', nameEl.textContent)
+    })
+
+    nameEl.addEventListener('click', async () => {
+      if (selAbsent) {
+        if (!absent.includes(nameEl.innerHTML)) {
+          absent.push(nameEl.innerHTML)
+          nameEl.classList.add('absent')
+          nameList.appendChild(nameEl)
+        } else {
+          absent.splice(absent.indexOf(nameEl.innerHTML), 1)
+          nameEl.classList.remove('absent')
+        }
+        //console.log(absent);
+      } else if (selLocked) {
+        if (!locked.includes(nameEl.innerHTML)) {
+          locked.push(nameEl.innerHTML)
+          nameEl.classList.add('locked')
+        } else {
+          locked.splice(locked.indexOf(nameEl.innerHTML), 1)
+          nameEl.classList.remove('locked')
+        }
+      }
+    })
+  } else {
+    // otherwise mobile
+    nameEl.addEventListener('click', async () => {
+      if (!selAbsent && !selLocked) {
+        const tempSelected = document.querySelector('.selected')
+        if (tempSelected != null || tempSelected != undefined) {
+          nameEl.parentElement.append(tempSelected)
+          nameList.appendChild(nameEl)
+          tempSelected.classList.remove('selected')
+        } else {
+          nameEl.classList.add('selected')
+        }
+      } else if (selAbsent) {
+        if (!absent.includes(nameEl.innerHTML)) {
+          absent.push(nameEl.innerHTML)
+          nameEl.classList.add('absent')
+        } else {
+          absent.splice(absent.indexOf(nameEl.innerHTML), 1)
+          nameEl.classList.remove('absent')
+        }
+        //console.log(absent);
+      } else {
+        if (!locked.includes(nameEl.innerHTML)) {
+          locked.push(nameEl.innerHTML)
+          nameEl.classList.add('locked')
+        } else {
+          locked.splice(locked.indexOf(nameEl.innerHTML), 1)
+          nameEl.classList.remove('locked')
+        }
+      }
+
+      for (let i = 0; i < slotsLength; i++) {
+        const cur = pairingHolder.children[i]
+        //console.log(cur)
+        if (cur.childElementCount > 1) {
+          nameList.appendChild(cur.children[0])
+        }
+      }
+    })
+  }
+  nameEl.addEventListener('click', async () => {
+    // console.log(prevClickName);
+    let old = document.querySelector('.name.tooltip')
+    if (old) {
+      old.setAttribute('data-tooltip', '')
+      old.classList.remove('tooltip')
+    }
+
+    if (prevClickName == name && Date.now() - prevClickTime < 250) {
+      // nameEl.classList.add('tooltip')
+      let prevParts = await getPrevPartners(name)
+      // if (!mobile) {
+      //   nameEl.setAttribute('data-tooltip', prevParts.join(', '))
+      // } else {
+      while (prevPairsHolder.firstChild) {
+        prevPairsHolder.removeChild(prevPairsHolder.firstChild)
+      }
+      prevPairs.style.display = 'block'
+      selectedName.textContent = name
+      prevParts.forEach((partner) => {
+        const nameEl = document.createElement('div')
+        nameEl.classList.add('name')
+        nameEl.innerHTML = partner
+        prevPairsHolder.appendChild(nameEl)
+      })
+      // }
+    }
+
+    prevClickName = name
+    prevClickTime = Date.now()
+  })
+
+  // if(name == 'Sabrina'){
+  //     nameEl.addEventListener('click', ()=>{
+  //         betoClicks++;
+  //         if(betoClicks == 10){
+  //             betoClicks = 0;
+  //             console.log('Sabrina secret');
+  //             location.href = 'https://smachef.wordpress.com'
+  //         }
+  //     })
+  // }
+  // if(name == 'Elliott'){
+  //     nameEl.addEventListener('click', ()=>{
+  //         elliottClicks++;
+  //         if(elliottClicks == 10){
+  //             elliottClicks = 0;
+  //             console.log('Elliott secret');
+  //             location.href = 'https://open.spotify.com/track/2QhURnm7mQDxBb5jWkbDug?si=806e79489ecd49bb'
+  //             // location.href = 'https://exoplanetresearch.netlify.app/'
+  //         }
+  //     })
+  // }
+
+  return nameEl
+}
+
+function saveTemp() {
+  let pairs = { name: 'temp' }
+  // let pairsArray = []
+  for (let i = 0; i < slotsLength; i++) {
+    if (i % 3 == 0) {
+      for (let j = 0; j < 3; j++) {
+        if (pairingHolder.children[i / 3].children[j + 1] != undefined && pairingHolder.children[i / 3].children[j + 1].children[0]) {
+          pairs[i + j] = pairingHolder.children[i / 3].children[j + 1].children[0].textContent
+        } else {
+          pairs[i + j] = ''
+        }
+      }
+    }
+  }
+  console.log('Pairs', pairs)
+
+  window.localStorage.setItem('tempPairs', JSON.stringify(pairs))
+}
+
+//Gets list of saved paring names from server
+async function getSaved() {
+  //Gets names from server
+  options = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({}),
+  }
+  loadingEl.style.display = 'block'
+  let response = await fetch(API_URL + '/getNames', options)
+  let json = await response.json()
+  loadingEl.style.display = 'none'
+  console.log(json)
+
+  // if names exist create buttons for them
+  if (json.pairs != null) {
+    while (loadHolder.firstChild) {
+      // remove old buttons
+      loadHolder.removeChild(loadHolder.firstChild)
+    }
+    // loop through names and create button
+    for (let i = 0; i < json.pairs.length; i++) {
+      const loadNameHolder = document.createElement('div')
+      loadNameHolder.classList.add('loadNameHolder')
+
+      const loadName = document.createElement('button')
+      loadName.classList.add('loadName')
+      loadName.textContent = json.pairs[i].name
+      let tempName = loadName.textContent.replace(' ', '%20')
+      let link = 'https://www.bhspairs.cf/?p/' + tempName
+      loadName.addEventListener('click', async () => {
+        //on click get pairings from server
+        options = {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name: loadName.textContent }),
+        }
+        loadingEl.style.display = 'block'
+        const response = await fetch(API_URL + '/getPairs', options)
+        const json = await response.json()
+        loadingEl.style.display = 'none'
+        console.log(json)
+        // window.location.href = link
+
+        getSaved()
+        // if pairs exist create them
+        if (json.pairs != null) {
+          makeNames(json.pairs)
+          makePairs(json.pairs)
+          nameInput.value = ''
+        } else {
+          makeNames()
+          makePairs()
+          alert('No pairs saved under this name.')
+        }
+      })
+
+      //Delete button
+      if (!mobile) {
+        const loadDel = document.createElement('button')
+        loadDel.classList.add('loadDel')
+        const loadDelIcon = document.createElement('i')
+        loadDelIcon.classList.add('fa-trash', 'fa-solid', 'fa-lg')
+        loadDel.appendChild(loadDelIcon)
+        loadDel.addEventListener('click', async () => {
+          //send deletion request to server
+          options = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name: loadName.textContent }),
+          }
+          loadingEl.style.display = 'block'
+          const response = await fetch(API_URL + '/delPair', options)
+          const json = await response.json()
+          loadingEl.style.display = 'none'
+          console.log(json)
+          getSaved()
+        })
+
+        const copyLink = document.createElement('button')
+        copyLink.classList.add('loadDel')
+        const copyLinkIcon = document.createElement('i')
+        copyLinkIcon.classList.add('fa-copy', 'fa-solid', 'fa-lg')
+        copyLink.appendChild(copyLinkIcon)
+        copyLink.addEventListener('click', () => {
+          navigator.clipboard.writeText(link)
+        })
+
+        loadNameHolder.appendChild(loadName)
+        loadNameHolder.appendChild(copyLink)
+        loadNameHolder.appendChild(loadDel)
+      } else {
+        loadNameHolder.appendChild(loadName)
+      }
+      loadHolder.appendChild(loadNameHolder)
+    }
+  }
+
+  //Gets names from server
+  loadingEl.style.display = 'block'
+  response = await fetch(API_URL + '/getPairsOfficial', options)
+  json = await response.json()
+  loadingEl.style.display = 'none'
+
+  sorted = Object.values(json.pairs).sort(compareFn)
+
+  // if names exist create buttons for them
+  if (json.pairs != null) {
+    while (officialList.firstChild) {
+      // remove old buttons
+      officialList.removeChild(officialList.firstChild)
+    }
+    // loop through names and create button
+    for (let i = 0; i < sorted.length; i++) {
+      const loadNameHolder = document.createElement('div')
+      loadNameHolder.classList.add('loadNameHolder')
+
+      const loadName = document.createElement('button')
+      loadName.classList.add('loadName')
+      loadName.textContent = sorted[i].name
+      let tempName = loadName.textContent.replace(' ', '%20')
+      let link = 'https://www.bhspairs.cf/?o/' + tempName
+      loadName.addEventListener('click', async () => {
+        //on click get pairings from server
+        options = {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name: loadName.textContent }),
+        }
+        loadingEl.style.display = 'block'
+        const response = await fetch(API_URL + '/getPairsOfficialOne', options)
+        const json = await response.json()
+        loadingEl.style.display = 'none'
+        console.log(json)
+
+        // window.location.href = link
+        getSaved()
+        // if pairs exist create them
+        if (json.pairs != null) {
+          makeNames(json.pairs)
+          makePairs(json.pairs)
+          nameInput.value = ''
+        } else {
+          makeNames()
+          makePairs()
+          alert('No pairs saved under this name.')
+        }
+        loadSaveContainer.style.display = 'none'
+      })
+      loadNameHolder.appendChild(loadName)
+      if (!mobile) {
+        const copyLink = document.createElement('button')
+        copyLink.classList.add('loadDel')
+        const copyLinkIcon = document.createElement('i')
+        copyLinkIcon.classList.add('fa-copy', 'fa-solid', 'fa-lg')
+        copyLink.appendChild(copyLinkIcon)
+        copyLink.addEventListener('click', () => {
+          navigator.clipboard.writeText(link)
+        })
+        loadNameHolder.appendChild(copyLink)
+      }
+
+      officialList.appendChild(loadNameHolder)
+    }
+  }
+
+  let curPairs = JSON.parse(window.localStorage.getItem('pairs'))
+  console.log(curPairs)
+  if (curPairs != null) {
+    while (localSaved.firstChild) {
+      // remove old buttons
+      localSaved.removeChild(localSaved.firstChild)
+    }
+    // loop through names and create button
+    for (let i = 0; i < curPairs.length; i++) {
+      const loadNameHolder = document.createElement('div')
+      loadNameHolder.classList.add('loadNameHolder')
+
+      const loadName = document.createElement('button')
+      loadName.classList.add('loadName')
+      loadName.textContent = curPairs[i].name
+      loadName.addEventListener('click', async () => {
+        getSaved()
+        // if pairs exist create them
+        if (curPairs[i] != null) {
+          makeNames(curPairs[i])
+          makePairs(curPairs[i])
+          nameInput.value = ''
+        } else {
+          makeNames()
+          makePairs()
+          alert('No pairs saved under this name.')
+        }
+      })
+
+      //Delete button
+      if (!mobile) {
+        const loadDel = document.createElement('button')
+        loadDel.classList.add('loadDel')
+        const loadDelIcon = document.createElement('i')
+        loadDelIcon.classList.add('fa-trash', 'fa-solid', 'fa-lg')
+        loadDel.appendChild(loadDelIcon)
+        loadDel.addEventListener('click', async () => {
+          curPairs.splice(i, 1)
+          console.log(curPairs)
+          window.localStorage.setItem('pairs', JSON.stringify(curPairs))
+          getSaved()
+        })
+        loadNameHolder.appendChild(loadDel)
+      }
+      loadNameHolder.appendChild(loadName)
+      localSaved.appendChild(loadNameHolder)
+    }
+  }
+}
+
+async function getBoatCount() {
+  options = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({}),
+  }
+  loadingEl.style.display = 'block'
+  const response = await fetch(API_URL + '/getPairsOfficial', options)
+  const pairings = await response.json()
+  loadingEl.style.display = 'none'
+
+  let fjCount = new Array(names.length).fill(0)
+  let c420Count = new Array(names.length).fill(0)
+  let e420Count = new Array(names.length).fill(0)
+
+  let fjCut = 16
+  let e420Cut = 28
+  let c420Cut = 32
+
+  for (let i = 0; i < pairings.pairs.length; i++) {
+    console.log(Object.values(pairings.pairs[i]).length)
+    if (Object.values(pairings.pairs[i]).length < slotsLength - 6) {
+      // console.log('Long List')
+      fjCut = 24
+      e420Cut = 42
+      c420Cut = 48
+    }
+    for (let j = 0; j < fjCut; j++) {
+      fjCount[names.indexOf(pairings.pairs[i][j])]++
+    }
+    for (let j = fjCut; j < e420Cut; j++) {
+      e420Count[names.indexOf(pairings.pairs[i][j])]++
+    }
+    for (let j = e420Cut; j < c420Cut; j++) {
+      c420Count[names.indexOf(pairings.pairs[i][j])]++
+    }
+  }
+  // console.log("Boat count",names,fjCount,c420Count,e420Count);
+
+  let girls = ['Elliott', 'Ava', 'Sabrina', 'Talia']
+  for (let i = 0; i < names.length; i++) {
+    const nameEl = document.createElement('div')
+    nameEl.classList.add('countName')
+    nameEl.innerHTML = names[i]
+
+    const gapEl = document.createElement('div')
+    gapEl.style.flexGrow = 1
+    nameEl.appendChild(gapEl)
+
+    const fjCountEl = document.createElement('div')
+    fjCountEl.classList.add('boatCount')
+    fjCountEl.innerHTML = fjCount[i]
+    nameEl.appendChild(fjCountEl)
+
+    const c420CountEl = document.createElement('div')
+    c420CountEl.classList.add('boatCount')
+    c420CountEl.innerHTML = c420Count[i]
+    nameEl.appendChild(c420CountEl)
+
+    const e420CountEl = document.createElement('div')
+    e420CountEl.classList.add('boatCount')
+    e420CountEl.innerHTML = e420Count[i]
+    nameEl.appendChild(e420CountEl)
+
+    if (fjCount[i] - c420Count[i] - e420Count[i] < 0 && !girls.includes(names[i])) {
+      nameEl.setAttribute('boat-karma', 'positive')
+    }
+    if (fjCount[i] - c420Count[i] - e420Count[i] > 0 && !girls.includes(names[i])) {
+      nameEl.setAttribute('boat-karma', 'negative')
+    }
+
+    countNamesHolder.appendChild(nameEl)
+  }
+}
+
+async function getPrevPartners(name) {
+  let partners = []
+
+  options = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({}),
+  }
+  loadingEl.style.display = 'block'
+  const response = await fetch(API_URL + '/getPairsOfficial', options)
+  let pairings = await response.json()
+  loadingEl.style.display = 'none'
+
+  pairings = Object.values(pairings.pairs).sort(compareFn)
+
+  for (let i = 0; i < pairings.length; i++) {
+    let nameIndex = Object.values(pairings[i]).indexOf(name)
+    let largeCut = 39
+    let pairLength = Object.values(pairings[i]).length
+    console.log(pairings[i].name, pairLength)
+
+    if (Object.values(pairings[i]).includes(name)) {
+      if (pairLength > largeCut && nameIndex < pairLength - 6) {
+        // if big pairs and not rotating slots
+        //if skipper slot and isnt empty crew
+        if (nameIndex % 3 == 0 && pairings[i][nameIndex + 1] != undefined && pairings[i][nameIndex + 1] != '') {
+          partners.push(pairings[i][nameIndex + 1])
+
+          //if rotating slot is not empty
+          if (pairings[i][nameIndex + 2] != undefined && pairings[i][nameIndex + 2] != '') {
+            partners.push(pairings[i][nameIndex + 2])
+          }
+
+          //if crew slot and skipper is not empty
+        } else if (nameIndex % 3 == 1 && pairings[i][nameIndex - 1] != undefined && pairings[i][nameIndex - 1] != '') {
+          partners.push(pairings[i][nameIndex - 1])
+
+          //if rotating slot and skipper is not empty
+        } else if (nameIndex % 3 == 2 && pairings[i][nameIndex - 2] != undefined && pairings[i][nameIndex - 2] != '') {
+          partners.push(pairings[i][nameIndex - 2])
+        }
+        // otherwise if short pairs and not rotating slots
+      } else if (pairLength < largeCut && nameIndex < pairLength - 6) {
+        //if skipper slot and isnt empty crew
+        if (nameIndex % 2 == 0 && pairings[i][nameIndex + 1] != undefined && pairings[i][nameIndex + 1] != '') {
+          partners.push(pairings[i][nameIndex + 1])
+
+          //if crew slot and skipper is not empty
+        } else if (nameIndex % 2 == 1 && pairings[i][nameIndex - 1] != undefined && pairings[i][nameIndex - 1] != '') {
+          partners.push(pairings[i][nameIndex - 1])
+        }
+      }
+    }
+  }
+  console.log('Previous partners of ', name, partners)
+  return partners
+}
 
 // Toggle between light and dark mode
 modeToggle.addEventListener('click', () => {

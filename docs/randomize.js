@@ -1,11 +1,14 @@
 // Randomize pairs button
 randomPairs.addEventListener('click', () => {
   let lockedPairs = []
-  for (let i = 0; i < (slotsLength / 2) * 3; i++) {
-    if (locked.includes(pairingHolder.children[i].textContent)) {
-      console.log(i)
-      lockedPairs.push(pairingHolder.children[i].textContent)
-    } else if (i % 3 != 2) lockedPairs.push('')
+  for (let i = 0; i < slotsLength / 3; i++) {
+    for (let j = 0; j < 3; j++) {
+      if (pairingHolder.children[i].children[j] != undefined && pairingHolder.children[i].children[j].children[0]) {
+        if (locked.includes(pairingHolder.children[i].children[j].children[0].textContent)) {
+          lockedPairs.push(pairingHolder.children[i].children[j].children[0].textContent)
+        } else if (i % 3 != 2) lockedPairs.push('')
+      }
+    }
   }
   // console.log('Locked: ', lockedPairs)
 

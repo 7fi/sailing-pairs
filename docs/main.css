@@ -280,6 +280,10 @@ button{
     max-height: 91%;
     overflow-y: scroll;
 }
+#prevPairsWindow{
+    max-width: 30em;
+    margin: 20px auto;
+}
 #countNamesHolder .countName:nth-child(odd){
     background-color: var(--medDark)!important;
 }
@@ -344,11 +348,19 @@ button{
 }
 
 #pairingHolder{
-    display:grid;
+    display:flex;
     width: 100%;
     height: 100%;
-    grid-template-columns: repeat(var(--colCount), 1fr);
-    grid-template-rows: repeat(var(--slotCount), 47px);
+    flex-direction: column;
+    /* grid-template-columns: repeat(var(--colCount), 1fr); */
+    /* grid-template-rows: repeat(var(--slotCount), 47px); */
+    gap:7px;
+}
+.pairSlotHolder{
+    display: flex;
+    flex-direction: row;
+    height:47px;
+    width: 100%;
     gap:7px;
 }
 .pairingHolderPic{
@@ -364,19 +376,22 @@ button{
     border-radius: var(--radius);
     display: grid;
     align-items: stretch;
+    width: 100%;
 }
-.pairSlot[boatDisplay="true"]:nth-child(3n - 2):nth-child(-3n + 22)::before{
+
+#pairingHolder > [boatDisplay="true"]:nth-child(n):nth-child(-n + 8) > :nth-child(2)::before{
     content:"FJ";
 }
-.pairSlot[boatDisplay="true"]:nth-child(3n + 25):nth-child(-3n + 40)::before{
+#pairingHolder > [boatDisplay="true"]:nth-child(n + 9):nth-child(-n + 14) > :nth-child(2)::before{
     content:"420E";
 }
-.pairSlot[boatDisplay="true"]:nth-child(3n + 43):nth-child(-3n + 46)::before{
+#pairingHolder > [boatDisplay="true"]:nth-child(n + 15):nth-child(-n + 16) > :nth-child(2)::before{
     content:"C420";
 }
-.pairSlot[boatDisplay="true"]:nth-last-child(3)::before{
+#pairingHolder > [boatDisplay="true"]:nth-child(17) > :nth-child(2)::before{
     content:"Rotating";
 }
+
 .pairSlot::before{
     z-index: 2;
     position: absolute;
@@ -384,25 +399,25 @@ button{
     padding: 15px;
     text-align: right;
 }
-.pairSlot[boatDisplay="false"]:nth-child(3n - 2)::after{
+.pairSlotHolder[boatDisplay="false"] > :nth-child(2)::after{
     content:"Skipper";
     color:var(--highlight2);
 }
-.pairSlot:nth-child(3n - 2) .name{
+.pairSlotHolder > :nth-child(2) .name{
     color:var(--highlight2);
 }
-.pairSlot:nth-child(3n - 1)::after{
+.pairSlotHolder > :nth-child(3)::after{
     content:"Crew";
     color:var(--highlight1);
 }
-.pairSlot:nth-child(3n - 1) .name{
+.pairSlotHolder > :nth-child(3) .name{
     color:var(--highlight1);
 }
-.pairSlot:nth-child(3n)::after{
+.pairSlotHolder > :nth-child(4)::after{
     content:"Rotating";
     color:var(--highlight2);
 }
-.pairSlot:nth-child(3n) .name{  
+.pairSlotHolder > :nth-child(4) .name{  
     color:var(--highlight2);
 }
 
@@ -450,14 +465,23 @@ button{
     width: 30px;
     height: 30px;
     display: none;
-    background:var(--highlight);
+    /* background:var(--highlight); */
     animation: loadingAnim 2s infinite;
     animation-timing-function: linear;
     z-index: 99999;
 }
 @keyframes loadingAnim {
-    from{transform: rotate(0deg);}
-    to{transform: rotate(360deg);}
+    0%{transform: rotate(0deg);}
+    40%{transform: rotate(90deg);}
+    60%{transform: rotate(90deg);}
+    100%{transform: rotate(0deg);}
+}
+@keyframes wavesAnim{
+    0%{transform: rotate(-30deg) translateY(10px);}
+    25%{transform: rotate(0deg) translateY(-10px);}
+    50%{transform: rotate(30deg) translateY(10px);}
+    75%{transform: rotate(0deg) translateY(-10px);}
+    100%{transform: rotate(-30deg)translateY(10px);}
 }
 #invLink{
     top:0;
