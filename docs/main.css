@@ -676,6 +676,6 @@ button{
         display: none;
     }
     .pairDrag{
-        display: none;
+        display: none!important;
     }
 }
