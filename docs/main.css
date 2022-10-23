@@ -455,7 +455,7 @@ button{
 }
 #right .name{
     width:calc(50% - 20px);
-    /* margin:5px; */
+    margin:5px;
     color: var(--highlight);
 }
 .pairSlot .name{
@@ -658,7 +658,7 @@ button{
         width: 97%;
         height: 100%;
         grid-template-columns: 1fr 1fr;
-        gap:10px;
+        /* gap:10px; */
     }
     .name{
         font-size: 1.15rem!important;
