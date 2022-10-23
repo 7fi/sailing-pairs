@@ -364,10 +364,6 @@ button{
     height:47px;
     width: 100%;
     gap:7px;
-    pointer-events: none;
-}
-.pairSlotHolder > *{
-    pointer-events: all;
 }
 .pairingHolderPic{
     grid-template-rows:repeat(var(--slotCount),105px)!important;
