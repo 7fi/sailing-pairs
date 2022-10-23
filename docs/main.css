@@ -55,6 +55,7 @@ a:hover{
 body{
     font-family: futura-pt, sans-serif;
     font-weight: 400;
+    user-select: none;
 }
 button{
     appearance: none;
@@ -363,6 +364,10 @@ button{
     height:47px;
     width: 100%;
     gap:7px;
+    pointer-events: none;
+}
+.pairSlotHolder > *{
+    pointer-events: all;
 }
 .pairingHolderPic{
     grid-template-rows:repeat(var(--slotCount),105px)!important;
@@ -450,13 +455,27 @@ button{
 }
 #right .name{
     width:calc(50% - 20px);
-    margin:5px;
+    /* margin:5px; */
     color: var(--highlight);
 }
 .pairSlot .name{
     z-index: 1;
     margin:7px;
     align-self: flex-start;
+}
+
+.pairDrag {
+    margin: auto;
+    cursor: grab;
+}
+
+.pairSlotHolder.dragging2 > .pairDrag{
+    padding-left:10px;
+}
+.pairSlotHolder.dragging2{
+    opacity: 0.2;
+    border: 2px solid #4ca1af;
+    border-radius: var(--radius);
 }
 
 #loadingEl{
@@ -648,11 +667,15 @@ button{
     }
     #right .name{
         width: 98%;
+        max-height: 2em;
     }
     #countNamesHolder{
         margin:20px;
     }
     .tooltip::after, .tooltip::before{
+        display: none;
+    }
+    .pairDrag{
         display: none;
     }
 }

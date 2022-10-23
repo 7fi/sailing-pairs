@@ -166,7 +166,20 @@ if (thisPage == 'main') {
     e.preventDefault()
     if (!mobile) {
       const draggingEl = document.querySelector('.dragging')
-      nameList.appendChild(draggingEl)
+      if (draggingEl) nameList.appendChild(draggingEl)
+    }
+  })
+
+  pairingHolder.addEventListener('dragover', (e) => {
+    e.preventDefault()
+
+    const afterElement = getDragAfterElement(e.clientY)
+    const draggingEl = document.querySelector('.dragging2')
+
+    if (afterElement == null && draggingEl) {
+      pairingHolder.appendChild(draggingEl)
+    } else if (draggingEl) {
+      pairingHolder.insertBefore(draggingEl, afterElement)
     }
   })
 
@@ -450,9 +463,16 @@ function makePairs(inputPairs) {
       const pairSlotHolder = document.createElement('div')
       pairSlotHolder.classList.add('pairSlotHolder')
       pairSlotHolder.setAttribute('boatDisplay', boatDisplayVal)
+      pairSlotHolder.setAttribute('draggable', true)
 
+      pairSlotHolder.addEventListener('dragstart', (e) => {
+        if (e.target == pairSlotHolder) pairSlotHolder.classList.add('dragging2')
+      })
+      pairSlotHolder.addEventListener('dragend', () => {
+        pairSlotHolder.classList.remove('dragging2')
+      })
       const pairSlotDrag = document.createElement('div')
-      pairSlotDrag.classList.add('pairDrag', 'draggable')
+      pairSlotDrag.classList.add('pairDrag', 'fa-lg', 'fa-bars', 'fa-solid')
       // pairSlotDrag.addEventListener('dragend')
       pairSlotHolder.appendChild(pairSlotDrag)
 
@@ -480,10 +500,12 @@ function makePairs(inputPairs) {
         })
         pairSlotEl.addEventListener('dragover', (e) => {
           e.preventDefault()
+          // console.log(e)
           if (!mobile) {
-            const draggingEl = document.querySelector('.dragging')
+            const draggingEl = document.querySelector('.name.dragging')
+            // console.log(draggingEl)
             // console.log(pref[names.indexOf(draggingEl.textContent)]);
-            if (pairSlotEl.childElementCount < 2) {
+            if (pairSlotEl.childElementCount < 2 && draggingEl) {
               //&& pref[names.indexOf(draggingEl.textContent)]
               pairSlotEl.appendChild(draggingEl)
             }
@@ -629,11 +651,13 @@ function makeName(name) {
         }
       }
 
-      for (let i = 0; i < slotsLength; i++) {
-        const cur = pairingHolder.children[i]
-        //console.log(cur)
-        if (cur.childElementCount > 1) {
-          nameList.appendChild(cur.children[0])
+      for (let i = 0; i < slotsLength / 3; i++) {
+        for (let j = 0; j < 3; j++) {
+          const cur = pairingHolder.children[i].children[j]
+          //console.log(cur)
+          if (cur.childElementCount > 1) {
+            nameList.appendChild(cur.children[0])
+          }
         }
       }
     })
@@ -1041,6 +1065,25 @@ async function getPrevPartners(name, pairings) {
   }
   console.log('Previous partners of ', name, partners)
   return partners
+}
+
+//Gets the element after the one you are hovering on
+function getDragAfterElement(y) {
+  const draggableEls = [...pairingHolder.querySelectorAll('.pairSlotHolder')]
+
+  return draggableEls.reduce(
+    (closest, child) => {
+      const box = child.getBoundingClientRect()
+      const offset = y - box.top - box.height / 2
+
+      if (offset < 0 && offset > closest.offset) {
+        return { offset: offset, element: child }
+      } else {
+        return closest
+      }
+    },
+    { offset: Number.NEGATIVE_INFINITY }
+  ).element
 }
 
 // Toggle between light and dark mode
