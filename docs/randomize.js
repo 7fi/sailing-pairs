@@ -11,20 +11,13 @@ randomPairs.addEventListener('click', async () => {
   }
 
   //Get list of non absent people
-  let shuffledNames = []
-  people.forEach((person) => {
-    if (!absent.includes(person.name) && !locked.includes(person.name)) {
-      shuffledNames.push(person.name)
+  let shuffledNames = await getBoatCount(true)
+  for (let i = 0; i < shuffledNames.length; i++) {
+    if (absent.includes(shuffledNames[i]) || locked.includes(shuffledNames[i])) {
+      shuffledNames.splice(shuffledNames.indexOf(shuffledNames[i]), 1)
     }
-  })
-  let currentIndex = shuffledNames.length,
-    randomIndex
-
-  while (currentIndex != 0) {
-    randomIndex = Math.floor(Math.random() * currentIndex)
-    currentIndex--
-    ;[shuffledNames[currentIndex], shuffledNames[randomIndex]] = [shuffledNames[randomIndex], shuffledNames[currentIndex]]
   }
+  console.log(shuffledNames)
 
   let skippers = []
   let crews = []
@@ -37,15 +30,17 @@ randomPairs.addEventListener('click', async () => {
     }
   }
   console.log(skippers, crews)
-  ;(currentIndex = skippers.length), randomIndex
 
-  while (currentIndex != 0) {
-    randomIndex = Math.floor(Math.random() * currentIndex)
-    currentIndex--
-    ;[skippers[currentIndex], skippers[randomIndex]] = [skippers[randomIndex], skippers[currentIndex]]
-  }
+  let currentIndex = skippers.length,
+    randomIndex
 
-  //shuffle crews
+    // while (currentIndex != 0) {
+    //   randomIndex = Math.floor(Math.random() * currentIndex)
+    //   currentIndex--
+    //   ;[skippers[currentIndex], skippers[randomIndex]] = [skippers[randomIndex], skippers[currentIndex]]
+    // }
+
+    //shuffle crews
   ;(currentIndex = crews.length), randomIndex
 
   while (currentIndex != 0) {

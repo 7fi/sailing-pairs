@@ -75,7 +75,7 @@ const people = [
   { name: 'Adam', skipper: true, crew: false },
   { name: 'Alexander', skipper: true, crew: false },
   { name: 'Andrea', skipper: true, crew: true },
-  { name: 'Ava', skipper: true, crew: true },
+  { name: 'Ava', skipper: true, crew: true, weight: 113 },
   { name: 'Ben', skipper: true, crew: false },
   { name: 'Beto', skipper: true, crew: false },
   { name: 'Carson', skipper: false, crew: true },
@@ -104,15 +104,15 @@ const people = [
   { name: 'Maura', skipper: true, crew: true },
   { name: 'Nelson', skipper: true, crew: true },
   { name: 'Nick', skipper: false, crew: true },
-  { name: 'Nolan', skipper: true, crew: false },
+  { name: 'Nolan', skipper: true, crew: false, weight: 145 },
   { name: 'Owen', skipper: true, crew: false },
   { name: 'Payton', skipper: false, crew: true },
-  { name: 'Ryan', skipper: true, crew: false },
+  { name: 'Ryan', skipper: true, crew: false, weight: 160 },
   { name: 'Sabrina', skipper: false, crew: true, weight: 105 },
   { name: 'Sharkey', skipper: false, crew: true },
   { name: 'Stella', skipper: false, crew: true },
   { name: 'Suraj', skipper: false, crew: true },
-  { name: 'Talia', skipper: false, crew: true },
+  { name: 'Talia', skipper: false, crew: true, weight: 109 },
   { name: 'Zephyr', skipper: false, crew: true },
 ]
 
@@ -954,7 +954,7 @@ async function getSaved() {
   }
 }
 
-async function getBoatCount() {
+async function getBoatCount(rtn) {
   options = {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -969,9 +969,9 @@ async function getBoatCount() {
   let c420Count = new Array(names.length).fill(0)
   let e420Count = new Array(names.length).fill(0)
 
-  let fjCut = 24
-  let e420Cut = 42
-  let c420Cut = 48
+  let fjCut = 8 * 3
+  let e420Cut = fjCut + 6 * 3
+  let c420Cut = e420Cut + 2 * 3
 
   for (let i = 0; i < pairings.pairs.length; i++) {
     console.log(Object.values(pairings.pairs[i]).length)
@@ -1020,6 +1020,17 @@ async function getBoatCount() {
     }
 
     countNamesHolder.appendChild(nameEl)
+  }
+  if (rtn) {
+    let karmalist = {}
+    for (let i = 0; i < names.length; i++) {
+      karmalist[names[i]] = fjCount[i] - c420Count[i] - e420Count[i]
+    }
+    const sortable = Object.entries(karmalist)
+      .sort((a, b) => a[1] - b[1])
+      .map((el) => el[0])
+    // console.log(sortable);
+    return sortable
   }
 }
 
