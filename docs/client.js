@@ -74,7 +74,7 @@ const API_URL = 'https://bhspairs.herokuapp.com' // For deployment
 const people = [
   { name: 'Adam', skipper: true, crew: false },
   { name: 'Alexander', skipper: true, crew: false },
-  { name: 'Andrea', skipper: true, crew: true },
+  { name: 'Andrea', skipper: false, crew: true },
   { name: 'Ava', skipper: true, crew: true, weight: 113 },
   { name: 'Ben', skipper: true, crew: false },
   { name: 'Beto', skipper: true, crew: false },
@@ -100,7 +100,7 @@ const people = [
   { name: 'Jeffrey', skipper: true, crew: true },
   { name: 'Joseph', skipper: true, crew: true },
   { name: 'Kai', skipper: false, crew: true },
-  { name: 'Luke', skipper: false, crew: true },
+  { name: 'Luke', skipper: true, crew: true },
   { name: 'Maura', skipper: true, crew: true },
   { name: 'Nelson', skipper: true, crew: true },
   { name: 'Nick', skipper: false, crew: true },
