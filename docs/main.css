@@ -125,6 +125,65 @@ button{
     place-items: center;
     position:relative;
 }
+.buttonsHolder > .icon{
+    margin: 5px;
+}
+
+.container {
+    display: block;
+    position: relative;
+    padding-left: 25px;
+    margin-top: 6px;
+    cursor: pointer;
+}
+
+.container input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+.checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 20px;
+    width: 20px;
+    border-radius: var(--radius);
+    background-color: var(--light);
+  }
+  
+  .container:hover input ~ .checkmark {
+    background-color: var(--highlight2);
+  }
+  
+  .container input:checked ~ .checkmark {
+    background-color: var(--highlight1);
+  }
+  
+  .checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+  }
+  
+  .container input:checked ~ .checkmark:after {
+    display: block;
+  }
+  
+  .container .checkmark:after {
+    left: 6px;
+    top: 2px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+  }
 
 .tooltip::before,
 .tooltip::after {
@@ -258,7 +317,7 @@ button{
     background-color: #00000044;
 }
 
-#countWindow, #infoWindow, #prevPairs{
+#countWindow, #infoWindow, #prevPairs, #settingsWindow{
     z-index:9;
     display:none;
     place-items:center;
@@ -270,7 +329,7 @@ button{
     background-color:#00000055;
     z-index: 25;
 }
-#countNamesHolder, #information, #prevPairsWindow{
+#countNamesHolder, #information, #prevPairsWindow, #settings{
     z-index: 20;
     display: grid;
     /* gap:5px; */
@@ -286,6 +345,16 @@ button{
     max-width: 30em;
     margin: 20px auto;
 }
+#settings{
+    overflow: visible;
+}
+
+.buttonsHolder{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
 #countNamesHolder .countName:nth-child(odd){
     background-color: var(--medDark)!important;
 }

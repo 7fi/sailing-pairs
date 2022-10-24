@@ -15,6 +15,7 @@ const countWindow = document.getElementById('countWindow')
 const countButton = document.getElementById('countButton')
 const infoButton = document.getElementById('infoButton')
 const infoWindow = document.getElementById('infoWindow')
+const settingsWindow = document.getElementById('settingsWindow')
 
 const nameInput = document.getElementById('nameInput')
 const saveButton = document.getElementById('save')
@@ -23,12 +24,16 @@ const saveButtonOfficial = document.getElementById('saveOfficial')
 const modeToggle = document.getElementById('modeToggle')
 const selectAbsent = document.getElementById('selectAbsent')
 const selectLocked = document.getElementById('selectLocked')
+const settingsBtn = document.getElementById('settingsButton')
 const resetPairs = document.getElementById('resetPairs')
 const randomPairs = document.getElementById('randomPairs')
 const squareMode = document.getElementById('squareMode')
 const picModeButton = document.getElementById('picMode')
 const boatDisplay = document.getElementById('boatDisplay')
 const betoEl = document.getElementById('betoEl')
+
+const boatCountRnd = document.getElementById('boatCountRnd')
+const prevPartRnd = document.getElementById('prevPartRnd')
 
 const prevPairs = document.getElementById('prevPairs')
 const prevPairsWindow = document.getElementById('prevPairsWindow')
@@ -40,6 +45,8 @@ let square = false
 let picMode = false
 let selAbsent = false
 let selLocked = false
+let byBoatCount = false
+let byPrevParts = true
 let absent = []
 let locked = []
 let boatDisplayVal = 'true'
@@ -374,6 +381,9 @@ if (thisPage == 'main') {
     document.querySelectorAll('.pairSlotHolder').forEach((slot) => {
       slot.setAttribute('boatDisplay', boatDisplayVal)
     })
+  })
+  settingsBtn.addEventListener('click', () => {
+    settingsWindow.style.display = 'block'
   })
 }
 
@@ -986,42 +996,42 @@ async function getBoatCount(rtn) {
     }
   }
   // console.log("Boat count",names,fjCount,c420Count,e420Count);
+  if (rtn == undefined) {
+    let girls = ['Elliott', 'Ava', 'Sabrina', 'Talia']
+    for (let i = 0; i < names.length; i++) {
+      const nameEl = document.createElement('div')
+      nameEl.classList.add('countName')
+      nameEl.innerHTML = names[i]
 
-  let girls = ['Elliott', 'Ava', 'Sabrina', 'Talia']
-  for (let i = 0; i < names.length; i++) {
-    const nameEl = document.createElement('div')
-    nameEl.classList.add('countName')
-    nameEl.innerHTML = names[i]
+      const gapEl = document.createElement('div')
+      gapEl.style.flexGrow = 1
+      nameEl.appendChild(gapEl)
 
-    const gapEl = document.createElement('div')
-    gapEl.style.flexGrow = 1
-    nameEl.appendChild(gapEl)
+      const fjCountEl = document.createElement('div')
+      fjCountEl.classList.add('boatCount')
+      fjCountEl.innerHTML = fjCount[i]
+      nameEl.appendChild(fjCountEl)
 
-    const fjCountEl = document.createElement('div')
-    fjCountEl.classList.add('boatCount')
-    fjCountEl.innerHTML = fjCount[i]
-    nameEl.appendChild(fjCountEl)
+      const c420CountEl = document.createElement('div')
+      c420CountEl.classList.add('boatCount')
+      c420CountEl.innerHTML = c420Count[i]
+      nameEl.appendChild(c420CountEl)
 
-    const c420CountEl = document.createElement('div')
-    c420CountEl.classList.add('boatCount')
-    c420CountEl.innerHTML = c420Count[i]
-    nameEl.appendChild(c420CountEl)
+      const e420CountEl = document.createElement('div')
+      e420CountEl.classList.add('boatCount')
+      e420CountEl.innerHTML = e420Count[i]
+      nameEl.appendChild(e420CountEl)
 
-    const e420CountEl = document.createElement('div')
-    e420CountEl.classList.add('boatCount')
-    e420CountEl.innerHTML = e420Count[i]
-    nameEl.appendChild(e420CountEl)
+      if (fjCount[i] - c420Count[i] - e420Count[i] < 0 && !girls.includes(names[i])) {
+        nameEl.setAttribute('boat-karma', 'positive')
+      }
+      if (fjCount[i] - c420Count[i] - e420Count[i] > 0 && !girls.includes(names[i])) {
+        nameEl.setAttribute('boat-karma', 'negative')
+      }
 
-    if (fjCount[i] - c420Count[i] - e420Count[i] < 0 && !girls.includes(names[i])) {
-      nameEl.setAttribute('boat-karma', 'positive')
+      countNamesHolder.appendChild(nameEl)
     }
-    if (fjCount[i] - c420Count[i] - e420Count[i] > 0 && !girls.includes(names[i])) {
-      nameEl.setAttribute('boat-karma', 'negative')
-    }
-
-    countNamesHolder.appendChild(nameEl)
-  }
-  if (rtn) {
+  } else {
     let karmalist = {}
     for (let i = 0; i < names.length; i++) {
       karmalist[names[i]] = fjCount[i] - c420Count[i] - e420Count[i]
@@ -1029,7 +1039,6 @@ async function getBoatCount(rtn) {
     const sortable = Object.entries(karmalist)
       .sort((a, b) => a[1] - b[1])
       .map((el) => el[0])
-    // console.log(sortable);
     return sortable
   }
 }
@@ -1096,6 +1105,10 @@ function getDragAfterElement(y) {
     { offset: Number.NEGATIVE_INFINITY }
   ).element
 }
+
+settingsWindow.addEventListener('click', (e) => {
+  if (e.target == settingsWindow) settingsWindow.style.display = 'none'
+})
 
 // Toggle between light and dark mode
 modeToggle.addEventListener('click', () => {

@@ -1,4 +1,6 @@
 randomPairs.addEventListener('click', async () => {
+  console.log(byBoatCount)
+  console.log('settings', byBoatCount == 'off', byPrevParts == 'on')
   //Create locked pair list with blank slots
   let lockedPairs = []
   for (let i = 0; i < slotsLength / 3; i++) {
@@ -11,7 +13,10 @@ randomPairs.addEventListener('click', async () => {
   }
 
   //Get list of non absent people
-  let shuffledNames = await getBoatCount(true)
+  let shuffledNames = names.slice()
+  if (byBoatCount) {
+    shuffledNames = await getBoatCount(true)
+  }
   for (let i = 0; i < shuffledNames.length; i++) {
     if (absent.includes(shuffledNames[i]) || locked.includes(shuffledNames[i])) {
       shuffledNames.splice(shuffledNames.indexOf(shuffledNames[i]), 1)
@@ -33,14 +38,15 @@ randomPairs.addEventListener('click', async () => {
 
   let currentIndex = skippers.length,
     randomIndex
+  if (!byBoatCount) {
+    while (currentIndex != 0) {
+      randomIndex = Math.floor(Math.random() * currentIndex)
+      currentIndex--
+      ;[skippers[currentIndex], skippers[randomIndex]] = [skippers[randomIndex], skippers[currentIndex]]
+    }
+  }
 
-    // while (currentIndex != 0) {
-    //   randomIndex = Math.floor(Math.random() * currentIndex)
-    //   currentIndex--
-    //   ;[skippers[currentIndex], skippers[randomIndex]] = [skippers[randomIndex], skippers[currentIndex]]
-    // }
-
-    //shuffle crews
+  //shuffle crews
   ;(currentIndex = crews.length), randomIndex
 
   while (currentIndex != 0) {
@@ -52,29 +58,36 @@ randomPairs.addEventListener('click', async () => {
 
   //Shuffle skippers here
 
-  options = {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({}),
+  let pairings
+  if (byPrevParts) {
+    options = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({}),
+    }
+    loadingEl.style.display = 'block'
+    const response = await fetch(API_URL + '/getPairsOfficial', options)
+    pairings = await response.json()
   }
-  loadingEl.style.display = 'block'
-  const response = await fetch(API_URL + '/getPairsOfficial', options)
-  let pairings = await response.json()
 
   let newNames = []
   for (let i = 0; i < slotsLength / 3; i++) {
     // find crew for given skipper
     newNames.push(skippers[0])
-    let prevPairs = await getPrevPartners(skippers[0], pairings)
-    console.log(prevPairs)
     let crew
-    for (let j = 0; j < crews.length; j++) {
-      if (!prevPairs.includes(crews[j])) {
-        crew = crews[j]
-        break
+    let prevPairs
+    if (byPrevParts) {
+      prevPairs = await getPrevPartners(skippers[0], pairings)
+      for (let j = 0; j < crews.length; j++) {
+        if (!prevPairs.includes(crews[j])) {
+          crew = crews[j]
+          break
+        }
       }
+    } else {
+      crew = crews[0]
     }
-    if (crew == undefined) {
+    if (crew == undefined && byPrevParts) {
       let frequency = {}
       for (let i = 0; i < prevPairs.length; i++) {
         frequency[prevPairs[i]] = prevPairs.filter((x) => x === prevPairs[i]).length

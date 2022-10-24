@@ -26,14 +26,8 @@
         >
         <div id="placeholder"></div>
         <div id="buttons">
-          <button
-            class="icon tooltip"
-            id="modeToggle"
-            data-tooltip="Toggle dark/light mode"
-            type="button"
-          >
-            <i class="fa-solid fa-moon fa-lg"></i>
-          </button>
+          
+          
           <button
             class="icon tooltip"
             id="resetPairs"
@@ -68,14 +62,6 @@
           </button>
           <button
             class="icon tooltip"
-            id="boatDisplay"
-            data-tooltip="Toggle boat type display"
-            type="button"
-          >
-            <i class="fa-solid fa-tag fa-lg"></i>
-          </button>
-          <button
-            class="icon tooltip"
             id="countButton"
             data-tooltip="Toggle boat count window"
             type="button"
@@ -89,6 +75,14 @@
             type="button"
           >
             <i class="fa-solid fa-info fa-lg"></i>
+          </button>
+          <button
+            class="icon tooltip"
+            id="settingsButton"
+            data-tooltip="Settings"
+            type="button"
+          >
+            <i class="fa-solid fa-gear fa-lg"></i>
           </button>
           <!-- <button id="squareMode" title="Become square" type="button"><i class="gg-shape-square"></i></button>
                 <button id="picMode" title="Toggle picture mode" type="button"><i class="gg-image"></i></button> -->
@@ -184,6 +178,41 @@
           Known bugs:
           <ul>
           </ul>
+        </div>
+      </div>
+      <div id="settingsWindow">
+        <div id="settings">
+          <!-- <h1>Settings:</h1> -->
+          <div class="buttonsHolder">
+            <button
+              class="icon tooltip"
+              id="modeToggle"
+              data-tooltip="Toggle dark/light mode"
+              type="button"
+            >
+              <i class="fa-solid fa-moon fa-lg"></i>
+            </button>
+            <button
+              class="icon tooltip"
+              id="boatDisplay"
+              data-tooltip="Toggle boat type display"
+              type="button"
+            >
+              <i class="fa-solid fa-tag fa-lg"></i>
+            </button>
+            
+          </div>
+          <h3>Randomization:</h3>
+          <label class="container">
+            <input type="checkbox" id="boatCountRnd" onchange="byBoatCount = this.checked">
+            <span class="checkmark"></span>
+            Randomize based on boat count
+          </label>
+          <label class="container">
+            <input type="checkbox" id="prevPartRnd" onchange="byPrevParts = this.checked" checked>
+            <span class="checkmark"></span>
+            Randomize based on previous partners
+          </label>
         </div>
       </div>
       <div id="prevPairs">
