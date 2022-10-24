@@ -1,25 +1,30 @@
 randomPairs.addEventListener('click', async () => {
   console.log(byBoatCount)
-  console.log('settings', byBoatCount == 'off', byPrevParts == 'on')
+  console.log('settings', byBoatCount, byPrevParts)
   //Create locked pair list with blank slots
   let lockedPairs = []
   for (let i = 0; i < slotsLength / 3; i++) {
-    for (let j = 1; j < 4; j++) {
-      if (locked.includes(pairingHolder.children[i].children[j].innerHTML)) {
-        console.log(i)
-        lockedPairs.push(pairingHolder.children[i].children[j].innerHTML)
-      } else if (i % 3 != 2) lockedPairs.push('')
+    for (let j = 1; j < 3; j++) {
+      if (pairingHolder.children[i].children[j] != undefined && pairingHolder.children[i].children[j].children[0] != undefined && locked.includes(pairingHolder.children[i].children[j].children[0].innerHTML)) {
+        // console.log(i)
+        lockedPairs.push(pairingHolder.children[i].children[j].children[0].innerHTML)
+      } else lockedPairs.push('')
     }
   }
+  console.log(lockedPairs)
 
   //Get list of non absent people
   let shuffledNames = names.slice()
   if (byBoatCount) {
     shuffledNames = await getBoatCount(true)
   }
-  for (let i = 0; i < shuffledNames.length; i++) {
-    if (absent.includes(shuffledNames[i]) || locked.includes(shuffledNames[i])) {
-      shuffledNames.splice(shuffledNames.indexOf(shuffledNames[i]), 1)
+  console.log(shuffledNames)
+  for (let i = shuffledNames.length - 1; i >= 0; i--) {
+    console.log(shuffledNames[i])
+    if (absent.includes(shuffledNames[i]) || lockedPairs.includes(shuffledNames[i])) {
+      console.log(`${shuffledNames[i]} is absent or locked`)
+      shuffledNames.splice(i, 1)
+      // console.log(shuffledNames)
     }
   }
   console.log(shuffledNames)
@@ -71,34 +76,56 @@ randomPairs.addEventListener('click', async () => {
   }
 
   let newNames = []
+  let lpI = 0
   for (let i = 0; i < slotsLength / 3; i++) {
     // find crew for given skipper
-    newNames.push(skippers[0])
-    let crew
-    let prevPairs
-    if (byPrevParts) {
-      prevPairs = await getPrevPartners(skippers[0], pairings)
-      for (let j = 0; j < crews.length; j++) {
-        if (!prevPairs.includes(crews[j])) {
-          crew = crews[j]
-          break
+    // console.log('Locked pair', lockedPairs[lpI], lpI)
+    let skipper
+    if (lockedPairs[lpI] != '') {
+      skipper = lockedPairs[lpI]
+      newNames.push(lockedPairs[lpI])
+    } else {
+      skipper = skippers[0]
+      newNames.push(skippers[0])
+      skippers.splice(skippers.indexOf(skippers[0]), 1)
+    }
+    console.log('Skipper:', skipper)
+    lpI++
+    if (skipper) {
+      let crew
+      let prevPairs
+      if (lockedPairs[lpI] != '') crew = lockedPairs[lpI]
+      else {
+        if (byPrevParts) {
+          prevPairs = await getPrevPartners(skipper, pairings)
+          for (let j = 0; j < crews.length; j++) {
+            if (!prevPairs.includes(crews[j])) {
+              crew = crews[j]
+              break
+            }
+          }
+        } else {
+          crew = crews[0]
+        }
+        if (crew == undefined && byPrevParts) {
+          let frequency = {}
+          for (let i = 0; i < prevPairs.length; i++) {
+            frequency[prevPairs[i]] = prevPairs.filter((x) => x === prevPairs[i]).length
+          }
+          console.log('Frequency', frequency)
+          const sortable = Object.entries(frequency)
+            .sort((a, b) => a[1] - b[1])
+            .map((el) => el[0])
+          let j = 0
+          while (locked.includes(sortable[j]) || absent.includes(sortable[j])) j++
+          crew = sortable[j]
         }
       }
-    } else {
-      crew = crews[0]
-    }
-    if (crew == undefined && byPrevParts) {
-      let frequency = {}
-      for (let i = 0; i < prevPairs.length; i++) {
-        frequency[prevPairs[i]] = prevPairs.filter((x) => x === prevPairs[i]).length
-      }
-      console.log('Frequency', frequency)
-    } else {
       newNames.push(crew)
       crews.splice(crews.indexOf(crew), 1)
-      console.log('Crews:', crews)
     }
-    skippers.splice(skippers.indexOf(skippers[0]), 1)
+    console.log('Crews:', crews)
+    lpI++
     console.log('skippers:', skippers)
   }
 
