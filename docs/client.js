@@ -45,6 +45,7 @@ let square = false
 let picMode = false
 let selAbsent = false
 let selLocked = false
+let byPos = true
 let byBoatCount = false
 let byPrevParts = true
 let absent = []
