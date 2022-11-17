@@ -14,7 +14,7 @@ randomPairs.addEventListener('click', async () => {
   console.log(lockedPairs)
 
   //Get list of non absent people
-  let shuffledNames = names.slice()
+  let shuffledNames = names[season][team].slice()
   if (byBoatCount) {
     shuffledNames = await getBoatCount(true)
   }
@@ -34,7 +34,7 @@ randomPairs.addEventListener('click', async () => {
     let skippers = []
     let crews = []
     for (let i = 0; i < shuffledNames.length; i++) {
-      if (people[people.findIndex((e) => e.name == shuffledNames[i])].skipper && !(skippers.length >= shuffledNames.length / 2)) {
+      if (people[season][team][people[season][team].findIndex((e) => e.name == shuffledNames[i])].skipper && !(skippers.length >= shuffledNames.length / 2)) {
         skippers.push(shuffledNames[i])
         // console.log(shuffledNames[i], " is a skipper ", people[people.findIndex((e) => e.name == shuffledNames[i])].skipper);
       } else {

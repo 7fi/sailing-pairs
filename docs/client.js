@@ -10,6 +10,8 @@ const loadSaveContainer = document.getElementById('loadSaveContainer')
 const localSaved = document.getElementById('localSaved')
 const officialList = document.getElementById('officialList')
 const loadPermBtn = document.getElementById('loadPermBtn')
+const seasonSelect = document.getElementById('seasonSelect')
+const teamSelect = document.getElementById('teamSelect')
 
 const countNamesHolder = document.getElementById('countNamesHolder')
 const countWindow = document.getElementById('countWindow')
@@ -53,6 +55,9 @@ let absent = []
 let locked = []
 let boatDisplayVal = 'true'
 
+let season = seasonSelect.value
+let team = teamSelect.value
+
 // let betoQuotes = ['Hi',"I'm bad at sailing!"];
 let betoClicks = 0
 let sabrinaClicks = 0
@@ -82,7 +87,7 @@ observer.observe(document.body)
 
 let findDuplicates = (arr) => arr.filter((item, index) => arr.indexOf(item) != index)
 
-const slotsLength = Math.floor(names.length / 2) * 3
+const slotsLength = Math.floor(names[season][team].length / 2) * 3
 document.documentElement.style.setProperty('--slotCount', slotsLength / 3)
 document.documentElement.style.setProperty('--colCount', 3)
 console.log(slotsLength, 'slotsLength')
@@ -221,7 +226,7 @@ if (thisPage == 'main') {
         } else {
           inputDate = formatDate(new Date(), 0)
         }
-        let pairs = { name: nameInput.value, practiceDate: inputDate }
+        let pairs = { name: nameInput.value, practiceDate: inputDate, season: season }
         for (let i = 0; i < slotsLength; i++) {
           if (i % 3 == 0) {
             for (let j = 0; j < 3; j++) {
@@ -504,7 +509,7 @@ function makeNames(inputPairs) {
   }
   // if input pairs supplied then dont create those names
   if (inputPairs != undefined) {
-    let tempNames = names.slice()
+    let tempNames = names[season][team].slice()
     let newNames = Object.values(inputPairs)
     // console.log('newnames', newNames)
     let len = newNames.length
@@ -525,7 +530,7 @@ function makeNames(inputPairs) {
     })
   } else {
     // otherwise make all names
-    names.forEach((name) => {
+    names[season][team].forEach((name) => {
       const nameEl = makeName(name)
       nameList.appendChild(nameEl)
     })
@@ -722,7 +727,7 @@ async function getSaved() {
   options = {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({}),
+    body: JSON.stringify({ season: season }),
   }
   loadingEl.style.display = 'block'
   let response = await fetch(API_URL + '/getNames', options)
@@ -785,7 +790,7 @@ async function getSaved() {
           options = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name: loadName.textContent }),
+            body: JSON.stringify({ name: loadName.textContent, season: season }),
           }
           loadingEl.style.display = 'block'
           const response = await fetch(API_URL + '/delPair', options)
@@ -943,9 +948,9 @@ async function getBoatCount(rtn) {
   const pairings = await response.json()
   loadingEl.style.display = 'none'
 
-  let fjCount = new Array(names.length).fill(0)
-  let c420Count = new Array(names.length).fill(0)
-  let e420Count = new Array(names.length).fill(0)
+  let fjCount = new Array(names[season][team].length).fill(0)
+  let c420Count = new Array(names[season][team].length).fill(0)
+  let e420Count = new Array(names[season][team].length).fill(0)
 
   let fjCut = 8 * 3
   let e420Cut = fjCut + 6 * 3
@@ -954,22 +959,22 @@ async function getBoatCount(rtn) {
   for (let i = 0; i < pairings.pairs.length; i++) {
     console.log(Object.values(pairings.pairs[i]).length)
     for (let j = 0; j < fjCut; j++) {
-      fjCount[names.indexOf(pairings.pairs[i][j])]++
+      fjCount[names[season][team].indexOf(pairings.pairs[i][j])]++
     }
     for (let j = fjCut; j < e420Cut; j++) {
-      e420Count[names.indexOf(pairings.pairs[i][j])]++
+      e420Count[names[season][team].indexOf(pairings.pairs[i][j])]++
     }
     for (let j = e420Cut; j < c420Cut; j++) {
-      c420Count[names.indexOf(pairings.pairs[i][j])]++
+      c420Count[names[season][team].indexOf(pairings.pairs[i][j])]++
     }
   }
   // console.log("Boat count",names,fjCount,c420Count,e420Count);
   if (rtn == undefined) {
     let girls = ['Elliott', 'Ava', 'Sabrina', 'Talia']
-    for (let i = 0; i < names.length; i++) {
+    for (let i = 0; i < names[season][team].length; i++) {
       const nameEl = document.createElement('div')
       nameEl.classList.add('countName')
-      nameEl.innerHTML = names[i]
+      nameEl.innerHTML = names[season][team][i]
 
       const gapEl = document.createElement('div')
       gapEl.style.flexGrow = 1
@@ -990,10 +995,10 @@ async function getBoatCount(rtn) {
       e420CountEl.innerHTML = e420Count[i]
       nameEl.appendChild(e420CountEl)
 
-      if (fjCount[i] - c420Count[i] - e420Count[i] < 0 && !girls.includes(names[i])) {
+      if (fjCount[i] - c420Count[i] - e420Count[i] < 0 && !girls.includes(names[season][team][i])) {
         nameEl.setAttribute('boat-karma', 'positive')
       }
-      if (fjCount[i] - c420Count[i] - e420Count[i] > 0 && !girls.includes(names[i])) {
+      if (fjCount[i] - c420Count[i] - e420Count[i] > 0 && !girls.includes(names[season][team][i])) {
         nameEl.setAttribute('boat-karma', 'negative')
       }
 
@@ -1001,7 +1006,7 @@ async function getBoatCount(rtn) {
     }
   } else {
     let karmalist = {}
-    for (let i = 0; i < names.length; i++) {
+    for (let i = 0; i < names[season][team].length; i++) {
       karmalist[names[i]] = fjCount[i] - c420Count[i] - e420Count[i]
     }
     const sortable = Object.entries(karmalist)
@@ -1109,10 +1114,10 @@ function setTheme(theme) {
   console.log('Theme set to', theme)
 }
 
-console.log(pickSternTier() + ' is assigned to do stern ties')
+// console.log(pickSternTier() + ' is assigned to do stern ties')
 function pickSternTier() {
   let potentialPpl = []
-  people.forEach((person) => {
+  people['Fall 2022'].forEach((person) => {
     if (person.name != 'Elliott') potentialPpl.push(person.name)
   })
   return potentialPpl[Math.floor(Math.random() * potentialPpl.length)]

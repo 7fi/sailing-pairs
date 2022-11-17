@@ -160,6 +160,17 @@ button {
   margin: 5px;
 }
 
+#seasonSelect,
+#teamSelect {
+  border: 0.2rem solid var(--light);
+  border-radius: var(--radius);
+  height: 33px;
+  margin: 22px 0px 0px 10px;
+  background-color: transparent;
+  font-family: inherit;
+  font-weight: 500;
+}
+
 .container {
   display: block;
   position: relative;
@@ -266,7 +277,9 @@ button {
 #saveLocal,
 #saveOfficial,
 #loadPermBtn {
-  background-color: var(--med);
+  /* background-color: var(--med); */
+  border: 0.2rem solid var(--med);
+
   margin: 5px;
   padding: 5px;
   border-radius: var(--radius);

@@ -9,6 +9,10 @@ const pairsSchema = new mongoose.Schema({
     type: Date,
     required: false,
   },
+  season: {
+    type: String,
+    required: false,
+  },
   0: {
     type: String,
     required: false,
