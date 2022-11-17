@@ -140,6 +140,9 @@ randomPairs.addEventListener('click', async () => {
       }
     }
     newNames = shuffledNames
+    if (newNames.length > (slotsLength / 3) * 2) {
+      newNames = newNames.slice(0, (slotsLength / 3) * 2)
+    }
   }
 
   makeNames(newNames)

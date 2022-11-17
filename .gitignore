@@ -4,3 +4,4 @@ node_modules
 *.code-workspace
 docs/img/.DS_Store
 .DS_Store
+.hintrc

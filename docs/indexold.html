@@ -5,11 +5,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/png" href="/img/icon.svg" />
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="main.css" />
     <script src="https://kit.fontawesome.com/2e5caad16b.js" crossorigin="anonymous"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
-    <script src="https://kit.fontawesome.com/2e5caad16b.js" crossorigin="anonymous"></script>
-
     <script src="info.js" defer></script>
     <script src="client.js" defer></script>
     <script src="randomize.js" defer></script>
@@ -47,7 +44,7 @@
                 <button id="picMode" title="Toggle picture mode" type="button"><i class="gg-image"></i></button> -->
         </div>
       </div>
-      <div id="loadSaveContainer">
+      <div id="loadSaveContainer" style="z-index: 9; display: none; place-items: center; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: #00000055">
         <div id="loadSaveWindow">
           <div id="loadPerm">
             <div id="saveHolder">
@@ -142,16 +139,15 @@
           <div id="prevPairsHolder"></div>
         </div>
       </div>
-
+      <div id="loadSave" class="tooltip" data-tooltip="Load or save pairings to the database">
+        <div id="loadText">Load/Save Pairs</div>
+      </div>
       <div id="left">
         <div id="pairingHolder"></div>
       </div>
       <div id="right">
         <div id="listContainer"></div>
         <img id="betoEl" src="img/scrog.png" style="display: none; float: right; position: absolute; bottom: 0" />
-      </div>
-      <div id="loadSave" class="tooltip" data-tooltip="Load or save pairings to the database">
-        <div id="loadText">Load/Save Pairs</div>
       </div>
     </div>
   </body>
