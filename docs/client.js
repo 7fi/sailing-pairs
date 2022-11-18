@@ -12,6 +12,7 @@ const officialList = document.getElementById('officialList')
 const loadPermBtn = document.getElementById('loadPermBtn')
 const seasonSelect = document.getElementById('seasonSelect')
 const teamSelect = document.getElementById('teamSelect')
+const fontSelect = document.getElementById('fontSelect')
 
 const countNamesHolder = document.getElementById('countNamesHolder')
 const countWindow = document.getElementById('countWindow')
@@ -110,6 +111,8 @@ document.documentElement.style.setProperty('--slotCount', slotsLength / 3)
 document.documentElement.style.setProperty('--colCount', 3)
 console.log(slotsLength, 'slotsLength')
 
+fontSelect.value = localStorage.getItem('font') ? localStorage.getItem('font') : fontSelect.value
+document.documentElement.style.setProperty('--font', fontSelect.value)
 const currentTheme = localStorage.getItem('theme') ? localStorage.getItem('theme') : null
 if (currentTheme) {
   document.documentElement.setAttribute('data-theme', currentTheme)
@@ -386,7 +389,7 @@ async function parseUrl() {
   console.log(season)
   let pairingName
   if (urlArgs.length > 3) pairingName = urlArgs[2] + '/' + urlArgs[3]
-  else pairingName = urlArgs[1]
+  else pairingName = urlArgs[2]
   if (pairingName != undefined) pairingName = pairingName.replace('%20', ' ')
   if (urlArgs[1] == '?p') {
     options = {
@@ -418,6 +421,7 @@ async function parseUrl() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ name: pairingName, season: season }),
     }
+    console.log(options.body)
     loadingEl.style.display = 'block'
     const response = await fetch(API_URL + '/getPairsOfficialOne', options)
     const json = await response.json()

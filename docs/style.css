@@ -10,6 +10,7 @@
   --highlight1: #12a5b1;
   --highlight2: #203960;
   --radius: 7px;
+  --font: 'Roboto';
 }
 /* Dark mode */
 [data-theme='dark'] {
@@ -53,7 +54,7 @@ a:hover {
 }
 
 body {
-  font-family: 'Roboto Mono', monospace;
+  font-family: var(--font), sans-serif;
   /* font-family: futura-pt, sans-serif; */
   font-weight: 400;
   -webkit-user-select: none;
@@ -160,8 +161,7 @@ button {
   margin: 5px;
 }
 
-#seasonSelect,
-#teamSelect {
+select {
   border: 0.2rem solid var(--light);
   border-radius: var(--radius);
   height: 33px;
@@ -227,6 +227,9 @@ button {
   transform: rotate(45deg);
 }
 
+.setting {
+}
+
 .tooltip::before,
 .tooltip::after {
   --scale: 0;
@@ -234,18 +237,18 @@ button {
   --tooltip-color: var(--light);
 
   position: absolute;
-  bottom: -0.25rem;
+  top: -0.75rem;
   left: 50%;
   transform: translateX(-50%) translateY(var(--translate-y, 0)) scale(var(--scale));
   transition: 100ms transform;
-  transform-origin: top center;
+  transform-origin: bottom center;
   font-weight: 700;
   z-index: 99999 !important;
   pointer-events: none;
 }
 
 .tooltip::before {
-  --translate-y: calc(100% + var(--arrow-size));
+  --translate-y: calc(-100% + var(--arrow-size));
 
   content: attr(data-tooltip);
   color: var(--highlight);
@@ -268,7 +271,7 @@ button {
 
   content: '';
   border: var(--arrow-size) solid transparent;
-  border-bottom-color: var(--tooltip-color);
+  border-top-color: var(--tooltip-color);
   transform-origin: bottom center;
 }
 
@@ -280,7 +283,6 @@ button {
   /* background-color: var(--med); */
   border: 0.2rem solid var(--med);
 
-  margin: 5px;
   padding: 5px;
   border-radius: var(--radius);
   font-weight: 700;
@@ -292,6 +294,7 @@ button {
   padding: 0px;
 }
 #loadText {
+  margin: 5px;
   width: 200px;
   text-align: center;
   cursor: pointer;
@@ -311,6 +314,7 @@ button {
   z-index: 10;
   display: grid;
   grid-template-areas: 'top top' 'left-load right-load' 'name name' 'left-bottom right-bottom' 'mid-bottom mid-bottom' 'bottom bottom';
+  grid-template-rows: 2.5rem auto 2rem 2.5rem 2.5rem auto;
   gap: 5px;
   background-color: var(--dark);
   box-shadow: #000 3px 3px 10px;
@@ -348,9 +352,9 @@ button {
 }
 #loadDropContainer,
 #localSaved,
-#officialList {
+#officialList,
+#savedNames {
   display: flex;
-  top: -5px;
   position: relative;
   flex-direction: column;
   background-color: var(--medDark);
@@ -523,16 +527,19 @@ button {
 .pairSlot::before {
   position: absolute;
   color: var(--highlight2);
-  padding: 0.5rem;
+  /* padding: 0.5rem; */
   text-align: right;
-  padding: 0.6rem 1rem;
 }
 
 .pairSlot::after {
   position: absolute;
   /* font-weight: 500; */
   text-align: center;
-  padding: 0.6rem 1rem;
+}
+.pairSlot::before,
+.pairSlot::after {
+  font-size: 0.9rem;
+  padding: 0.75rem;
 }
 .pairSlotHolder[boatDisplay='false'] > :nth-child(2)::after {
   content: 'Skipper';
@@ -578,14 +585,15 @@ button {
   /* background-color: var(--med); */
   border: var(--light) 0.2rem solid;
   text-align: center;
-  font-family: futura-pt, sans-serif;
-  font-weight: 700;
+  font-family: inherit;
+  /* font-weight: 700; */
   font-style: normal;
   font-size: 1.2em;
   height: 2rem;
   padding: 5px;
   border-radius: var(--radius);
   overflow-y: hidden;
+  white-space: nowrap;
 }
 /* .name {
   cursor: grab;
@@ -783,7 +791,7 @@ button {
 }
 
 /*For moblie stuffs*/
-@media only screen and (max-width: 1000px) {
+@media only screen and (max-width: 800px) {
   #window {
     /* grid-template-areas: 'header header' 'left left' 'right right' 'footer footer'; */
     /* grid-template-rows: auto auto auto 12%; */
@@ -845,7 +853,6 @@ button {
   .name {
     font-size: 1.15rem !important;
     overflow-x: auto;
-    white-space: nowrap;
     background-color: var(--medDark);
   }
   #right .name {
