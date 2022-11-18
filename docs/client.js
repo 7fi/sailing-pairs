@@ -55,8 +55,26 @@ let absent = []
 let locked = []
 let boatDisplayVal = 'true'
 
+seasonSelect.value = localStorage.getItem('season') ? localStorage.getItem('season') : seasonSelect.value
 let season = seasonSelect.value
+teamSelect.value = localStorage.getItem('team') ? localStorage.getItem('team') : teamSelect.value
 let team = teamSelect.value
+
+seasonSelect.onchange = function () {
+  season = seasonSelect.value
+  makePairs()
+  makeNames()
+  getSaved()
+  localStorage.setItem('season', season)
+}
+
+teamSelect.onchange = function () {
+  team = teamSelect.value
+  makePairs()
+  makeNames()
+  getSaved()
+  localStorage.setItem('team', team)
+}
 
 // let betoQuotes = ['Hi',"I'm bad at sailing!"];
 let betoClicks = 0
@@ -361,17 +379,20 @@ if (thisPage == 'main') {
 }
 
 async function parseUrl() {
-  const urlArgs = window.location.search.split('/', 3)
+  const urlArgs = window.location.search.split('/', 4)
   console.log(urlArgs)
+  if (urlArgs[0] == '?F22') season = 'Fall 2022'
+  if (urlArgs[0] == '?S23') season = 'Spring 2023'
+  console.log(season)
   let pairingName
-  if (urlArgs.length > 2) pairingName = urlArgs[1] + '/' + urlArgs[2]
+  if (urlArgs.length > 3) pairingName = urlArgs[2] + '/' + urlArgs[3]
   else pairingName = urlArgs[1]
   if (pairingName != undefined) pairingName = pairingName.replace('%20', ' ')
-  if (urlArgs[0] == '?p') {
+  if (urlArgs[1] == '?p') {
     options = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name: pairingName }),
+      body: JSON.stringify({ name: pairingName, season: season }),
     }
     loadingEl.style.display = 'block'
     const response = await fetch(API_URL + '/getPairs', options)
@@ -391,11 +412,11 @@ async function parseUrl() {
       alert('No pairs saved under this name.')
       window.location.href = window.location.href.split('/?')[0]
     }
-  } else if (urlArgs[0] == '?o') {
+  } else if (urlArgs[1] == '?o') {
     options = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name: pairingName }),
+      body: JSON.stringify({ name: pairingName, season: season }),
     }
     loadingEl.style.display = 'block'
     const response = await fetch(API_URL + '/getPairsOfficialOne', options)
@@ -750,7 +771,8 @@ async function getSaved() {
       loadName.classList.add('loadName')
       loadName.textContent = json.pairs[i].name
       let tempName = loadName.textContent.replace(' ', '%20')
-      let link = 'https://www.bhspairs.cf/?p/' + tempName
+      let tempSeason = season[0] + season[season.length - 2] + season[season.length - 1]
+      let link = `https://www.bhspairs.cf/?${tempSeason}/?p/${tempName}`
       loadName.addEventListener('click', async () => {
         //on click get pairings from server
         options = {
@@ -842,13 +864,14 @@ async function getSaved() {
       loadName.classList.add('loadName')
       loadName.textContent = sorted[i].name
       let tempName = loadName.textContent.replace(' ', '%20')
-      let link = 'https://www.bhspairs.cf/?o/' + tempName
+      let tempSeason = season[0] + season[season.length - 2] + season[season.length - 1]
+      let link = `https://www.bhspairs.cf/?${tempSeason}/?o/${tempName}`
       loadName.addEventListener('click', async () => {
         //on click get pairings from server
         options = {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name: loadName.textContent }),
+          body: JSON.stringify({ name: loadName.textContent, season: season }),
         }
         loadingEl.style.display = 'block'
         const response = await fetch(API_URL + '/getPairsOfficialOne', options)
