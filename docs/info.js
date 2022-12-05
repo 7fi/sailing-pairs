@@ -100,8 +100,8 @@ const people = {
 
 // Name list
 const names = {
-  'Fall 2022': { Varsity: ['Adam', 'Alexander', 'Andrea', 'Ava', 'Ben', 'Beto', 'Carson', 'Carter', 'Chris', 'Cole', 'Cyrus', 'Elliott', 'Fin', 'Gretchen F', 'Gretchen I', 'Holden', 'Isaia', 'Jaya', 'Jeffrey', 'Joseph', 'Kai', 'Luke', 'Maura', 'Nelson', 'Nick', 'Nolan', 'Owen', 'Payton', 'Ryan', 'Sabrina', 'Sharkey', 'Stella', 'Suraj', 'Talia', 'Zephyr'], 'Jr Varsity': [] },
-  'Spring 2023': { Varsity: ['Adam', 'Alexander', 'Andrea', 'Ava', 'Ben', 'Beto', 'Carson', 'Carter', 'Chris', 'Cole', 'Cyrus', 'Elliott', 'Fin', 'Gretchen F', 'Gretchen I', 'Holden', 'Isaia', 'Jaya', 'Jeffrey', 'Joseph', 'Kai', 'Luke', 'Maura', 'Nelson', 'Nick', 'Nolan', 'Owen', 'Payton', 'Ryan', 'Sabrina', 'Sharkey', 'Stella', 'Suraj', 'Talia', 'Zephyr'], 'Jr Varsity': [] },
+  'Fall 2022': { Varsity: ['Adam', 'Alexander', 'Andrea', 'Ava', 'Ben', 'Beto', 'Carson', 'Carter', 'Chris', 'Cole', 'Cyrus', 'Elliott', 'Fin', 'Gretchen F', 'Gretchen I', 'Holden', 'Isaia', 'Jaya', 'Jeffrey', 'Joseph', 'Kai', 'Luke', 'Maura', 'Nelson', 'Nick', 'Nolan', 'Owen', 'Payton', 'Ryan', 'Sabrina', 'Sharkey', 'Stella', 'Suraj', 'Talia', 'Zephyr'], Development: ['Yuhh', 'Shall we?', 'Yodie Gang', 'Come in', 'Fulcrum', 'Need I say more?', 'Fadedthanaho'] },
+  'Spring 2023': { Varsity: ['Adam', 'Alexander', 'Andrea', 'Ava', 'Ben', 'Beto', 'Carson', 'Carter', 'Chris', 'Cole', 'Cyrus', 'Elliott', 'Fin', 'Gretchen F', 'Gretchen I', 'Holden', 'Isaia', 'Jaya', 'Jeffrey', 'Joseph', 'Kai', 'Luke', 'Maura', 'Nelson', 'Nick', 'Nolan', 'Owen', 'Payton', 'Ryan', 'Sabrina', 'Sharkey', 'Stella', 'Suraj', 'Talia', 'Zephyr'], Development: [] },
 }
 
 const mobileSize = '1000px'
