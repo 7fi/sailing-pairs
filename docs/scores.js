@@ -1,6 +1,7 @@
 const graphMode = document.getElementById('graphMode');
 const datasetsEls = document.getElementById('datasets');
 
+
 var config;
 const ctx = document.getElementById('graph');
 const addDatasetButton = document.getElementById('addDataset');
@@ -9,13 +10,13 @@ let datasets = [];
 let chartType = 'line';
 
 addDataset();
-async function addDataset(){
+async function addDataset() {
     const datasetEl = document.createElement('div');
     datasetEl.classList.add("dataset");
 
     let types = ["raw", "points", "ratio"];
-    let fleets = ["any","g", "s","z"];
-    let divisions = ["any","a", "b"];
+    let fleets = ["any", "g", "s", "z"];
+    let divisions = ["any", "a", "b"];
 
     const typeDropLabel = document.createElement('div');
     typeDropLabel.classList.add("dropLabel");
@@ -27,15 +28,15 @@ async function addDataset(){
     typeDropMenu.classList.add("dropdownMenu");
     typeDrop.appendChild(typeDropMenu);
 
-    
-    for(let i = 0; i < types.length; i++){
+
+    for (let i = 0; i < types.length; i++) {
         const typeDropMember = document.createElement('div');
         typeDropMember.innerHTML = types[i];
         typeDropMember.classList.add("dropMember");
-        typeDropMember.addEventListener('click', async() =>{
+        typeDropMember.addEventListener('click', async () => {
             typeDropLabel.innerHTML = typeDropMember.innerHTML;
-            datasets.splice(datasets.findIndex(element => element.label == nameDropLabel.innerHTML),1);
-            await loadScores(typeDropLabel.innerHTML,nameDropLabel.innerHTML,fleetDropLabel.innerHTML);
+            datasets.splice(datasets.findIndex(element => element.label == nameDropLabel.innerHTML), 1);
+            await loadScores(typeDropLabel.innerHTML, nameDropLabel.innerHTML, fleetDropLabel.innerHTML);
         })
         typeDropMenu.appendChild(typeDropMember);
     }
@@ -49,15 +50,15 @@ async function addDataset(){
     const nameDropMenu = document.createElement('div');
     nameDropMenu.classList.add("dropdownMenu");
     nameDrop.appendChild(nameDropMenu);
-    
-    for(let i = 0; i < people.length; i++){
+
+    for (let i = 0; i < people.length; i++) {
         const loadScoreEl = document.createElement('div');
         loadScoreEl.innerHTML = people[i].name;
         loadScoreEl.classList.add("dropMember");
-        loadScoreEl.addEventListener('click', async() =>{
-            datasets.splice(datasets.findIndex(element => element.label == nameDropLabel.innerHTML),1);
+        loadScoreEl.addEventListener('click', async () => {
+            datasets.splice(datasets.findIndex(element => element.label == nameDropLabel.innerHTML), 1);
             nameDropLabel.innerHTML = loadScoreEl.innerHTML;
-            await loadScores(typeDropLabel.innerHTML,nameDropLabel.innerHTML,fleetDropLabel.innerHTML,divisionDropLabel.innerHTML);
+            await loadScores(typeDropLabel.innerHTML, nameDropLabel.innerHTML, fleetDropLabel.innerHTML, divisionDropLabel.innerHTML);
         })
 
         nameDropMenu.appendChild(loadScoreEl);
@@ -73,14 +74,14 @@ async function addDataset(){
     fleetDropMenu.classList.add("dropdownMenu");
     fleetDrop.appendChild(fleetDropMenu);
 
-    for(let i = 0; i < fleets.length; i++){
+    for (let i = 0; i < fleets.length; i++) {
         const fleetEl = document.createElement('div');
         fleetEl.innerHTML = fleets[i];
         fleetEl.classList.add("dropMember");
-        fleetEl.addEventListener('click', async() =>{
+        fleetEl.addEventListener('click', async () => {
             fleetDropLabel.innerHTML = fleetEl.innerHTML;
-            datasets.splice(datasets.findIndex(element => element.label == nameDropLabel.innerHTML),1);
-            await loadScores(typeDropLabel.innerHTML,nameDropLabel.innerHTML,fleetDropLabel.innerHTML,divisionDropLabel.innerHTML);
+            datasets.splice(datasets.findIndex(element => element.label == nameDropLabel.innerHTML), 1);
+            await loadScores(typeDropLabel.innerHTML, nameDropLabel.innerHTML, fleetDropLabel.innerHTML, divisionDropLabel.innerHTML);
         })
 
         fleetDropMenu.appendChild(fleetEl);
@@ -96,14 +97,14 @@ async function addDataset(){
     divisionDropMenu.classList.add("dropdownMenu");
     divisionDrop.appendChild(divisionDropMenu);
 
-    for(let i = 0; i < divisions.length; i++){
+    for (let i = 0; i < divisions.length; i++) {
         const divisionEl = document.createElement('div');
         divisionEl.innerHTML = divisions[i];
         divisionEl.classList.add("dropMember");
-        divisionEl.addEventListener('click', async() =>{
+        divisionEl.addEventListener('click', async () => {
             divisionDropLabel.innerHTML = divisionEl.innerHTML;
-            datasets.splice(datasets.findIndex(element => element.label == nameDropLabel.innerHTML),1);
-            await loadScores(typeDropLabel.innerHTML,nameDropLabel.innerHTML,fleetDropLabel.innerHTML,divisionDropLabel.innerHTML);
+            datasets.splice(datasets.findIndex(element => element.label == nameDropLabel.innerHTML), 1);
+            await loadScores(typeDropLabel.innerHTML, nameDropLabel.innerHTML, fleetDropLabel.innerHTML, divisionDropLabel.innerHTML);
         })
 
         divisionDropMenu.appendChild(divisionEl);
@@ -115,8 +116,8 @@ async function addDataset(){
     const delDataset = document.createElement('div');
     delDataset.classList.add("delDataset");
     delDataset.innerHTML = "-";
-    delDataset.addEventListener('click',() => {
-        datasets.splice(datasets.findIndex(element => element.label == nameDropLabel.innerHTML),1);
+    delDataset.addEventListener('click', () => {
+        datasets.splice(datasets.findIndex(element => element.label == nameDropLabel.innerHTML), 1);
         datasetEl.remove();
         updateGraph();
     })
@@ -127,35 +128,35 @@ async function addDataset(){
     datasetEl.appendChild(divisionDrop);
     datasetEl.appendChild(flexGap);
     datasetEl.appendChild(delDataset);
-    
+
     datasetsEls.insertBefore(datasetEl, addDatasetButton);
-    
-    let curDrops = [typeDrop,nameDrop,fleetDrop,divisionDrop];
+
+    let curDrops = [typeDrop, nameDrop, fleetDrop, divisionDrop];
     curDrops.forEach(dropdown => {
-        dropdown.addEventListener('click', () =>{
-            document.querySelectorAll(".dropdown").forEach(x => {if(x != dropdown)x.classList.remove("active")});
+        dropdown.addEventListener('click', () => {
+            document.querySelectorAll(".dropdown").forEach(x => { if (x != dropdown) x.classList.remove("active") });
             dropdown.classList.toggle("active");
         });
     })
     loadScores("raw", "Carter");
 
 }
-addDatasetButton.addEventListener('click', ()=>{
+addDatasetButton.addEventListener('click', () => {
     addDataset();
 })
 
 let colors = ['#ff0000', '#00ff00', '#0000ff', "#ffbf00", "#ff7700", "#00fff7", "#008cff", "#9d00ff", "#ff00f7"];
 // let backgroundColors = ["#ff000055", "#00ff0055", "#0000ff55"];
-async function loadScores(type, name, fleet, division, position, pair, regatta){
+async function loadScores(type, name, fleet, division, position, pair, regatta) {
 
-    if(fleet == 'any') {fleet = undefined};
-    if(division == 'any'){division = undefined};
+    if (fleet == 'any') { fleet = undefined };
+    if (division == 'any') { division = undefined };
 
-    loadingEl.style.display ='block';
-    options = {method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({name:name, type:type, fleet:fleet,division:division,position:position,pair:pair,regatta:regatta})};
+    loadingEl.style.display = 'block';
+    options = { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name: name, type: type, fleet: fleet, division: division, position: position, pair: pair, regatta: regatta }) };
     const response = await fetch(API_URL + '/scores', options);
     const json = await response.json();
-    const data = json.body; 
+    const data = json.body;
     console.log(data);
     labels = [];
     for (let i = 1; i < json.labels.length; i++) {
@@ -178,9 +179,9 @@ async function loadScores(type, name, fleet, division, position, pair, regatta){
     });
     console.log(datasets)
     updateGraph();
-    loadingEl.style.display ='none';
+    loadingEl.style.display = 'none';
 }
-function updateGraph(){
+function updateGraph() {
     config = {
         type: chartType,
         data: {
@@ -200,11 +201,11 @@ function updateGraph(){
             },
             animations: {
                 tension: {
-                  duration: 1000,
-                  easing: 'linear',
-                  from: 0.7,
-                  to: 0,
-                  loop: true
+                    duration: 1000,
+                    easing: 'linear',
+                    from: 0.7,
+                    to: 0,
+                    loop: true
                 }
             },
         }
@@ -213,10 +214,10 @@ function updateGraph(){
     chart = new Chart(ctx, config);
 }
 let types = ["bar", "line", "scatter"];
-graphMode.addEventListener('click', () =>{
+graphMode.addEventListener('click', () => {
     type(types[(types.indexOf(config.type) + 1) % 3])
 })
-function type(type){
+function type(type) {
     config.type = type;
     // chartType = type;
     console.log(config.type)
