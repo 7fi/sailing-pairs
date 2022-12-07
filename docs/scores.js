@@ -207,7 +207,6 @@ function updateGraph(){
                   loop: true
                 }
             },
-            
         }
     };
     chart.destroy();

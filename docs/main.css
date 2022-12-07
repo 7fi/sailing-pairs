@@ -113,6 +113,7 @@ button {
   /* bottom:0; */
   grid-area: content;
   position: absolute;
+  top:100px;
 }
 .icon {
   background-color: var(--med);
@@ -630,6 +631,21 @@ button {
   cursor: pointer;
   right: 0;
 }
+ 
+#updateGraph{
+  background-color:red;
+  width:200px;
+  height:50px;
+  cursor:pointer;
+  position:absolute;
+  right: 0px;
+  top: 100px;
+}
+#regattas,#namesBox{
+  width: 600px;
+  height: 50px;
+}
+
 .flexGap {
   flex-grow: 1;
 }
