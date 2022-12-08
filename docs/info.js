@@ -1,6 +1,6 @@
 // const API_URL = 'https://bhspairs.herokuapp.com' // For deployment
-const API_URL = 'https://bhspairs.onrender.com' // For deployment
-// const API_URL = 'http://localhost:3000'; // For development
+// const API_URL = 'https://bhspairs.onrender.com' // For deployment
+const API_URL = 'http://localhost:3000'; // For development
 
 const people = {
   'Fall 2022': {

@@ -4,12 +4,13 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"></script>
-    <link rel="stylesheet" href="../main.css" />
+    <link rel="stylesheet" href="../style.css" />
     <script src="https://kit.fontawesome.com/2e5caad16b.js" crossorigin="anonymous"></script>
-    <script src="info.js" defer></script>
-    <script src="../client.js" defer></script>
-    <script src="../scores2.js" defer></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+    <script src="https://kit.fontawesome.com/2e5caad16b.js" crossorigin="anonymous"></script>
     <title>BHS Sailing Pairings</title>
     <style>
       @media only screen and (max-width: 600px) {
@@ -28,8 +29,8 @@
     </style>
   </head>
   <body>
-    <div id="window" style="grid-template-areas: 'header' 'datasets' 'content'; grid-template-columns: 1fr; grid-template-rows: 80px auto 1fr">
-      <div id="loadingEl"></div>
+    <div id="window" style="grid-template-areas: 'header' 'regattas' 'people' 'graph'; grid-template-columns: 1fr; grid-template-rows: 75px auto auto 1fr">
+      <div id="loadingEl" class="fa-sailboat fa-lg fa-solid"></div>
       <div id="header">
         <a id="title" href="/">Scores</a>
         <div id="placeholder"></div>
@@ -43,17 +44,102 @@
           INFO HERE<br /><br />
           Todo:
           <ul>
-            <li>Make randomization based on boat count</li>
-            <li>Make randomization based on previous partners</li>
-            <li>Feature to check all previous parings of a specific person</li>
           </ul>
         </div>
       </div>
-      <input type="text" name="regattas" id="regattas">
-      <input type="text" name="namesBox" id="namesBox">
-      <button id="updateGraph"></button>
+      <div id="settingsWindow">
+        <div id="settings">
+          <!-- <h1>Settings:</h1> -->
+          <div class="buttonsHolder">
+            <button class="icon tooltip" id="modeToggle" data-tooltip="Toggle dark/light mode" type="button">
+              <i class="fa-solid fa-moon fa-lg"></i>
+            </button>
+            <button class="icon tooltip" id="boatDisplay" data-tooltip="Toggle boat type display" type="button">
+              <i class="fa-solid fa-tag fa-lg"></i>
+            </button>
+          </div>
+          <h3>Randomization:</h3>
+          <label class="container">
+            <input type="checkbox" id="posRnd" onchange="byPos = this.checked" checked />
+            <span class="checkmark"></span>
+            Randomize based on skipper / crew position
+          </label>
+          <label class="container">
+            <input type="checkbox" id="boatCountRnd" onchange="byBoatCount = this.checked" />
+            <span class="checkmark"></span>
+            Randomize based on boat count
+          </label>
+          <label class="container">
+            <input type="checkbox" id="prevPartRnd" onchange="byPrevParts = this.checked" checked />
+            <span class="checkmark"></span>
+            Randomize based on previous partners
+          </label>
+          <h3>Visuals:</h3>
+          <label>
+            Font:
+            <select id="fontSelect" onchange="document.documentElement.style.setProperty('--font', this.value); localStorage.setItem('font', this.value)">
+              <option>Roboto</option>
+              <option>Roboto Mono</option>
+              <option>futura-pt</option>
+            </select>
+          </label>
+        </div>
+      </div>
+      <div id="regattas">
+        <div class="dataset">
+          <select class="selectBox" name="Type" id="dataType">
+            <option value="Raw">Raw score (# of boats lost to)</option>
+            <option value="Points">Points (# of boats beat)</option>
+            <option value="Ratio">Ratio (% of fleet beat)</option>
+          </select>
+        </div>
+        <!-- <div class="dataset">
+          <select class="selectBox" name="Season" id="Season">
+            <option value="F22">F22</option>
+            <option value="S22">S22</option>
+          </select>
+          <select class="selectBox" name="Team" id="Team">
+            <option value="Select Team">-select team-</option>
+          </select>
+          <select class="selectBox" name="Regatta" id="Regatta">
+            <option value="Select Regatta">-select regatta-</option>
+          </select>
+          <div class="flexGap"></div>
+          <button class="delDataset">-</button>
+        </div> -->
+        <div id="addRegatta" title="Add regatta">+</div>
+      </div>
+      <div id="ppl">
+        <!-- <div class="dataset">
+          <select name="nameSelect" class="nameSelect">
+            <option value="name">-select name-</option>
+          </select>
+          <input type="color" name="personColor" class="colSelect">
+          <select name="divSelect" id="divSelect">
+            <option value="any">Any</option>
+            <option value="A">A</option>
+            <option value="B">B</option>
+          </select>
+          <select name="posSelect" id="posSelect">
+            <option value="any">Any</option>
+            <option value="skipper">Skipper</option>
+            <option value="crew">Crew</option>
+          </select>
+          <div class="flexGap"></div>
+          <button class="delDataset">-</button>
+        </div> -->
+        <div id="addPerson" title="Add Person">+</div>
+      </div>
 
-      <canvas id="graph"> </canvas>
+
+      <!-- <input type="text" name="regattas" id="regattas">
+      <input type="text" name="namesBox" id="namesBox">
+      <button id="updateGraph"></button> -->
+
+      <!-- <canvas id="graph"> </canvas> -->
+      <script src="../info.js"></script>
+      <script src="../client.js"></script>
+      <script src="../scores2.js"></script>
     </div>
   </body>
 </html>

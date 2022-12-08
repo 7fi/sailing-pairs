@@ -232,14 +232,27 @@ app.post('/scores', async (req, res) => {
 */
 
 app.post('/scores', async (req, res) => {
-    console.log(req.body.regattas)
+    // console.log(req.body.regattas)
     // console.log(await fetchRegattas(JSON.parse(req.body.regattas)))
-    let ppl = await fetchRegattas(JSON.parse(req.body.regattas))
+    let ppl = await getRegattaData(req.body.regattas)
     // console.log(ppl)
     res.json({
         status: 'Yuhhh',
         people: ppl,
     })
+})
+
+app.post('/teams',async (req, res) => {
+    res.json({teams: await getSchools(req.body.district)})
+})
+app.post('/regattas',async (req, res) => {
+    let regattasList = await getRegattas(req.body.link, req.body.season)
+    if(Object.keys(regattasList).length === 0){
+        res.status(404)
+    }else{
+        res.status(200)
+    }
+    res.json({regattas: regattasList})
 })
 
 class person {
@@ -300,15 +313,15 @@ function addPerson(people, name, pos, division, home, raceNums, scores, teams, v
     return people
 }
 
-async function fetchRegattas(regattas) {
+async function getRegattaData(regattas) {
     let people = []
 
     for (r = 0; r < Object.values(regattas).length; r++) {
         let regatta = Object.values(regattas)[r]
 
         try {
-            const response = await axios.get(`https://scores.hssailing.org/${regatta}/full-scores/`)
-            const response2 = await axios.get(`https://scores.hssailing.org/${regatta}/sailors/`)
+            const response = await axios.get(`https://scores.hssailing.org${regatta}full-scores/`)
+            const response2 = await axios.get(`https://scores.hssailing.org${regatta}sailors/`)
             const fullScores = cheerio.load(response.data)
             const scoreData = fullScores('table.results tbody')
             const sailors = cheerio.load(response2.data)
@@ -400,4 +413,49 @@ async function fetchRegattas(regattas) {
     return people
     // console.log(people)
     // console.log(getData("Raw", "Carter Anderson",undefined,undefined,undefined,undefined, "oak gold"))
+}
+
+async function getSchools(district){
+    let schools = {}
+    try{
+        const response = await axios.get(`https://scores.hssailing.org/schools/`)
+        const $ = cheerio.load(response.data)
+        // console.log(response.status)
+
+        $(`#${district} tbody`).children().each(async function(i){
+            schools[$(this).find('a').text()] = $(this).find('a').attr('href')
+            // try{
+            //     let href = $(this).find('a').attr('href')
+            //     // console.log(href)
+            //     const response2 = await axios.get(`https://scores.hssailing.org${href}`)
+            //     console.log(response2.status, href)
+            //     schools[$(this).find('a').text()] = href
+            // }catch(error){
+            // }
+        })
+    }catch(error){
+        // console.error(error)
+    }
+    return schools
+}
+
+async function getRegattas(schoolLink, season){
+    let regattas = {}
+    if(schoolLink != ""){
+        try{
+            const response = await axios.get(`https://scores.hssailing.org${schoolLink}${season}`)
+            const $ = cheerio.load(response.data)
+            // console.log(response.status)
+
+            $(`table.participation-table tbody`).children().each(function(i){
+                // console.log($(this).text().includes("2 Divisions") || $(this).text().includes("Combined"))
+                if($(this).text().includes("2 Divisions") || $(this).text().includes("Combined")){
+                    regattas[$(this).find('a span').text()] = $(this).find('a').attr('href')
+                }
+            })
+        }catch(error){
+            // console.error(error)
+        }
+    }
+    return regattas
 }

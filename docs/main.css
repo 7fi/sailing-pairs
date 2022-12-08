@@ -111,9 +111,9 @@ button {
   /* width: 100%; */
   /* height: 500px; */
   /* bottom:0; */
-  grid-area: content;
-  position: absolute;
-  top:100px;
+  grid-area: graph;
+  /* position: absolute; */
+  /* top:100px; */
 }
 .icon {
   background-color: var(--med);
@@ -619,7 +619,7 @@ button {
   bottom: 0;
   position: absolute;
 }
-#addDataset {
+#addRegatta, #addPerson{
   background-color: var(--med);
   width: 30px;
   height: 30px;
@@ -641,10 +641,10 @@ button {
   right: 0px;
   top: 100px;
 }
-#regattas,#namesBox{
+/* #regattas,#namesBox{
   width: 600px;
   height: 50px;
-}
+} */
 
 .flexGap {
   flex-grow: 1;
@@ -660,12 +660,15 @@ button {
   font-size: 1.5em;
   cursor: pointer;
 }
-#addDataset:hover {
+#addRegatta:hover, #addPerson:hover {
   background-color: var(--light);
 }
-#datasets {
-  grid-area: datasets;
+#regattas {
+  grid-area: regattas;
   z-index: 9;
+}
+#ppl{
+  grid-area: people;
 }
 .dataset {
   width: calc(100%-20px);

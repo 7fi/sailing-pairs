@@ -164,11 +164,13 @@ button {
 select {
   border: 0.2rem solid var(--light);
   border-radius: var(--radius);
-  height: 33px;
-  margin: 22px 0px 0px 10px;
   background-color: transparent;
   font-family: inherit;
   font-weight: 500;
+}
+#header select{
+  margin: 22px 0px 0px 10px;
+  height: 33px;
 }
 
 .container {
@@ -687,7 +689,7 @@ select {
   bottom: 0;
   position: absolute;
 }
-#addDataset {
+#addRegatta, #addPerson{
   background-color: var(--med);
   width: 30px;
   height: 30px;
@@ -713,7 +715,7 @@ select {
   font-size: 1.5em;
   cursor: pointer;
 }
-#addDataset:hover {
+#addRegatta:hover, #addPerson:hover {
   background-color: var(--light);
 }
 #datasets {
@@ -727,7 +729,7 @@ select {
   /* grid-auto-flow: column; */
   /* grid-template-columns: repeat(4, 1fr); */
   flex-direction: row;
-  background-color: var(--light);
+  background-color: var(--dark);
   border-radius: var(--radius);
   /* position:relative; */
   height: 60px;
