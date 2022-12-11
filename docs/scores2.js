@@ -27,7 +27,9 @@ const addPersonButton = document.getElementById('addPerson')
 // let regattas = {"oak gold": "s22/island-cup"}
 let regattas = {}
 let inputNames = {}
+let teams = []
 let sailors = []
+let curSailors = []
 // let inputNames = { 'Elliott Chalcraft': '#e0570d', 'Carter Anderson': '#3684a3', 'Ryan Downey': '#2de00d', 'Sabrina Anderson': '#d20de0', 'Barrett Lhamon': '#f00' }
 let Type = 'Raw'
 
@@ -35,7 +37,9 @@ setup()
 async function setup() {
     await addRegatta()
     readData()
+    await loadData()
     await addPerson()
+    readData()
 }
 
 function getData(type, name, fleet = undefined, division = undefined, position = undefined, pair = undefined, regatta = undefined) {
@@ -99,6 +103,9 @@ async function loadData() {
     const response = await fetch(API_URL + '/scores', options)
     const json = await response.json()
     regattaData = json
+    curSailors = json.people
+    curSailors.filter((person) => teams.includes(person.home))
+    // curSailors = curSailors.map((person) => person.name)
     sailors = json.people.map((person) => person.name)
     // console.log(sailors)
     console.log(json)
@@ -198,6 +205,8 @@ function readData() {
         //regattaSelect.options[regattaSelect.selectedIndex].text
         console.log(el.children[2].options[el.children[2].selectedIndex].text)
         regattas[el.children[2].options[el.children[2].selectedIndex].text] = el.children[2].value
+
+        if (!teams.includes(el.children[1].options[el.children[1].selectedIndex].text)) teams.push(el.children[1].options[el.children[1].selectedIndex].text)
     }
 
     for (let i = 0; i < peopleEls.children.length - 1; i++) {
@@ -205,7 +214,7 @@ function readData() {
         inputNames[el.children[0].options[el.children[0].selectedIndex].text] = el.children[1].value
     }
 
-    console.log(regattas, inputNames)
+    console.log('ReadData:', regattas, teams, inputNames)
 }
 
 let types = ['bar', 'line', 'scatter']
@@ -219,6 +228,8 @@ function type(type) {
     chart.destroy()
     chart = new Chart(ctx, config)
 }
+
+function updateNames() {}
 
 async function updateRegattas(teamSelect, regattaSelect, season) {
     loadingEl.style.display = 'block'
@@ -327,9 +338,9 @@ async function addRegatta() {
     }
     // }
     // regattas[regattaSelect.options[regattaSelect.selectedIndex].text] = regattaSelect.value
-    await loadData()
+    // await loadData()
 
-    readData()
+    // readData()
 
     const flexGap = document.createElement('div')
     flexGap.classList.add('flexGap')
@@ -362,8 +373,8 @@ async function addPerson() {
     const nameSelect = document.createElement('select')
     nameSelect.classList.add('selectBox')
 
-    console.log('sailors', sailors)
-    sailors.forEach((sailor) => {
+    console.log('sailors', curSailors)
+    curSailors.forEach((sailor) => {
         const nameOpt = document.createElement('option')
         nameOpt.value, (nameOpt.innerText = sailor)
         nameSelect.append(nameOpt)

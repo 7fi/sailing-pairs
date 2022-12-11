@@ -242,23 +242,24 @@ app.post('/scores', async (req, res) => {
     })
 })
 
-app.post('/teams',async (req, res) => {
-    res.json({teams: await getSchools(req.body.district)})
+app.post('/teams', async (req, res) => {
+    res.json({ teams: await getSchools(req.body.district) })
 })
-app.post('/regattas',async (req, res) => {
+app.post('/regattas', async (req, res) => {
     let regattasList = await getRegattas(req.body.link, req.body.season)
-    if(Object.keys(regattasList).length === 0){
+    if (Object.keys(regattasList).length === 0) {
         res.status(404)
-    }else{
+    } else {
         res.status(200)
     }
-    res.json({regattas: regattasList})
+    res.json({ regattas: regattasList })
 })
 
 class person {
-    constructor(name, team, races) {
+    constructor(name, team, home, races) {
         this.name = name
         this.team = team
+        this.home = home
         this.races = races
     }
 }
@@ -272,14 +273,14 @@ class race {
         this.venue = venue
     }
 }
-function addPerson(people, name, pos, division, home, raceNums, scores, teams, venue) {
+function addPerson(people, name, pos, division, home, teamName, raceNums, scores, teams, venue) {
     // console.log(name, scores)
     let scoreLen = Array.from(scores).length
     // console.log("Scorelen", scoreLen)
     let newNums = []
     let names = people.map((person) => person.name)
     if (!names.includes(name)) {
-        people.push(new person(name, home, []))
+        people.push(new person(name, home, teamName, []))
     }
     // console.log([''] == [''])
     // console.log(raceNums[0].includes(''))
@@ -363,10 +364,15 @@ async function getRegattaData(regattas) {
                 // console.log(teamScores)
 
                 let teamNameEl
+                let schoolName
                 sailors(`table.sailors tbody .teamname`).each(function (i) {
-                    if (sailors(this).text() == teamName) teamNameEl = sailors(this)
+                    if (sailors(this).text() == teamName) {
+                        teamNameEl = sailors(this)
+                        schoolName = sailors(this).prev().text()
+                    }
                 })
                 // console.log(teamNameEl.text())
+                // console.log(schoolName)
 
                 let index = 0
                 let row = teamNameEl.parent()
@@ -388,7 +394,7 @@ async function getRegattaData(regattas) {
                         let raceNums = skipper.next().text().split(',')
                         raceNums = raceNums.map((num) => num.split('-'))
                         // console.log(raceNums)
-                        people = addPerson(people, skipperName.split(" '")[0], 'Skipper', division, teamHome, raceNums, teamScores[division], teamHomes, betterVenue)
+                        people = addPerson(people, skipperName.split(" '")[0], 'Skipper', division, teamHome, schoolName, raceNums, teamScores[division], teamHomes, betterVenue)
                     }
 
                     // Get Skipper
@@ -397,7 +403,7 @@ async function getRegattaData(regattas) {
                     if (crewName != '') {
                         let raceNums = crew.next().text().split(',')
                         raceNums = raceNums.map((num) => num.split('-'))
-                        people = addPerson(people, crewName.split(" '")[0], 'Crew', division, teamHome, raceNums, teamScores[division], teamHomes, betterVenue)
+                        people = addPerson(people, crewName.split(" '")[0], 'Crew', division, teamHome, schoolName, raceNums, teamScores[division], teamHomes, betterVenue)
                         // console.log(raceNums)
                     }
 
@@ -415,45 +421,49 @@ async function getRegattaData(regattas) {
     // console.log(getData("Raw", "Carter Anderson",undefined,undefined,undefined,undefined, "oak gold"))
 }
 
-async function getSchools(district){
+async function getSchools(district) {
     let schools = {}
-    try{
+    try {
         const response = await axios.get(`https://scores.hssailing.org/schools/`)
         const $ = cheerio.load(response.data)
         // console.log(response.status)
 
-        $(`#${district} tbody`).children().each(async function(i){
-            schools[$(this).find('a').text()] = $(this).find('a').attr('href')
-            // try{
-            //     let href = $(this).find('a').attr('href')
-            //     // console.log(href)
-            //     const response2 = await axios.get(`https://scores.hssailing.org${href}`)
-            //     console.log(response2.status, href)
-            //     schools[$(this).find('a').text()] = href
-            // }catch(error){
-            // }
-        })
-    }catch(error){
+        $(`#${district} tbody`)
+            .children()
+            .each(async function (i) {
+                schools[$(this).find('a').text()] = $(this).find('a').attr('href')
+                // try{
+                //     let href = $(this).find('a').attr('href')
+                //     // console.log(href)
+                //     const response2 = await axios.get(`https://scores.hssailing.org${href}`)
+                //     console.log(response2.status, href)
+                //     schools[$(this).find('a').text()] = href
+                // }catch(error){
+                // }
+            })
+    } catch (error) {
         // console.error(error)
     }
     return schools
 }
 
-async function getRegattas(schoolLink, season){
+async function getRegattas(schoolLink, season) {
     let regattas = {}
-    if(schoolLink != ""){
-        try{
+    if (schoolLink != '') {
+        try {
             const response = await axios.get(`https://scores.hssailing.org${schoolLink}${season}`)
             const $ = cheerio.load(response.data)
             // console.log(response.status)
 
-            $(`table.participation-table tbody`).children().each(function(i){
-                // console.log($(this).text().includes("2 Divisions") || $(this).text().includes("Combined"))
-                if($(this).text().includes("2 Divisions") || $(this).text().includes("Combined")){
-                    regattas[$(this).find('a span').text()] = $(this).find('a').attr('href')
-                }
-            })
-        }catch(error){
+            $(`table.participation-table tbody`)
+                .children()
+                .each(function (i) {
+                    // console.log($(this).text().includes("2 Divisions") || $(this).text().includes("Combined"))
+                    if ($(this).text().includes('2 Divisions') || $(this).text().includes('Combined')) {
+                        regattas[$(this).find('a span').text()] = $(this).find('a').attr('href')
+                    }
+                })
+        } catch (error) {
             // console.error(error)
         }
     }
