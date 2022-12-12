@@ -460,7 +460,7 @@ async function getRegattas(schoolLink, season) {
                 .each(function (i) {
                     // console.log($(this).text().includes("2 Divisions") || $(this).text().includes("Combined"))
                     if ($(this).text().includes('2 Divisions') || $(this).text().includes('Combined')) {
-                        regattas[$(this).find('a span').text()] = $(this).find('a').attr('href')
+                        regattas[$(this).find('a span').text()] = { link: $(this).find('a').attr('href'), date: $(this).find('time').attr('datetime').split('T')[0] }
                     }
                 })
         } catch (error) {
