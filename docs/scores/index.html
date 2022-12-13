@@ -11,7 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
     <script src="https://kit.fontawesome.com/2e5caad16b.js" crossorigin="anonymous"></script>
-    <script src="/node_modules/chart.js/dist/chart.umd.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <title>BHS Sailing Pairings</title>
     <style>
       @media only screen and (max-width: 600px) {
@@ -89,9 +89,9 @@
       <div id="regattas">
         <div class="dataset">
           <select class="selectBox" name="Type" id="dataType">
-            <option value="Raw">Raw score (# of boats lost to)</option>
-            <option value="Points">Points (# of boats beat)</option>
-            <option value="Ratio">Ratio (% of fleet beat)</option>
+            <option value="Raw">Raw score</option>
+            <option value="Points">Points</option>
+            <option value="Ratio">Percentage</option>
           </select>
           <select name="divSelect" id="divSelect">
             <option value="any">Any</option>

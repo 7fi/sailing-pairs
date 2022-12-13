@@ -1,6 +1,7 @@
 const graphMode = document.getElementById('graphMode')
 const regattaEls = document.getElementById('regattas')
 const peopleEls = document.getElementById('ppl')
+const dataType = document.getElementById('dataType')
 
 // const updateGraphBtn = document.getElementById('updateGraph')
 // const regattasBox = document.getElementById('regattas')
@@ -32,7 +33,13 @@ let teams = []
 let sailors = []
 let curSailors = []
 // let inputNames = { 'Elliott Chalcraft': '#e0570d', 'Carter Anderson': '#3684a3', 'Ryan Downey': '#2de00d', 'Sabrina Anderson': '#d20de0', 'Barrett Lhamon': '#f00' }
-let Type = 'Ratio'
+let Type = 'Raw'
+
+const titles = {
+    Raw: 'Raw score (Lower is better)',
+    Points: 'Number of boats beat (Higher is better)',
+    Ratio: 'Percentage of fleet beat (Higher is better)',
+}
 
 setup()
 async function setup() {
@@ -66,9 +73,9 @@ function getData(type, name, fleet = undefined, division = undefined, position =
                     }
                     if (type == 'Ratio') {
                         if (!isNaN(r.score)) {
-                            data[`${regatta} ${r.division}${r.number}`] = 1 - r.score / r.teams.length
+                            data[`${regatta} ${r.division}${r.number}`] = (1 - r.score / r.teams.length) * 100
                         } else {
-                            data[`${regatta} ${r.division}${r.number}`] = r.teams.length + 1
+                            data[`${regatta} ${r.division}${r.number}`] = 0
                         }
                     }
                 }
@@ -153,14 +160,28 @@ async function updateGraph() {
             names.forEach((p) => {
                 console.log(p, data[p])
                 if (Object.keys(data[p]).length > 0) {
-                    datasets.push({
-                        label: p,
-                        data: data[p],
-                        backgroundColor: inputNames[p] + '55',
-                        borderColor: inputNames[p],
-                        borderWidth: 2,
-                        fill: false,
+                    let found = false
+                    datasets.forEach((dataset) => {
+                        if (dataset.label == p) {
+                            dataset.data = {
+                                ...dataset.data,
+                                ...data[p],
+                            }
+                            found = true
+                        }
                     })
+                    if (!found) {
+                        datasets.push({
+                            label: p,
+                            data: data[p],
+                            backgroundColor: inputNames[p],
+                            borderColor: inputNames[p] + '55',
+                            borderWidth: 5,
+                            pointRadius: 5,
+                            fill: false,
+                            pointHitRadius: 30,
+                        })
+                    }
                 }
             })
             console.log(`Input names: ${names}`)
@@ -188,7 +209,7 @@ async function updateGraph() {
                 },
                 title: {
                     display: true,
-                    text: 'Data:',
+                    text: titles[Type],
                 },
             },
             scales: {
@@ -200,6 +221,16 @@ async function updateGraph() {
                 },
             },
         },
+    }
+
+    if (Type == 'Ratio') {
+        config.options.scales.y = {
+            max: 100,
+            min: 0,
+            ticks: {
+                stepSize: 5,
+            },
+        }
     }
     /*scales: {
                 x: {
@@ -220,7 +251,11 @@ async function updateGraph() {
                     loop: true,
                 },
             }, */
-    console.log('config', config)
+    // console.log('config', config)
+    config.type = 'line'
+    chart.destroy()
+    chart = new Chart(ctx, config)
+    config.type = 'scatter'
     chart.destroy()
     chart = new Chart(ctx, config)
 
@@ -263,6 +298,11 @@ let types = ['bar', 'line', 'scatter']
 graphMode.addEventListener('click', () => {
     type(types[(types.indexOf(config.type) + 1) % 3])
 })
+dataType.addEventListener('change', () => {
+    Type = dataType.value
+    updateGraph()
+})
+
 function type(type) {
     config.type = type
     // chartType = type;
@@ -287,11 +327,12 @@ function updateNames() {
             el.children[0].append(nameOpt)
         })
 
-        if (curSailors.indexOf(prevSelected) != undefined) {
+        console.log(curSailors.indexOf(prevSelected), el.children[0].options)
+        if (curSailors.indexOf(prevSelected) != -1) {
             el.children[0].selectedIndex = curSailors.indexOf(prevSelected)
         } else {
-            el.children[0].selectedIndex = 0
-            // el.children[0].value = el.children[0].options[el.children[0].selectedIndex].text
+            // console.log('FIRST CHILD:', el.children[0].options[0].text)
+            el.children[0].options[0].selected = true
         }
 
         // console.log(`Names updated ${prevSelected} ${el.children[0].selectedIndex}`)
