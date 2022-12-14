@@ -74,7 +74,7 @@ function getData(type, name, fleet = undefined, division = undefined, position =
                     }
                     if (type == 'Ratio') {
                         if (!isNaN(r.score)) {
-                            data[`${regatta} ${r.division}${r.number}`] = (1 - r.score / r.teams.length) * 100
+                            data[`${regatta} ${r.division}${r.number}`] = (1 - (r.score - 1) / r.teams.length) * 100
                         } else {
                             data[`${regatta} ${r.division}${r.number}`] = 0
                         }
@@ -321,7 +321,8 @@ function readData() {
     })
     regattas = Object.keys(regattas)
         .sort(function (a, b) {
-            return new Date(regattasList[a].date) - new Date(regattasList[b].date)
+            if (regattasList[a] != undefined && regattasList[b] != undefined) return new Date(regattasList[a].date) - new Date(regattasList[b].date)
+            return 0
         })
         .reduce((obj, key) => {
             obj[key] = regattas[key]
