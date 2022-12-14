@@ -1,0 +1,52 @@
+.delDataset {
+    border: 0.2em solid var(--med);
+    padding: 0;
+    margin: 5px;
+    border-radius: var(--radius);
+    aspect-ratio: 1/1;
+    font-size: 0.95em;
+}
+#addRegatta:hover, #addPerson:hover, .delDataset:hover {
+    background-color: var(--med);
+}
+#datasets {
+    grid-area: datasets;
+    z-index: 9;
+}
+.dataset {
+    width: calc(100%-20px);
+    margin: 10px;
+    display: flex;
+    /* grid-auto-flow: column; */
+    /* grid-template-columns: repeat(4, 1fr); */
+    flex-direction: row;
+    /* background-color: var(--dark); */
+    border: 0.2rem solid var(--dark);
+    border-radius: var(--radius);
+    /* position:relative; */
+    height: 35px;
+    /* padding: 5px; */
+}
+.dataset select{
+    margin:5px;
+}
+input[type='color']{
+    border: 0.2rem solid var(--med);
+    background:none;
+    border-radius: var(--radius);
+    margin: 5px;
+}
+#addRegatta, #addPerson{
+    border: 0.2em solid var(--med);
+    width: 1.3rem;
+    height: 1.3rem;
+    text-align: center;
+    font-size: 1.3em;
+    border-radius: var(--radius);
+    margin: 10px;
+    cursor: pointer;
+    right: 0;
+}
+#globalParams{
+    background-color: var(--dark);
+}

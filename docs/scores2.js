@@ -34,6 +34,7 @@ let sailors = []
 let curSailors = []
 // let inputNames = { 'Elliott Chalcraft': '#e0570d', 'Carter Anderson': '#3684a3', 'Ryan Downey': '#2de00d', 'Sabrina Anderson': '#d20de0', 'Barrett Lhamon': '#f00' }
 let Type = 'Raw'
+let verticalLabels = true
 
 const titles = {
     Raw: 'Raw score (Lower is better)',
@@ -85,16 +86,43 @@ function getData(type, name, fleet = undefined, division = undefined, position =
     return data
 }
 function compareRace(first, second) {
+    let longF = false
+    let longS = false
+    let firstDiv = first[first.length - 2]
+    if (firstDiv != 'A' && firstDiv != 'B') {
+        firstDiv = first[first.length - 3]
+        longF = true
+    }
+    let secondDiv = second[second.length - 2]
+    if (secondDiv != 'A' && secondDiv != 'B') {
+        secondDiv = second[second.length - 3]
+        longS = true
+    }
+    //Compare race numbers
+
+    if (longF && !longS) return 1
+    else if (!longF && longS) return -1
+
+    if (longF && longS) {
+        if (first[first.length - 2] > second[second.length - 2]) {
+            return 1
+        }
+        if (first[first.length - 2] < second[second.length - 2]) {
+            return -1
+        }
+    }
     if (first[first.length - 1] > second[second.length - 1]) {
         return 1
     }
     if (first[first.length - 1] < second[second.length - 1]) {
         return -1
     }
-    if (first[first.length - 2] > second[second.length - 2]) {
+
+    //Compare divisions
+    if (firstDiv > secondDiv) {
         return 1
     }
-    if (first[first.length - 2] < second[second.length - 2]) {
+    if (firstDiv < secondDiv) {
         return -1
     }
     return 0
@@ -103,7 +131,7 @@ async function loadData() {
     loadingEl.style.display = 'block'
     // console.log(regattasBox.value)
     readData()
-    //   console.log(regattas)
+    console.log(regattas)
     options = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -179,7 +207,7 @@ async function updateGraph() {
                             borderWidth: 5,
                             pointRadius: 5,
                             fill: false,
-                            pointHitRadius: 30,
+                            pointHitRadius: 10,
                         })
                     }
                 }
@@ -215,8 +243,7 @@ async function updateGraph() {
             scales: {
                 x: {
                     ticks: {
-                        maxRotation: 90,
-                        minRotation: 90,
+                        autoSkip: false,
                     },
                 },
             },
@@ -229,6 +256,15 @@ async function updateGraph() {
             min: 0,
             ticks: {
                 stepSize: 5,
+            },
+        }
+    }
+    if (verticalLabels) {
+        config.options.scales.x = {
+            ticks: {
+                maxRotation: 90,
+                minRotation: 90,
+                autoSkip: false,
             },
         }
     }
@@ -269,14 +305,20 @@ function readData() {
 
     //   console.log('reading data', regattaEls.children.length, peopleEls.children.length)
 
-    for (let i = 1; i < regattaEls.children.length - 1; i++) {
-        let el = regattaEls.children[i]
+    Array.from(regattaEls.children).forEach((el) => {
         //regattaSelect.options[regattaSelect.selectedIndex].text
         // console.log(el.children[2].options[el.children[2].selectedIndex].text)
-        regattas[el.children[2].options[el.children[2].selectedIndex].text] = el.children[2].value
+        if (el.children[2].value == 'All') {
+            Array.from(el.children[2].options).forEach((option) => {
+                if (option.text != 'All') regattas[option.text] = option.value
+            })
+            // regattas = { ...el.children[2].value }
+        } else {
+            regattas[el.children[2].options[el.children[2].selectedIndex].text] = el.children[2].value
+        }
 
         if (!teams.includes(el.children[1].options[el.children[1].selectedIndex].text)) teams.push(el.children[1].options[el.children[1].selectedIndex].text)
-    }
+    })
     regattas = Object.keys(regattas)
         .sort(function (a, b) {
             return new Date(regattasList[a].date) - new Date(regattasList[b].date)
@@ -286,10 +328,9 @@ function readData() {
             return obj
         }, {})
 
-    for (let i = 0; i < peopleEls.children.length - 1; i++) {
-        let el = peopleEls.children[i]
+    Array.from(peopleEls.children).forEach((el) => {
         inputNames[el.children[0].options[el.children[0].selectedIndex].text] = el.children[1].value
-    }
+    })
 
     console.log('ReadData:', regattas, teams, inputNames)
 }
@@ -312,9 +353,7 @@ function type(type) {
 }
 
 function updateNames() {
-    for (let i = 0; i < peopleEls.children.length - 1; i++) {
-        let el = peopleEls.children[i]
-
+    Array.from(peopleEls.children).forEach((el) => {
         let prevSelected = el.children[0].options[el.children[0].selectedIndex].text
 
         while (el.children[0].firstChild) {
@@ -326,6 +365,10 @@ function updateNames() {
             nameOpt.value, (nameOpt.innerText = sailor)
             el.children[0].append(nameOpt)
         })
+        const allOpt = document.createElement('option')
+        allOpt.value = 'All'
+        allOpt.text = 'All'
+        el.children[0].append(allOpt)
 
         console.log(curSailors.indexOf(prevSelected), el.children[0].options)
         if (curSailors.indexOf(prevSelected) != -1) {
@@ -334,9 +377,7 @@ function updateNames() {
             // console.log('FIRST CHILD:', el.children[0].options[0].text)
             el.children[0].options[0].selected = true
         }
-
-        // console.log(`Names updated ${prevSelected} ${el.children[0].selectedIndex}`)
-    }
+    })
 }
 
 async function updateRegattas(teamSelect, regattaSelect, season) {
@@ -373,6 +414,11 @@ async function updateRegattas(teamSelect, regattaSelect, season) {
             regattaOpt.text = regatta
             regattaSelect.append(regattaOpt)
         })
+        const allOpt = document.createElement('option')
+        allOpt.value = 'All'
+        allOpt.text = 'All'
+        regattaSelect.append(allOpt)
+
         console.log('Regattas Filled in')
     } else {
         alert('Team not found')
@@ -442,12 +488,15 @@ async function addRegatta() {
         }
     })
     // while (Object.keys(regattas).length === 0) {
-    for (let i = 1; i < regattaEls.children.length - 1; i++) {
-        let el = regattaEls.children[i]
-        //regattaSelect.options[regattaSelect.selectedIndex].text
-        console.log(el.children[2].options[el.children[2].selectedIndex].text)
+    Array.from(regattaEls.children).forEach((el) => {
         regattas[el.children[2].options[el.children[2].selectedIndex].text] = el.children[2].value
-    }
+    })
+    // for (let i = 0; i < regattaEls.children.length - 1; i++) {
+    //     let el = regattaEls.children[i]
+    //     //regattaSelect.options[regattaSelect.selectedIndex].text
+    //     console.log(el.children[2].options[el.children[2].selectedIndex].text)
+    //     regattas[el.children[2].options[el.children[2].selectedIndex].text] = el.children[2].value
+    // }
     // }
     // regattas[regattaSelect.options[regattaSelect.selectedIndex].text] = regattaSelect.value
     // await loadData()
@@ -457,13 +506,13 @@ async function addRegatta() {
     const flexGap = document.createElement('div')
     flexGap.classList.add('flexGap')
 
-    const delDataset = document.createElement('div')
-    delDataset.classList.add('delDataset')
-    delDataset.innerHTML = '-'
+    const delDataset = document.createElement('button')
+    delDataset.classList.add('delDataset', 'fa-lg', 'fa-solid', 'fa-trash')
+    // delDataset.innerHTML = '-'
     delDataset.addEventListener('click', () => {
-        delete regattas[regattaSelect.options[regattaSelect.selectedIndex].text]
+        // delete regattas[regattaSelect.options[regattaSelect.selectedIndex].text]
         regatta.remove()
-        // updateGraph()
+        updateGraph()
     })
 
     regatta.append(seasonSelect)
@@ -471,7 +520,7 @@ async function addRegatta() {
     regatta.append(regattaSelect)
     regatta.append(flexGap)
     regatta.append(delDataset)
-    regattaEls.insertBefore(regatta, addRegattaButton)
+    regattaEls.append(regatta)
 }
 
 addRegattaButton.addEventListener('click', () => {
@@ -496,6 +545,7 @@ async function addPerson() {
     colorSelect.type = 'color'
     colorSelect.classList.add('colSelect')
 
+    /*
     const divSelect = document.createElement('select')
     divSelect.classList.add('selectBox')
     let divisions = ['Any', 'A', 'B']
@@ -513,6 +563,7 @@ async function addPerson() {
         posOpt.value, (posOpt.innerText = position)
         posSelect.append(posOpt)
     })
+    */
 
     nameSelect.addEventListener('change', () => {
         updateGraph()
@@ -520,29 +571,29 @@ async function addPerson() {
     colorSelect.addEventListener('change', () => {
         updateGraph()
     })
-    divSelect.addEventListener('change', async () => {
-        await loadData()
-    })
+    // divSelect.addEventListener('change', async () => {
+    //     await loadData()
+    // })
 
     const flexGap = document.createElement('div')
     flexGap.classList.add('flexGap')
 
-    const delDataset = document.createElement('div')
-    delDataset.classList.add('delDataset')
-    delDataset.innerHTML = '-'
+    const delDataset = document.createElement('button')
+    delDataset.classList.add('delDataset', 'fa-lg', 'fa-solid', 'fa-trash')
+    // delDataset.innerHTML = 'x'
     delDataset.addEventListener('click', () => {
         // delete regattas[regattaSelect.options[regattaSelect.selectedIndex].text]
         person.remove()
-        // updateGraph()
+        updateGraph()
     })
 
     person.append(nameSelect)
     person.append(colorSelect)
-    person.append(divSelect)
-    person.append(posSelect)
+    // person.append(divSelect)
+    // person.append(posSelect)
     person.append(flexGap)
     person.append(delDataset)
-    peopleEls.insertBefore(person, addPersonButton)
+    peopleEls.append(person)
 }
 
 addPersonButton.addEventListener('click', () => {

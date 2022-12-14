@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="../style.css" />
+    <link rel="stylesheet" href="scoreStyle.css" />
     <script src="https://kit.fontawesome.com/2e5caad16b.js" crossorigin="anonymous"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -33,20 +34,17 @@
     <div id="window" style="grid-template-areas: 'header' 'regattas' 'people' 'graph'; grid-template-columns: 1fr; grid-template-rows: 75px auto auto 1fr">
       <div id="loadingEl" class="fa-sailboat fa-lg fa-solid"></div>
       <div id="header">
-        <a id="title" href="/">Scores</a>
+        <a id="title" class="tooltip" data-tooltip="Back to pairings" href="/">Scores</a>
         <div id="placeholder"></div>
-        <button id="modeToggle" class="icon" title="Toggle Dark Mode" type="button"><i class="fa-solid fa-moon fa-lg"></i></button>
+        <!-- <button id="modeToggle" class="icon" title="Toggle Dark Mode" type="button"><i class="fa-solid fa-moon fa-lg"></i></button> -->
         <!-- <button id="squareMode" title="Become square" type="button"><i class="gg-shape-square"></i></button> -->
-        <button id="graphMode" class="icon" title="Switch graph mode" type="button"><i class="fa-solid fa-chart-line fa-lg"></i></button>
-        <button class="icon" id="infoButton" title="Toggle information window" type="button"><i class="fa-solid fa-info fa-lg"></i></button>
-      </div>
-      <div id="infoWindow">
-        <div id="information">
-          INFO HERE<br /><br />
-          Todo:
-          <ul>
-          </ul>
-        </div>
+        <!-- <button id="graphMode" class="icon" title="Switch graph mode" type="button"><i class="fa-solid fa-chart-line fa-lg"></i></button> -->
+        <button class="icon tooltip" id="graphMode" data-tooltip="Toggle graph mode" type="button">
+          <i class="fa-solid fa-chart-line fa-lg"></i>
+        </button>
+        <button class="icon tooltip" id="settingsButton" data-tooltip="Settings" type="button">
+          <i class="fa-solid fa-gear fa-lg"></i>
+        </button>
       </div>
       <div id="settingsWindow">
         <div id="settings">
@@ -59,21 +57,11 @@
               <i class="fa-solid fa-tag fa-lg"></i>
             </button>
           </div>
-          <h3>Randomization:</h3>
+          <h3>Scores:</h3>
           <label class="container">
-            <input type="checkbox" id="posRnd" onchange="byPos = this.checked" checked />
+            <input type="checkbox" id="vertLabels" onchange="verticalLabels = this.checked; updateGraph()" checked />
             <span class="checkmark"></span>
-            Randomize based on skipper / crew position
-          </label>
-          <label class="container">
-            <input type="checkbox" id="boatCountRnd" onchange="byBoatCount = this.checked" />
-            <span class="checkmark"></span>
-            Randomize based on boat count
-          </label>
-          <label class="container">
-            <input type="checkbox" id="prevPartRnd" onchange="byPrevParts = this.checked" checked />
-            <span class="checkmark"></span>
-            Randomize based on previous partners
+            Vertical Race Labels (For large datasets)
           </label>
           <h3>Visuals:</h3>
           <label>
@@ -86,24 +74,25 @@
           </label>
         </div>
       </div>
+      <div class="dataset" id="globalParams">
+        <span style="padding: 0.5em"><strong>Global Parameters:</strong></span>
+        <select class="selectBox" name="Type" id="dataType">
+          <option value="Raw">Raw score</option>
+          <option value="Points">Points</option>
+          <option value="Ratio">Percentage</option>
+        </select>
+        <!-- <select name="divSelect" id="divSelect">
+          <option value="any">Any</option>
+          <option value="A">A</option>
+          <option value="B">B</option>
+        </select>
+        <select name="posSelect" id="posSelect">
+          <option value="any">Any</option>
+          <option value="skipper">Skipper</option>
+          <option value="crew">Crew</option>
+        </select> -->
+      </div>
       <div id="regattas">
-        <div class="dataset">
-          <select class="selectBox" name="Type" id="dataType">
-            <option value="Raw">Raw score</option>
-            <option value="Points">Points</option>
-            <option value="Ratio">Percentage</option>
-          </select>
-          <select name="divSelect" id="divSelect">
-            <option value="any">Any</option>
-            <option value="A">A</option>
-            <option value="B">B</option>
-          </select>
-          <select name="posSelect" id="posSelect">
-            <option value="any">Any</option>
-            <option value="skipper">Skipper</option>
-            <option value="crew">Crew</option>
-          </select>
-        </div>
         <!-- <div class="dataset">
           <select class="selectBox" name="Season" id="Season">
             <option value="F22">F22</option>
@@ -118,8 +107,8 @@
           <div class="flexGap"></div>
           <button class="delDataset">-</button>
         </div> -->
-        <div id="addRegatta" title="Add regatta">+</div>
       </div>
+      <div id="addRegatta" title="Add regatta">+</div>
       <div id="ppl">
         <!-- <div class="dataset">
           <select name="nameSelect" class="nameSelect">
@@ -139,8 +128,8 @@
           <div class="flexGap"></div>
           <button class="delDataset">-</button>
         </div> -->
-        <div id="addPerson" title="Add Person">+</div>
       </div>
+      <div id="addPerson" title="Add Person">+</div>
 
 
       <!-- <input type="text" name="regattas" id="regattas">

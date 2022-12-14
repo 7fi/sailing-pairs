@@ -64,6 +64,7 @@ button {
   border: none;
   outline: none;
   background: none;
+  cursor: pointer;
 }
 
 #window {
@@ -157,6 +158,9 @@ button {
   place-items: center;
   position: relative;
 }
+.icon:hover{
+  background-color: var(--med);
+}
 .buttonsHolder > .icon {
   margin: 5px;
 }
@@ -239,7 +243,7 @@ select {
   --tooltip-color: var(--light);
 
   position: absolute;
-  top: -0.75rem;
+  top: -1.5em;
   left: 50%;
   transform: translateX(-50%) translateY(var(--translate-y, 0)) scale(var(--scale));
   transition: 100ms transform;
@@ -640,12 +644,18 @@ select {
 }
 
 #loadingEl {
-  position: absolute;
+  position: fixed;
   left: 49%;
   top: 49%;
   width: 30px;
   height: 30px;
   display: none;
+  /* width: 100%;
+  height: 100%;
+  pointer-events: none; */
+  /* text-align: center; */
+  /* padding: 30% 50%; */
+  /* background-color: rgb(0, 0, 0, 0.5); */
   /* background:var(--highlight); */
   animation: loadingAnim 2s infinite;
   animation-timing-function: linear;
@@ -689,107 +699,9 @@ select {
   bottom: 0;
   position: absolute;
 }
-#addRegatta, #addPerson{
-  background-color: var(--med);
-  width: 30px;
-  height: 30px;
-  text-align: center;
-  /* padding-top: 5px; */
-  font-size: 1.5em;
-  border-radius: var(--radius);
-  margin: 10px;
-  cursor: pointer;
-  right: 0;
-}
+
 .flexGap {
   flex-grow: 1;
-}
-.delDataset {
-  background-color: var(--med);
-  float: right;
-  padding-top: 3px;
-  margin: 10px;
-  border-radius: var(--radius);
-  aspect-ratio: 1/1;
-  text-align: center;
-  font-size: 1.5em;
-  cursor: pointer;
-}
-#addRegatta:hover, #addPerson:hover {
-  background-color: var(--light);
-}
-#datasets {
-  grid-area: datasets;
-  z-index: 9;
-}
-.dataset {
-  width: calc(100%-20px);
-  margin: 10px;
-  display: flex;
-  /* grid-auto-flow: column; */
-  /* grid-template-columns: repeat(4, 1fr); */
-  flex-direction: row;
-  background-color: var(--dark);
-  border-radius: var(--radius);
-  /* position:relative; */
-  height: 60px;
-}
-.dropLabel {
-  pointer-events: none;
-}
-.dropdown {
-  background: var(--light);
-  /* z-index: 8; */
-  width: 100px;
-  /* min-height: 30px;
-    max-height: 150px; */
-  /* overflow: auto; */
-  margin: 10px;
-  border-radius: var(--radius);
-  /* padding: 5px; */
-  text-align: center;
-  display: inline-block;
-  position: relative;
-  padding-top: 10px;
-}
-.dropdownMenu {
-  position: absolute;
-  opacity: 0;
-  left: 0;
-  top: 90%;
-  width: 100px;
-  border-radius: 0px 0px var(--radius) var(--radius);
-  background-color: var(--light);
-  transform: translateY(-10px);
-  pointer-events: none;
-  transition: opacity 150ms ease-in-out, transform 150ms ease-in-out;
-  overflow-y: auto;
-  max-height: 300px;
-  z-index: 9;
-}
-.dropdown.active > .dropdownMenu {
-  opacity: 1;
-  pointer-events: auto;
-  transform: translateY(0);
-}
-.dropdown:hover,
-.dropdown.active,
-.delDataset:hover {
-  background-color: var(--medDark);
-}
-
-/* .dropdown:hover :nth-last-child(n){
-    display:block;
-} */
-.dropMember {
-  /* display: none; */
-  /* background-color:var(--med); */
-  margin: 5px;
-  padding: 5px;
-  border-radius: var(--radius);
-}
-.dropMember:hover {
-  background-color: var(--medDark);
 }
 
 /*For moblie stuffs*/
