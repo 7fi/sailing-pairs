@@ -284,13 +284,14 @@ function addPerson(people, name, pos, division, home, teamName, raceNums, scores
     }
     // console.log([''] == [''])
     // console.log(raceNums[0].includes(''))
+    // console.log(name, raceNums)
     if (raceNums[0].includes('')) {
         newNums = [...Array(scoreLen).keys()].map((i) => i + 1)
         // console.log(newNums)
     } else if (raceNums.length > 0) {
         for (let i = 0; i < raceNums.length; i++) {
             if (raceNums[i].length > 1) {
-                for (j = parseInt(raceNums[i][0]); j < parseInt(raceNums[i][1]); j++) {
+                for (j = parseInt(raceNums[i][0]); j < parseInt(raceNums[i][1]) + 1; j++) {
                     newNums.push(j)
                 }
             } else {
@@ -299,7 +300,7 @@ function addPerson(people, name, pos, division, home, teamName, raceNums, scores
         }
     }
     raceNums = newNums
-    // console.log(raceNums)
+    // console.log(name, raceNums)
     for (let i = 0; i < scoreLen; i++) {
         const score = scores[i]
         if (raceNums.includes(i + 1)) {

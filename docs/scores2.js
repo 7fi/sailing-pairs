@@ -202,8 +202,8 @@ async function updateGraph() {
                         datasets.push({
                             label: p,
                             data: data[p],
-                            backgroundColor: inputNames[p],
-                            borderColor: inputNames[p] + '55',
+                            backgroundColor: inputNames[p] + '55',
+                            borderColor: inputNames[p],
                             borderWidth: 5,
                             pointRadius: 5,
                             fill: false,
@@ -394,7 +394,6 @@ async function updateRegattas(teamSelect, regattaSelect, season) {
     if (response.status != 404) {
         // let curList = json.regattas
         regattasList = {
-            ...regattasList,
             ...json.regattas,
         }
         console.log(regattasList)
