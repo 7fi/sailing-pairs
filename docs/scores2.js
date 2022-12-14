@@ -2,6 +2,9 @@ const graphMode = document.getElementById('graphMode')
 const regattaEls = document.getElementById('regattas')
 const peopleEls = document.getElementById('ppl')
 const dataType = document.getElementById('dataType')
+const fleetSelect = document.getElementById('fleetSelect')
+const divSelect = document.getElementById('divSelect')
+const posSelect = document.getElementById('posSelect')
 
 // const updateGraphBtn = document.getElementById('updateGraph')
 // const regattasBox = document.getElementById('regattas')
@@ -34,7 +37,7 @@ let sailors = []
 let curSailors = []
 // let inputNames = { 'Elliott Chalcraft': '#e0570d', 'Carter Anderson': '#3684a3', 'Ryan Downey': '#2de00d', 'Sabrina Anderson': '#d20de0', 'Barrett Lhamon': '#f00' }
 let Type = 'Raw'
-let verticalLabels = true
+let verticalLabels = false
 
 const titles = {
     Raw: 'Raw score (Lower is better)',
@@ -57,26 +60,28 @@ function getData(type, name, fleet = undefined, division = undefined, position =
     regattaData.people.forEach((p) => {
         if (p.name == name) {
             p.races.forEach((r) => {
-                if (regatta != undefined && r.venue == regatta) {
-                    if (type == 'Raw') {
-                        if (!isNaN(r.score)) {
-                            data[`${regatta} ${r.division}${r.number}`] = r.score
-                        } else {
-                            data[`${regatta} ${r.division}${r.number}`] = r.teams.length + 1
+                if ((regatta != undefined && r.venue == regatta) || regatta == undefined) {
+                    if (((division != 'All' && r.division == division) || division == 'All') && ((position != 'All' && r.position == position) || position == 'All') && ((fleet != 'All' && r.fleet == fleet) || fleet == 'All')) {
+                        if (type == 'Raw') {
+                            if (!isNaN(r.score)) {
+                                data[`${regatta} ${r.division}${r.number}`] = r.score
+                            } else {
+                                data[`${regatta} ${r.division}${r.number}`] = r.teams.length + 1
+                            }
                         }
-                    }
-                    if (type == 'Points') {
-                        if (!isNaN(r.score)) {
-                            data[`${regatta} ${r.division}${r.number}`] = r.teams.length - r.score + 1
-                        } else {
-                            data[`${regatta} ${r.division}${r.number}`] = r.teams.length + 1
+                        if (type == 'Points') {
+                            if (!isNaN(r.score)) {
+                                data[`${regatta} ${r.division}${r.number}`] = r.teams.length - r.score + 1
+                            } else {
+                                data[`${regatta} ${r.division}${r.number}`] = r.teams.length + 1
+                            }
                         }
-                    }
-                    if (type == 'Ratio') {
-                        if (!isNaN(r.score)) {
-                            data[`${regatta} ${r.division}${r.number}`] = (1 - (r.score - 1) / r.teams.length) * 100
-                        } else {
-                            data[`${regatta} ${r.division}${r.number}`] = 0
+                        if (type == 'Ratio') {
+                            if (!isNaN(r.score)) {
+                                data[`${regatta} ${r.division}${r.number}`] = (1 - (r.score - 1) / r.teams.length) * 100
+                            } else {
+                                data[`${regatta} ${r.division}${r.number}`] = 0
+                            }
                         }
                     }
                 }
@@ -173,7 +178,14 @@ async function updateGraph() {
         if (regattaData.people != undefined && regattaData.people.length > 0) {
             names.forEach((p) => {
                 try {
-                    data[p] = getData(Type, p, undefined, undefined, undefined, undefined, regatta)
+                    let fleet = fleetSelect.value
+                    if (fleet == 'All' && inputNames[p].fleet != 'All') fleet = inputNames[p].fleet
+                    let div = divSelect.value
+                    if (div == 'All' && inputNames[p].div != 'All') div = inputNames[p].div
+                    let pos = posSelect.value
+                    if (pos == 'All' && inputNames[p].pos != 'All') pos = inputNames[p].pos
+                    console.log('FLTDIVPOS', fleet, div, pos)
+                    data[p] = getData(Type, p, fleet, div, pos, undefined, regatta)
                     console.log(data[p])
                     races.push(...Object.keys(data[p]))
                     maxVals.push(Math.max(Object.values(data[p])))
@@ -202,8 +214,8 @@ async function updateGraph() {
                         datasets.push({
                             label: p,
                             data: data[p],
-                            backgroundColor: inputNames[p] + '55',
-                            borderColor: inputNames[p],
+                            backgroundColor: inputNames[p].color + '55',
+                            borderColor: inputNames[p].color,
                             borderWidth: 5,
                             pointRadius: 5,
                             fill: false,
@@ -330,7 +342,12 @@ function readData() {
         }, {})
 
     Array.from(peopleEls.children).forEach((el) => {
-        inputNames[el.children[0].options[el.children[0].selectedIndex].text] = el.children[1].value
+        inputNames[el.children[0].options[el.children[0].selectedIndex].text] = {
+            color: el.children[1].value,
+            fleet: el.children[2].value,
+            div: el.children[3].value,
+            pos: el.children[4].value,
+        }
     })
 
     console.log('ReadData:', regattas, teams, inputNames)
@@ -342,6 +359,15 @@ graphMode.addEventListener('click', () => {
 })
 dataType.addEventListener('change', () => {
     Type = dataType.value
+    updateGraph()
+})
+fleetSelect.addEventListener('change', () => {
+    updateGraph()
+})
+divSelect.addEventListener('change', () => {
+    updateGraph()
+})
+posSelect.addEventListener('change', () => {
     updateGraph()
 })
 
@@ -545,10 +571,19 @@ async function addPerson() {
     colorSelect.type = 'color'
     colorSelect.classList.add('colSelect')
 
-    /*
+    const fleetSel = document.createElement('select')
+    fleetSel.classList.add('selectBox', 'tooltip')
+    fleetSel.dataset['tooltip'] = 'Select Fleet'
+    let fleets = ['All', 'Gold', 'Silver']
+    fleets.forEach((fleet) => {
+        const fleetOpt = document.createElement('option')
+        fleetOpt.value, (fleetOpt.innerText = fleet)
+        fleetSel.append(fleetOpt)
+    })
+
     const divSelect = document.createElement('select')
     divSelect.classList.add('selectBox')
-    let divisions = ['Any', 'A', 'B']
+    let divisions = ['All', 'A', 'B']
     divisions.forEach((division) => {
         const divOpt = document.createElement('option')
         divOpt.value, (divOpt.innerText = division)
@@ -557,13 +592,12 @@ async function addPerson() {
 
     const posSelect = document.createElement('select')
     posSelect.classList.add('selectBox')
-    let positions = ['Any', 'Skipper', 'Crew']
+    let positions = ['All', 'Skipper', 'Crew']
     positions.forEach((position) => {
         const posOpt = document.createElement('option')
         posOpt.value, (posOpt.innerText = position)
         posSelect.append(posOpt)
     })
-    */
 
     nameSelect.addEventListener('change', () => {
         updateGraph()
@@ -571,29 +605,35 @@ async function addPerson() {
     colorSelect.addEventListener('change', () => {
         updateGraph()
     })
-    // divSelect.addEventListener('change', async () => {
-    //     await loadData()
-    // })
+    fleetSel.addEventListener('change', async () => {
+        updateGraph()
+    })
+    divSelect.addEventListener('change', async () => {
+        updateGraph()
+    })
+    posSelect.addEventListener('change', async () => {
+        updateGraph()
+    })
 
     const flexGap = document.createElement('div')
     flexGap.classList.add('flexGap')
 
     const delDataset = document.createElement('button')
     delDataset.classList.add('delDataset', 'fa-lg', 'fa-solid', 'fa-trash')
-    // delDataset.innerHTML = 'x'
     delDataset.addEventListener('click', () => {
-        // delete regattas[regattaSelect.options[regattaSelect.selectedIndex].text]
         person.remove()
         updateGraph()
     })
 
     person.append(nameSelect)
     person.append(colorSelect)
-    // person.append(divSelect)
-    // person.append(posSelect)
+    person.append(fleetSel)
+    person.append(divSelect)
+    person.append(posSelect)
     person.append(flexGap)
     person.append(delDataset)
     peopleEls.append(person)
+    updateGraph()
 }
 
 addPersonButton.addEventListener('click', () => {

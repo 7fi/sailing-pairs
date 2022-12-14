@@ -3,9 +3,6 @@ const mongoose = require('mongoose')
 const cors = require('cors')
 const cheerio = require('cheerio')
 const axios = require('axios')
-// const {
-//     google,
-// } = require('googleapis')
 
 // For development
 const dotenv = require('dotenv').config()
@@ -15,9 +12,6 @@ const dotenv = require('dotenv').config()
 const Pairs = require('./models/Pairs')
 const PairsBackup = require('./models/PairsBackup')
 const PairsOfficial = require('./models/PairsOfficial')
-// const {
-//   jobs,
-// } = require('googleapis/build/src/apis/jobs')
 
 // enable express && cors
 const app = express()
@@ -32,82 +26,6 @@ mongoose.connect(process.env.DATABASE_URL, { useNewUrlParser: true })
 const db = mongoose.connection
 db.once('open', () => app.listen(port, () => console.log(`Starting server at ${port}`))) //start server
 db.on('error', (error) => console.log(error))
-/*
-const client =
-  new google.auth.JWT(
-    process.env.client_email,
-    null,
-    process.env.private_key,
-    [
-      'https://www.googleapis.com/auth/spreadsheets',
-    ]
-  )
-
-client.authorize(
-  function (
-    err,
-    tokens
-  ) {
-    if (
-      err
-    ) {
-      console.log(
-        err
-      )
-      return
-    } else {
-      console.log(
-        'Connected'
-      )
-    }
-  }
-)
-
-async function gsrun(
-  cl,
-  range
-) {
-  const gsapi =
-    google.sheets(
-      {
-        version:
-          'v4',
-        auth: cl,
-      }
-    )
-
-  var opt =
-  {
-    spreadsheetId:
-      '1B56mAoBHFct_xcUB9ZWt-GHA1s2Kmbmc_LiiyABxlpY',
-    range: range,
-    majorDimension:
-      'COLUMNS',
-  }
-
-  let data =
-    await gsapi.spreadsheets.values.get(
-      opt
-    )
-  return data
-    .data
-    .values
-}
-
-async function test() {
-  console.log(
-    await getData(
-      'points',
-      'Barrett',
-      undefined,
-      undefined,
-      undefined,
-      undefined,
-      'SSP'
-    )
-  )
-  // console.log(await gsrun(client, "'scores'!H4:H46"));
-}*/
 
 // Handle post request for creating a saved pairing list
 app.post('/pairs', async (req, res) => {
@@ -222,18 +140,8 @@ app.post('/delPair', async (req, res) => {
         }
     )
 })
-/*
-app.post('/scores', async (req, res) => {
-        // console.log(req.body);
-        res.json({body: getData(req.body.type,req.body.name,req.body.fleet,req.body.division,req.body.position,req.body.pair,req.body.regatta),
-            labels: venues,})
-    }
-)
-*/
 
 app.post('/scores', async (req, res) => {
-    // console.log(req.body.regattas)
-    // console.log(await fetchRegattas(JSON.parse(req.body.regattas)))
     let ppl = await getRegattaData(req.body.regattas)
     // console.log(ppl)
     res.json({
@@ -264,16 +172,17 @@ class person {
     }
 }
 class race {
-    constructor(number, division, score, teams, position, venue) {
+    constructor(number, division, score, teams, position, venue, fleet) {
         this.number = number
         this.division = division
         this.score = score
         this.teams = teams
         this.position = position
         this.venue = venue
+        this.fleet = fleet
     }
 }
-function addPerson(people, name, pos, division, home, teamName, raceNums, scores, teams, venue) {
+function addPerson(people, name, pos, division, home, teamName, raceNums, scores, teams, venue, fleet) {
     // console.log(name, scores)
     let scoreLen = Array.from(scores).length
     // console.log("Scorelen", scoreLen)
@@ -307,7 +216,7 @@ function addPerson(people, name, pos, division, home, teamName, raceNums, scores
             people.forEach((p) => {
                 if (p.name == name) {
                     // console.log(p.races)
-                    p.races.push(new race(i + 1, division, score, teams, pos, venue))
+                    p.races.push(new race(i + 1, division, score, teams, pos, venue, fleet))
                 }
             })
         }
@@ -329,6 +238,8 @@ async function getRegattaData(regattas) {
             const sailors = cheerio.load(response2.data)
             const raceCount = parseInt(fullScores('th.right:nth-last-child(3)').text())
             const teamCount = scoreData.children().length / 3
+            let fleet = 'Gold'
+            if (regatta.toUpperCase().includes('SILVER')) fleet = 'Silver'
             // console.log(fullScores('table.results tbody').children(0).text())
 
             let betterVenue = Object.keys(regattas)[r]
@@ -395,7 +306,7 @@ async function getRegattaData(regattas) {
                         let raceNums = skipper.next().text().split(',')
                         raceNums = raceNums.map((num) => num.split('-'))
                         // console.log(raceNums)
-                        people = addPerson(people, skipperName.split(" '")[0], 'Skipper', division, teamHome, schoolName, raceNums, teamScores[division], teamHomes, betterVenue)
+                        people = addPerson(people, skipperName.split(" '")[0], 'Skipper', division, teamHome, schoolName, raceNums, teamScores[division], teamHomes, betterVenue, fleet)
                     }
 
                     // Get Skipper
@@ -404,7 +315,7 @@ async function getRegattaData(regattas) {
                     if (crewName != '') {
                         let raceNums = crew.next().text().split(',')
                         raceNums = raceNums.map((num) => num.split('-'))
-                        people = addPerson(people, crewName.split(" '")[0], 'Crew', division, teamHome, schoolName, raceNums, teamScores[division], teamHomes, betterVenue)
+                        people = addPerson(people, crewName.split(" '")[0], 'Crew', division, teamHome, schoolName, raceNums, teamScores[division], teamHomes, betterVenue, fleet)
                         // console.log(raceNums)
                     }
 

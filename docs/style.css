@@ -233,9 +233,6 @@ select {
   transform: rotate(45deg);
 }
 
-.setting {
-}
-
 .tooltip::before,
 .tooltip::after {
   --scale: 0;

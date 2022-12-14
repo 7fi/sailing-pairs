@@ -59,7 +59,7 @@
           </div>
           <h3>Scores:</h3>
           <label class="container">
-            <input type="checkbox" id="vertLabels" onchange="verticalLabels = this.checked; updateGraph()" checked />
+            <input type="checkbox" id="vertLabels" onchange="verticalLabels = this.checked; updateGraph()" />
             <span class="checkmark"></span>
             Vertical Race Labels (For large datasets)
           </label>
@@ -81,16 +81,21 @@
           <option value="Points">Points</option>
           <option value="Ratio">Percentage</option>
         </select>
-        <!-- <select name="divSelect" id="divSelect">
-          <option value="any">Any</option>
+        <select name="fleetSelect" id="fleetSelect" class="tooltip" data-tooltip="Select fleet">
+          <option value="All">All (Gold / Silver)</option>
+          <option value="Gold">Gold</option>
+          <option value="Silver">Silver</option>
+        </select>
+        <select name="divSelect" id="divSelect" class="tooltip" data-tooltip="Select Division">
+          <option value="All">All (A / B)</option>
           <option value="A">A</option>
           <option value="B">B</option>
         </select>
-        <select name="posSelect" id="posSelect">
-          <option value="any">Any</option>
-          <option value="skipper">Skipper</option>
-          <option value="crew">Crew</option>
-        </select> -->
+        <select name="posSelect" id="posSelect" class="tooltip" data-tooltip="Select Position">
+          <option value="All">All (Skipper / Crew)</option>
+          <option value="Skipper">Skipper</option>
+          <option value="Crew">Crew</option>
+        </select>
       </div>
       <div id="regattas">
         <!-- <div class="dataset">
@@ -116,12 +121,12 @@
           </select>
           <input type="color" name="personColor" class="colSelect">
           <select name="divSelect" id="divSelect">
-            <option value="any">Any</option>
+            <option value="any">All</option>
             <option value="A">A</option>
             <option value="B">B</option>
           </select>
           <select name="posSelect" id="posSelect">
-            <option value="any">Any</option>
+            <option value="any">All</option>
             <option value="skipper">Skipper</option>
             <option value="crew">Crew</option>
           </select>
@@ -129,7 +134,7 @@
           <button class="delDataset">-</button>
         </div> -->
       </div>
-      <div id="addPerson" title="Add Person">+</div>
+      <div id="addPerson" title="Add Person" class="tooltip" data-tooltip="Add new person">+</div>
 
 
       <!-- <input type="text" name="regattas" id="regattas">
