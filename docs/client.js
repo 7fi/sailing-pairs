@@ -1,4 +1,7 @@
 //Grab elements from dom
+import { initializeApp } from 'firebase/app'
+import { collection, getDoc, getDocs, getFirestore } from 'firebase/firestore'
+
 const loadingEl = document.getElementById('loadingEl')
 const settingsBtn = document.getElementById('settingsButton')
 const infoButton = document.getElementById('infoButton')
@@ -7,6 +10,28 @@ const settingsWindow = document.getElementById('settingsWindow')
 const squareMode = document.getElementById('squareMode')
 const modeToggle = document.getElementById('modeToggle')
 const fontSelect = document.getElementById('fontSelect')
+
+const firebaseConfig = {
+    apiKey: 'AIzaSyAIlmAr8qfAjVweURTIvOmvNbZzlii1QXc',
+    authDomain: 'bhspairs.firebaseapp.com',
+    projectId: 'bhspairs',
+    storageBucket: 'bhspairs.appspot.com',
+    messagingSenderId: '853792589116',
+    appId: '1:853792589116:web:0d634d29b62ae7cab90a39',
+    measurementId: 'G-KPRQEN42TT',
+}
+
+// Initialize Firebase
+initializeApp(firebaseConfig)
+// const analytics = getAnalytics(app)
+const db = getFirestore()
+const colRef = collection(db, 'sailing-pairs')
+
+getDocs(colRef).then((snapshot) => {
+    snapshot.docs.forEach((doc) => {
+        console.log(doc.data())
+    })
+})
 
 let lightMode = true
 let square = false
