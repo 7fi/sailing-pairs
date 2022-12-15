@@ -1,4 +1,4 @@
-import { byPos, byBoatCount, byPrevParts, slotsLength, names, absent, locked, season, team } from './pairs.js'
+import { byPos, byBoatCount, byPrevParts, slotsLength, names, absent, locked, season, team, getPairsOfficial, getPrevPartners, makeNames, makePairs } from './pairs.js'
 import { people } from './info.js'
 randomPairs.addEventListener('click', async () => {
     // console.log(byBoatCount)
@@ -69,14 +69,15 @@ randomPairs.addEventListener('click', async () => {
 
         let pairings
         if (byPrevParts) {
-            options = {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({}),
-            }
-            loadingEl.style.display = 'block'
-            const response = await fetch(API_URL + '/getPairsOfficial', options)
-            pairings = await response.json()
+            // options = {
+            //     method: 'POST',
+            //     headers: { 'Content-Type': 'application/json' },
+            //     body: JSON.stringify({}),
+            // }
+            // loadingEl.style.display = 'block'
+            // const response = await fetch(API_URL + '/getPairsOfficial', options)
+            // pairings = await response.json()
+            pairings = await getPairsOfficial()
         }
 
         let lpI = 0

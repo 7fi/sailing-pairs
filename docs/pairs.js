@@ -1,4 +1,4 @@
-import { people, mobileSize } from './info.js'
+import { people, mobileSize, firebaseConfig } from './info.js'
 import { compareFn, compareFnObj, formatDate } from './client.js'
 import { initializeApp } from 'firebase/app'
 import { addDoc, collection, doc, getDoc, getDocs, deleteDoc, docRef, getFirestore } from 'firebase/firestore'
@@ -50,16 +50,6 @@ let byPrevParts = true
 let absent = []
 let locked = []
 let boatDisplayVal = 'true'
-
-const firebaseConfig = {
-    apiKey: 'AIzaSyAIlmAr8qfAjVweURTIvOmvNbZzlii1QXc',
-    authDomain: 'bhspairs.firebaseapp.com',
-    projectId: 'bhspairs',
-    storageBucket: 'bhspairs.appspot.com',
-    messagingSenderId: '853792589116',
-    appId: '1:853792589116:web:0d634d29b62ae7cab90a39',
-    measurementId: 'G-KPRQEN42TT',
-}
 
 // Initialize Firebase
 initializeApp(firebaseConfig)
@@ -1114,4 +1104,4 @@ async function getPairsOfficialOne(id) {
     return docSnap.data()
 }
 
-export { byPos, byBoatCount, byPrevParts, slotsLength, names, absent, locked, season, team }
+export { byPos, byBoatCount, byPrevParts, slotsLength, names, absent, locked, season, team, getPairsOfficial, getPrevPartners, makeNames, makePairs }
