@@ -1,7 +1,7 @@
 import { people, mobileSize } from './info.js'
-import { compareFn } from './client.js'
+import { compareFn, formatDate } from './client.js'
 import { initializeApp } from 'firebase/app'
-import { collection, doc, getDoc, getDocs, getFirestore } from 'firebase/firestore'
+import { addDoc, collection, doc, getDoc, getDocs, deleteDoc, docRef, getFirestore } from 'firebase/firestore'
 
 const left = document.getElementById('left')
 const right = document.getElementById('right')
@@ -67,7 +67,7 @@ initializeApp(firebaseConfig)
 const db = getFirestore()
 
 const pairsDB = collection(db, 'pairs')
-// const backupDB = collection(db, 'pairs')
+const backupDB = collection(db, 'backup-pairs')
 const officialDB = collection(db, 'official-pairs')
 
 // getDocs(pairsDB).then((snapshot) => {
@@ -196,15 +196,17 @@ saveButton.addEventListener('click', async () => {
         nameInput.value = ''
 
         //send to server
-        let options = {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(pairs),
-        }
+        // let options = {
+        //     method: 'POST',
+        //     headers: { 'Content-Type': 'application/json' },
+        //     body: JSON.stringify(pairs),
+        // }
         loadingEl.style.display = 'block'
-        const response = await fetch(API_URL + '/pairs', options)
-        const responseBackup = await fetch(API_URL + '/pairsBackup', options)
+        // const response = await fetch(API_URL + '/pairs', options)
+        // const responseBackup = await fetch(API_URL + '/pairsBackup', options)
         // const json = await response.json()
+        addDoc(pairsDB, pairs)
+        addDoc(backupDB, pairs)
         loadingEl.style.display = 'none'
         // console.log(json)
 
@@ -244,16 +246,9 @@ saveButtonOfficial.addEventListener('click', async () => {
             nameInput.value = ''
 
             //send to server
-            let options = {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(pairs),
-            }
             loadingEl.style.display = 'block'
-            const response = await fetch(API_URL + '/pairsOfficial', options)
-            const json = await response.json()
+            addDoc(officialDB, pairs)
             loadingEl.style.display = 'none'
-            console.log(json)
 
             //reset
             makePairs()
@@ -660,17 +655,38 @@ function saveTemp() {
     window.localStorage.setItem('tempPairs', JSON.stringify(pairs))
 }
 
+// migrateSaved()
+async function migrateSaved() {
+    let options = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ season: 'Fall 2022' }),
+    }
+    loadingEl.style.display = 'block'
+    const response = await fetch('http://localhost:3000' + '/getPairsOfficial', options)
+    const json = await response.json()
+    loadingEl.style.display = 'none'
+    console.log(json.pairs)
+
+    json.pairs.forEach(async (pairing) => {
+        console.log(pairing)
+        // options = {
+        //     method: 'POST',
+        //     headers: { 'Content-Type': 'application/json' },
+        //     body: JSON.stringify({ name: pairing.name }),
+        // }
+        // const response = await fetch('http://localhost:3000' + '/getPairsOfficialOne', options)
+        // const json2 = await response.json()
+        // console.log(json2.pairs)
+        addDoc(officialDB, pairing)
+        addDoc(backupDB, pairing)
+    })
+}
+
 //Gets list of saved paring names from server
 async function getSaved() {
     //Gets names from server
-    // let options = {
-    //     method: 'POST',
-    //     headers: { 'Content-Type': 'application/json' },
-    //     body: JSON.stringify({ season: season }),
-    // }
     loadingEl.style.display = 'block'
-    // let response = await fetch(API_URL + '/getNames', options)
-    // let json = await response.json()
     let namesObj = await getNames()
     let names = Object.keys(namesObj)
     // console.log(pairs)
@@ -708,8 +724,8 @@ async function getSaved() {
                 // loadingEl.style.display = 'none'
                 // console.log(json)
 
+                console.log(namesObj)
                 let pairs = await getPairs(namesObj[names[i]])
-
                 // window.location.href = link
 
                 getSaved()
@@ -723,6 +739,7 @@ async function getSaved() {
                     makePairs()
                     alert('No pairs saved under this name.')
                 }
+                loadSaveContainer.style.display = 'none'
             })
 
             //Delete button
@@ -734,16 +751,18 @@ async function getSaved() {
                 loadDel.appendChild(loadDelIcon)
                 loadDel.addEventListener('click', async () => {
                     //send deletion request to server
-                    let options = {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ name: loadName.textContent, season: season }),
-                    }
+                    // let options = {
+                    //     method: 'POST',
+                    //     headers: { 'Content-Type': 'application/json' },
+                    //     body: JSON.stringify({ name: loadName.textContent, season: season }),
+                    // }
                     loadingEl.style.display = 'block'
-                    const response = await fetch(API_URL + '/delPair', options)
-                    const json = await response.json()
+                    // const response = await fetch(API_URL + '/delPair', options)
+                    // const json = await response.json()
+                    const docRef = doc(db, 'pairs', namesObj[names[i]])
+                    await deleteDoc(docRef)
                     loadingEl.style.display = 'none'
-                    console.log(json)
+                    // console.log(json)
                     getSaved()
                 })
 
@@ -768,15 +787,14 @@ async function getSaved() {
 
     //Gets names from server
     loadingEl.style.display = 'block'
-    // response = await fetch(API_URL + '/getPairsOfficial', options)
-    // json = await response.json()
-    let pairs = await getPiarsOffical()
+    let OnamesObj = await getOfficialNames()
     loadingEl.style.display = 'none'
+    let Onames = Object.keys(OnamesObj)
 
-    let sorted = Object.values(pairs).sort(compareFn)
+    let sorted = Onames.sort(compareFn)
 
     // if names exist create buttons for them
-    if (pairs != null) {
+    if (Onames.length > 0) {
         while (officialList.firstChild) {
             // remove old buttons
             officialList.removeChild(officialList.firstChild)
@@ -788,24 +806,17 @@ async function getSaved() {
 
             const loadName = document.createElement('button')
             loadName.classList.add('loadName')
-            loadName.textContent = sorted[i].name
+            loadName.textContent = sorted[i]
             let tempName = loadName.textContent.replace(' ', '%20')
             let tempSeason = season[0] + season[season.length - 2] + season[season.length - 1]
             let link = `https://www.bhspairs.cf/?${tempSeason}/?o/${tempName}`
             loadName.addEventListener('click', async () => {
                 //on click get pairings from server
-                let options = {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ name: loadName.textContent, season: season }),
-                }
                 loadingEl.style.display = 'block'
-                const response = await fetch(API_URL + '/getPairsOfficialOne', options)
-                const json = await response.json()
+                let pairs = await getPairsOfficialOne(OnamesObj[sorted[i]])
                 loadingEl.style.display = 'none'
-                console.log(json)
 
-                window.location.href = link
+                // window.location.href = link
                 getSaved()
                 // if pairs exist create them
                 if (pairs != null) {
@@ -895,7 +906,7 @@ async function getBoatCount(rtn) {
     loadingEl.style.display = 'block'
     // const response = await fetch(API_URL + '/getPairsOfficial', options)
     // const pairings = await response.json()
-    let pairings = await getPiarsOffical()
+    let pairings = await getPairsOfficial()
     loadingEl.style.display = 'none'
 
     let fjCount = new Array(names.length).fill(0)
@@ -1106,7 +1117,15 @@ async function getPairs(id) {
     return docSnap.data()
 }
 
-async function getPiarsOffical() {
+async function getOfficialNames() {
+    let data = {}
+    let snapshot = await getDocs(officialDB)
+    snapshot.docs.forEach((doc) => {
+        data[doc.data().name] = doc.id
+    })
+    return data
+}
+async function getPairsOfficial() {
     let data = {}
     let snapshot = await getDocs(officialDB)
     snapshot.docs.forEach((doc) => {
@@ -1114,5 +1133,11 @@ async function getPiarsOffical() {
     })
     return data
 }
+async function getPairsOfficialOne(id) {
+    let data = {}
+    let docRef = doc(db, 'official-pairs', id)
+    let docSnap = await getDoc(docRef)
+    return docSnap.data()
+}
 
-export { byPos, byBoatCount, byPrevParts, slotsLength, names, absent, locked }
+export { byPos, byBoatCount, byPrevParts, slotsLength, names, absent, locked, season, team }

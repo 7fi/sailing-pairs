@@ -54,10 +54,10 @@ function formatDate(date, dateOffset) {
 }
 
 function compareFn(a, b) {
-    aMonth = parseInt(a.name.split(' ')[1].split('/')[0])
-    aDay = parseInt(a.name.split(' ')[1].split('/')[1])
-    bMonth = parseInt(b.name.split(' ')[1].split('/')[0])
-    bDay = parseInt(b.name.split(' ')[1].split('/')[1])
+    let aMonth = parseInt(a.split(' ')[1].split('/')[0])
+    let aDay = parseInt(a.split(' ')[1].split('/')[1])
+    let bMonth = parseInt(b.split(' ')[1].split('/')[0])
+    let bDay = parseInt(b.split(' ')[1].split('/')[1])
     let num = 0
     if (aMonth < bMonth) num = -1
     else if (aMonth == bMonth && aDay < bDay) num = -1
