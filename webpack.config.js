@@ -14,7 +14,7 @@ module.exports = [
         },
         // entry: ['./docs/info.js', './docs/client.js', './docs/pairs.js', './docs/scores2.js'],
         output: {
-            path: path.resolve(__dirname, 'dist'),
+            path: path.resolve(__dirname, './docs/dist'),
             filename: '[name].bundle.js',
         },
         watch: true,
