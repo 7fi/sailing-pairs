@@ -107,7 +107,7 @@ const people = {
 //   'Spring 2023': { Varsity: ['Adam', 'Alexander', 'Andrea', 'Ava', 'Ben', 'Beto', 'Carson', 'Carter', 'Chris', 'Cole', 'Cyrus', 'Elliott', 'Fin', 'Gretchen F', 'Gretchen I', 'Holden', 'Isaia', 'Jaya', 'Jeffrey', 'Joseph', 'Kai', 'Luke', 'Maura', 'Nelson', 'Nick', 'Nolan', 'Owen', 'Payton', 'Ryan', 'Sabrina', 'Sharkey', 'Stella', 'Suraj', 'Talia', 'Zephyr'], 'Jr. Varsity': [] },
 // }
 
-const mobileSize = '1000px'
+const mobileSize = '800px'
 
 /* speculation lmao
 Varsity: [
@@ -158,3 +158,5 @@ Varsity: [
       { name: 'Zephyr', skipper: false, crew: true, partner: 'Alexander' },
     ],
 */
+
+export { people, mobileSize }
