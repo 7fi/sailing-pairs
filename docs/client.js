@@ -1,5 +1,5 @@
 import { people, mobileSize } from './info.js'
-import { season, team } from './pairs.js'
+//import { season, team } from './pairs.js'
 
 //Grab elements from dom
 const loadingEl = document.getElementById('loadingEl')
@@ -53,11 +53,25 @@ function formatDate(date, dateOffset) {
     return [date.getFullYear(), padTo2Digits(date.getMonth() + 1), padTo2Digits(date.getDate() + dateOffset)].join('-')
 }
 
-function compareFn(a, b) {
+function compareFn(a, b, obj) {
     let aMonth = parseInt(a.split(' ')[1].split('/')[0])
     let aDay = parseInt(a.split(' ')[1].split('/')[1])
     let bMonth = parseInt(b.split(' ')[1].split('/')[0])
     let bDay = parseInt(b.split(' ')[1].split('/')[1])
+    let num = 0
+    if (aMonth < bMonth) num = -1
+    else if (aMonth == bMonth && aDay < bDay) num = -1
+    else if (aMonth == bMonth && aDay > bDay) num = 1
+    else if (aMonth > bMonth) num = 1
+    // else return 0
+    return num
+}
+
+function compareFnObj(a, b) {
+    let aMonth = parseInt(a.name.split(' ')[1].split('/')[0])
+    let aDay = parseInt(a.name.split(' ')[1].split('/')[1])
+    let bMonth = parseInt(b.name.split(' ')[1].split('/')[0])
+    let bDay = parseInt(b.name.split(' ')[1].split('/')[1])
     let num = 0
     if (aMonth < bMonth) num = -1
     else if (aMonth == bMonth && aDay < bDay) num = -1
@@ -114,4 +128,4 @@ function pickSternTier() {
     return potentialPpl[Math.floor(Math.random() * potentialPpl.length)]
 }
 
-export { findDuplicates, padTo2Digits, formatDate, compareFn, switchMode, setTheme }
+export { findDuplicates, padTo2Digits, formatDate, compareFn, compareFnObj, switchMode, setTheme }

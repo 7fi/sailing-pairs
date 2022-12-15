@@ -1,3 +1,7 @@
+import { initializeApp } from 'firebase/app'
+import { addDoc, collection, doc, getDoc, getDocs, deleteDoc, docRef, getFirestore } from 'firebase/firestore'
+import { getFunctions, httpsCallable } from 'firebase/functions'
+
 const graphMode = document.getElementById('graphMode')
 const regattaEls = document.getElementById('regattas')
 const peopleEls = document.getElementById('ppl')
@@ -5,6 +9,12 @@ const dataType = document.getElementById('dataType')
 const fleetSelect = document.getElementById('fleetSelect')
 const divSelect = document.getElementById('divSelect')
 const posSelect = document.getElementById('posSelect')
+const vertLabels = document.getElementById('vertLabels')
+
+vertLabels.addEventListener('change', () => {
+    verticalLabels = vertLabels.checked
+    updateGraph()
+})
 
 // const updateGraphBtn = document.getElementById('updateGraph')
 // const regattasBox = document.getElementById('regattas')
@@ -14,6 +24,24 @@ const posSelect = document.getElementById('posSelect')
 // })
 // const API_URL = 'http://localhost:3000' // For development
 // const API_URL = 'https://bhspairs.onrender.com' // For deployment
+
+const firebaseConfig = {
+    apiKey: 'AIzaSyAIlmAr8qfAjVweURTIvOmvNbZzlii1QXc',
+    authDomain: 'bhspairs.firebaseapp.com',
+    projectId: 'bhspairs',
+    storageBucket: 'bhspairs.appspot.com',
+    messagingSenderId: '853792589116',
+    appId: '1:853792589116:web:0d634d29b62ae7cab90a39',
+    measurementId: 'G-KPRQEN42TT',
+}
+
+// Initialize Firebase
+initializeApp(firebaseConfig)
+
+const functions = getFunctions()
+const getSchools = httpsCallable(functions, 'getSchools')
+const getRegattas = httpsCallable(functions, 'getRegattas')
+const getRegattaData = httpsCallable(functions, 'getRegattaData')
 
 var config
 const ctx = document.getElementById('graph')
@@ -47,6 +75,7 @@ const titles = {
 
 setup()
 async function setup() {
+    // const getSchools = firebase.functions().httpsCallable('getSchools')
     await addRegatta()
     readData()
     await loadData()
@@ -57,7 +86,7 @@ async function setup() {
 
 function getData(type, name, fleet = undefined, division = undefined, position = undefined, pair = undefined, regatta = undefined) {
     let data = {}
-    regattaData.people.forEach((p) => {
+    regattaData.forEach((p) => {
         if (p.name == name) {
             p.races.forEach((r) => {
                 if ((regatta != undefined && r.venue == regatta) || regatta == undefined) {
@@ -137,22 +166,25 @@ async function loadData() {
     // console.log(regattasBox.value)
     readData()
     console.log(regattas)
-    options = {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ regattas: regattas }),
-    }
-    const response = await fetch(API_URL + '/scores', options)
-    const json = await response.json()
-    regattaData = json
-    curSailors = json.people.filter(function (el) {
+    // options = {
+    //     method: 'POST',
+    //     headers: { 'Content-Type': 'application/json' },
+    //     body: JSON.stringify({ regattas: regattas }),
+    // }
+    // const response = await fetch(API_URL + '/scores', options)
+    // const json = await response.json()
+    regattaData = await getRegattaData({ regattas: regattas })
+    regattaData = regattaData.data
+    // regattaData = json
+    console.log('REGATTADAT', regattaData)
+    curSailors = regattaData.filter(function (el) {
         return teams.includes(el.home)
     })
     curSailors = curSailors.map((person) => person.name)
     //   console.log(curSailors)
     //   sailors = json.people.map((person) => person.name)
     //   console.log(sailors)
-    console.log('Fetched Data', json)
+    // console.log('Fetched Data', json)
     updateNames()
     updateGraph()
     loadingEl.style.display = 'none'
@@ -175,7 +207,7 @@ async function updateGraph() {
         let races = []
         let names = Object.keys(inputNames)
         console.log(regattaData)
-        if (regattaData.people != undefined && regattaData.people.length > 0) {
+        if (regattaData != undefined && regattaData.length > 0) {
             names.forEach((p) => {
                 try {
                     let fleet = fleetSelect.value
@@ -410,19 +442,23 @@ function updateNames() {
 async function updateRegattas(teamSelect, regattaSelect, season) {
     loadingEl.style.display = 'block'
 
-    options = {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ link: teamSelect.value, season: season }),
-    }
-    const response = await fetch(API_URL + '/regattas', options)
-    let json = await response.json()
-    console.log(response.status)
-    if (response.status != 404) {
+    // options = {
+    //     method: 'POST',
+    //     headers: { 'Content-Type': 'application/json' },
+    //     body: JSON.stringify({ link: teamSelect.value, season: season }),
+    // }
+    // const response = await fetch(API_URL + '/regattas', options)
+    // let json = await response.json()
+
+    let regattasList = await getRegattas({ schoolLink: teamSelect.value, season: season })
+    regattasList = regattasList.data
+
+    // console.log(response.status)
+    if (Object.keys(regattasList).length > 0) {
         // let curList = json.regattas
-        regattasList = {
-            ...json.regattas,
-        }
+        // regattasList = {
+        //     ...json.regattas,
+        // }
         console.log(regattasList)
 
         if (regattaSelect.firstChild) {
@@ -470,19 +506,12 @@ async function addRegatta() {
     const teamSelect = document.createElement('select')
     teamSelect.classList.add('selectBox')
 
-    loadingEl.style.display = 'block'
-    options = {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ district: 'NWISA' }),
-    }
-    const response = await fetch(API_URL + '/teams', options)
-    const json = await response.json()
-    console.log(json.teams)
+    let schools = await getSchools({ district: 'NWISA' })
+    console.log(schools.data)
 
-    Object.keys(json.teams).forEach((teamName) => {
+    Object.keys(schools.data).forEach((teamName) => {
         const teamOpt = document.createElement('option')
-        teamOpt.value = json.teams[teamName]
+        teamOpt.value = schools.data[teamName]
         teamOpt.text = teamName
         teamSelect.append(teamOpt)
     })

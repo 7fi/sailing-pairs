@@ -1,5 +1,5 @@
 import { people, mobileSize } from './info.js'
-import { compareFn, formatDate } from './client.js'
+import { compareFn, compareFnObj, formatDate } from './client.js'
 import { initializeApp } from 'firebase/app'
 import { addDoc, collection, doc, getDoc, getDocs, deleteDoc, docRef, getFirestore } from 'firebase/firestore'
 
@@ -655,34 +655,6 @@ function saveTemp() {
     window.localStorage.setItem('tempPairs', JSON.stringify(pairs))
 }
 
-// migrateSaved()
-async function migrateSaved() {
-    let options = {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ season: 'Fall 2022' }),
-    }
-    loadingEl.style.display = 'block'
-    const response = await fetch('http://localhost:3000' + '/getPairsOfficial', options)
-    const json = await response.json()
-    loadingEl.style.display = 'none'
-    console.log(json.pairs)
-
-    json.pairs.forEach(async (pairing) => {
-        console.log(pairing)
-        // options = {
-        //     method: 'POST',
-        //     headers: { 'Content-Type': 'application/json' },
-        //     body: JSON.stringify({ name: pairing.name }),
-        // }
-        // const response = await fetch('http://localhost:3000' + '/getPairsOfficialOne', options)
-        // const json2 = await response.json()
-        // console.log(json2.pairs)
-        addDoc(officialDB, pairing)
-        addDoc(backupDB, pairing)
-    })
-}
-
 //Gets list of saved paring names from server
 async function getSaved() {
     //Gets names from server
@@ -898,15 +870,16 @@ async function getSaved() {
 }
 
 async function getBoatCount(rtn) {
-    let options = {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({}),
-    }
+    // let options = {
+    //     method: 'POST',
+    //     headers: { 'Content-Type': 'application/json' },
+    //     body: JSON.stringify({}),
+    // }
     loadingEl.style.display = 'block'
     // const response = await fetch(API_URL + '/getPairsOfficial', options)
     // const pairings = await response.json()
-    let pairings = await getPairsOfficial()
+    let pairingsObj = await getPairsOfficial()
+    let pairings = Object.values(pairingsObj)
     loadingEl.style.display = 'none'
 
     let fjCount = new Array(names.length).fill(0)
@@ -981,18 +954,19 @@ async function getPrevPartners(name, pairings) {
     let partners = []
 
     if (pairings == undefined) {
-        let options = {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({}),
-        }
+        // let options = {
+        //     method: 'POST',
+        //     headers: { 'Content-Type': 'application/json' },
+        //     body: JSON.stringify({}),
+        // }
         loadingEl.style.display = 'block'
-        const response = await fetch(API_URL + '/getPairsOfficial', options)
-        pairings = await response.json()
+        // const response = await fetch(API_URL + '/getPairsOfficial', options)
+        // pairings = await response.json()
+        pairings = await getPairsOfficial()
+        loadingEl.style.display = 'none'
     }
-    loadingEl.style.display = 'none'
 
-    pairings = Object.values(pairings.pairs).sort(compareFn)
+    pairings = Object.values(pairings).sort(compareFnObj)
 
     for (let i = 0; i < pairings.length; i++) {
         let nameIndex = Object.values(pairings[i]).indexOf(name)
