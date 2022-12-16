@@ -1,7 +1,7 @@
 import { people, mobileSize, firebaseConfig } from './info.js'
 import { compareFn, compareFnObj, formatDate } from './client.js'
 import { initializeApp } from 'firebase/app'
-import { addDoc, collection, doc, getDoc, getDocs, deleteDoc, docRef, getFirestore } from 'firebase/firestore'
+import { addDoc, collection, doc, getDoc, getDocs, deleteDoc, docRef, getFirestore, onSnapshot } from 'firebase/firestore'
 
 const left = document.getElementById('left')
 const right = document.getElementById('right')
@@ -51,6 +51,8 @@ let absent = []
 let locked = []
 let boatDisplayVal = 'true'
 
+let pageReads = 0
+
 // Initialize Firebase
 initializeApp(firebaseConfig)
 // const analytics = getAnalytics(app)
@@ -79,14 +81,16 @@ let team = teamSelect.value
 
 let names = people[season][team].map((person) => person.name)
 
-seasonSelect.onchange = function () {
+seasonSelect.onchange = async function () {
     season = seasonSelect.value
     names = people[season][team].map((person) => person.name)
     slotsLength = Math.floor(names.length / 2) * 3
     document.documentElement.style.setProperty('--slotCount', slotsLength / 3)
     makePairs()
     makeNames()
-    getSaved()
+    let snapshot = await getDocs(officialDB)
+    pageReads++
+    updateOfficial(snapshot)
     localStorage.setItem('season', season)
 }
 
@@ -97,7 +101,6 @@ teamSelect.onchange = function () {
     document.documentElement.style.setProperty('--slotCount', slotsLength / 3)
     makePairs()
     makeNames()
-    getSaved()
     localStorage.setItem('team', team)
 }
 
@@ -118,8 +121,7 @@ parseUrl()
 makePairs(JSON.parse(window.localStorage.getItem('tempPairs')))
 makeNames(JSON.parse(window.localStorage.getItem('tempPairs')))
 
-getSaved()
-getBoatCount()
+getLocalSaved()
 
 // dragging on desktop
 nameList.addEventListener('dragover', (e) => {
@@ -156,15 +158,13 @@ nameList.addEventListener('click', (e) => {
     }
 })
 
-loadPermBtn.addEventListener('click', async () => {
-    loadingEl.style.display = 'block'
-    response = await fetch(API_URL + '/getPairsOfficial', options)
-    json = await response.json()
-    loadingEl.style.display = 'none'
+// loadPermBtn.addEventListener('click', async () => {
+//     loadingEl.style.display = 'block'
+//     loadingEl.style.display = 'none'
 
-    makeNames(json.pairs[0].pairs)
-    makeNames(json.pairs[0].pairs)
-})
+//     makeNames(json.pairs[0].pairs)
+//     makeNames(json.pairs[0].pairs)
+// })
 
 //Saving pairings
 saveButton.addEventListener('click', async () => {
@@ -184,17 +184,7 @@ saveButton.addEventListener('click', async () => {
 
         console.log(pairs)
         nameInput.value = ''
-
-        //send to server
-        // let options = {
-        //     method: 'POST',
-        //     headers: { 'Content-Type': 'application/json' },
-        //     body: JSON.stringify(pairs),
-        // }
         loadingEl.style.display = 'block'
-        // const response = await fetch(API_URL + '/pairs', options)
-        // const responseBackup = await fetch(API_URL + '/pairsBackup', options)
-        // const json = await response.json()
         addDoc(pairsDB, pairs)
         addDoc(backupDB, pairs)
         loadingEl.style.display = 'none'
@@ -203,7 +193,6 @@ saveButton.addEventListener('click', async () => {
         //reset
         makePairs()
         makeNames()
-        getSaved()
     } else {
         alert('Please Enter Your Name')
     }
@@ -243,7 +232,6 @@ saveButtonOfficial.addEventListener('click', async () => {
             //reset
             makePairs()
             makeNames()
-            getSaved()
         }
     } else {
         alert('Please Enter Your Name')
@@ -279,7 +267,6 @@ saveButtonLocal.addEventListener('click', () => {
         //reset
         makePairs()
         makeNames()
-        getSaved()
     } else {
         alert('Please Enter Your Name')
     }
@@ -317,7 +304,6 @@ selectLocked.addEventListener('click', () => {
 
 //Reset pairs button
 resetPairs.addEventListener('click', () => {
-    getSaved()
     makeNames()
     makePairs()
     locked = []
@@ -645,16 +631,14 @@ function saveTemp() {
     window.localStorage.setItem('tempPairs', JSON.stringify(pairs))
 }
 
-//Gets list of saved paring names from server
-async function getSaved() {
-    //Gets names from server
+onSnapshot(pairsDB, async (snapshot) => {
+    pageReads++
     loadingEl.style.display = 'block'
-    let namesObj = await getNames()
+    let namesObj = {}
+    snapshot.docs.forEach((doc) => {
+        namesObj[doc.data().name] = doc.id
+    })
     let names = Object.keys(namesObj)
-    // console.log(pairs)
-
-    loadingEl.style.display = 'none'
-    // console.log(json)
 
     // if names exist create buttons for them
     if (names.length > 0) {
@@ -674,23 +658,10 @@ async function getSaved() {
             let tempSeason = season[0] + season[season.length - 2] + season[season.length - 1]
             let link = `https://www.bhspairs.cf/?${tempSeason}/?p/${tempName}`
             loadName.addEventListener('click', async () => {
-                //on click get pairings from server
-                // let options = {
-                //     method: 'POST',
-                //     headers: { 'Content-Type': 'application/json' },
-                //     body: JSON.stringify({ name: loadName.textContent }),
-                // }
-                // loadingEl.style.display = 'block'
-                // const response = await fetch(API_URL + '/getPairs', options)
-                // const json = await response.json()
-                // loadingEl.style.display = 'none'
-                // console.log(json)
-
-                console.log(namesObj)
+                // console.log(namesObj)
                 let pairs = await getPairs(namesObj[names[i]])
                 // window.location.href = link
 
-                getSaved()
                 // if pairs exist create them
                 if (pairs != null) {
                     makeNames(pairs)
@@ -712,20 +683,10 @@ async function getSaved() {
                 loadDelIcon.classList.add('fa-trash', 'fa-solid', 'fa-lg')
                 loadDel.appendChild(loadDelIcon)
                 loadDel.addEventListener('click', async () => {
-                    //send deletion request to server
-                    // let options = {
-                    //     method: 'POST',
-                    //     headers: { 'Content-Type': 'application/json' },
-                    //     body: JSON.stringify({ name: loadName.textContent, season: season }),
-                    // }
                     loadingEl.style.display = 'block'
-                    // const response = await fetch(API_URL + '/delPair', options)
-                    // const json = await response.json()
                     const docRef = doc(db, 'pairs', namesObj[names[i]])
                     await deleteDoc(docRef)
                     loadingEl.style.display = 'none'
-                    // console.log(json)
-                    getSaved()
                 })
 
                 const copyLink = document.createElement('button')
@@ -746,21 +707,30 @@ async function getSaved() {
             loadHolder.appendChild(loadNameHolder)
         }
     }
-
-    //Gets names from server
-    loadingEl.style.display = 'block'
-    let OnamesObj = await getOfficialNames()
     loadingEl.style.display = 'none'
-    let Onames = Object.keys(OnamesObj)
+})
 
-    let sorted = Onames.sort(compareFn)
+onSnapshot(officialDB, (snapshot) => {
+    pageReads++
+    updateOfficial(snapshot)
+})
 
-    // if names exist create buttons for them
-    if (Onames.length > 0) {
-        while (officialList.firstChild) {
-            // remove old buttons
-            officialList.removeChild(officialList.firstChild)
-        }
+function updateOfficial(snapshot) {
+    console.log(`Updating official w/${snapshot.docs}`)
+    let namesObj = {}
+    snapshot.docs.forEach((doc) => {
+        console.log(doc.data().season == season)
+        if (doc.data().season == season) namesObj[doc.data().name] = doc.id
+    })
+    let names = Object.keys(namesObj)
+    let sorted = names.sort(compareFn)
+
+    while (officialList.firstChild) {
+        // remove old buttons
+        officialList.removeChild(officialList.firstChild)
+    }
+
+    if (names.length > 0) {
         // loop through names and create button
         for (let i = 0; i < sorted.length; i++) {
             const loadNameHolder = document.createElement('div')
@@ -775,11 +745,10 @@ async function getSaved() {
             loadName.addEventListener('click', async () => {
                 //on click get pairings from server
                 loadingEl.style.display = 'block'
-                let pairs = await getPairsOfficialOne(OnamesObj[sorted[i]])
+                let pairs = await getPairsOfficialOne(namesObj[sorted[i]])
                 loadingEl.style.display = 'none'
 
                 // window.location.href = link
-                getSaved()
                 // if pairs exist create them
                 if (pairs != null) {
                     makeNames(pairs)
@@ -808,7 +777,11 @@ async function getSaved() {
             officialList.appendChild(loadNameHolder)
         }
     }
+    console.log('PAGE READS:', pageReads)
+}
 
+//Gets list of saved paring names from server
+function getLocalSaved() {
     let curPairs = JSON.parse(window.localStorage.getItem('pairs'))
     console.log(curPairs)
     if (curPairs != null) {
@@ -824,14 +797,14 @@ async function getSaved() {
             const loadName = document.createElement('button')
             loadName.classList.add('loadName')
             loadName.textContent = curPairs[i].name
-            loadName.addEventListener('click', async () => {
-                getSaved()
+            loadName.addEventListener('click', () => {
                 // if pairs exist create them
                 if (curPairs[i] != null) {
                     makeNames(curPairs[i])
                     makePairs(curPairs[i])
                     nameInput.value = ''
                 } else {
+                    getLocalSaved()
                     makeNames()
                     makePairs()
                     alert('No pairs saved under this name.')
@@ -845,11 +818,11 @@ async function getSaved() {
                 const loadDelIcon = document.createElement('i')
                 loadDelIcon.classList.add('fa-trash', 'fa-solid', 'fa-lg')
                 loadDel.appendChild(loadDelIcon)
-                loadDel.addEventListener('click', async () => {
+                loadDel.addEventListener('click', () => {
                     curPairs.splice(i, 1)
                     console.log(curPairs)
                     window.localStorage.setItem('pairs', JSON.stringify(curPairs))
-                    getSaved()
+                    getLocalSaved()
                 })
                 loadNameHolder.appendChild(loadDel)
             }
@@ -859,18 +832,12 @@ async function getSaved() {
     }
 }
 
-async function getBoatCount(rtn) {
-    // let options = {
-    //     method: 'POST',
-    //     headers: { 'Content-Type': 'application/json' },
-    //     body: JSON.stringify({}),
-    // }
-    loadingEl.style.display = 'block'
-    // const response = await fetch(API_URL + '/getPairsOfficial', options)
-    // const pairings = await response.json()
-    let pairingsObj = await getPairsOfficial()
+function getBoatCount(snapshot, rtn) {
+    let pairingsObj = {}
+    snapshot.docs.forEach((doc) => {
+        data[doc.id] = doc.data()
+    })
     let pairings = Object.values(pairingsObj)
-    loadingEl.style.display = 'none'
 
     let fjCount = new Array(names.length).fill(0)
     let c420Count = new Array(names.length).fill(0)
@@ -953,6 +920,7 @@ async function getPrevPartners(name, pairings) {
         // const response = await fetch(API_URL + '/getPairsOfficial', options)
         // pairings = await response.json()
         pairings = await getPairsOfficial()
+        pageReads++
         loadingEl.style.display = 'none'
     }
 
@@ -1026,7 +994,6 @@ async function parseUrl() {
         loadingEl.style.display = 'none'
         console.log(json)
 
-        getSaved()
         // if pairs exist create them
         if (json.pairs != null) {
             makeNames(json.pairs)
@@ -1051,7 +1018,6 @@ async function parseUrl() {
         loadingEl.style.display = 'none'
         console.log(json)
 
-        getSaved()
         // if pairs exist create them
         if (json.pairs != null) {
             makeNames(json.pairs)
@@ -1066,32 +1032,18 @@ async function parseUrl() {
     }
 }
 
-async function getNames() {
-    let data = {}
-    let snapshot = await getDocs(pairsDB)
-    snapshot.docs.forEach((doc) => {
-        data[doc.data().name] = doc.id
-    })
-    return data
-}
 async function getPairs(id) {
     let data = {}
     let docRef = doc(db, 'pairs', id)
     let docSnap = await getDoc(docRef)
+    pageReads++
     return docSnap.data()
 }
 
-async function getOfficialNames() {
-    let data = {}
-    let snapshot = await getDocs(officialDB)
-    snapshot.docs.forEach((doc) => {
-        data[doc.data().name] = doc.id
-    })
-    return data
-}
 async function getPairsOfficial() {
     let data = {}
     let snapshot = await getDocs(officialDB)
+    pageReads++
     snapshot.docs.forEach((doc) => {
         data[doc.id] = doc.data()
     })
@@ -1101,6 +1053,7 @@ async function getPairsOfficialOne(id) {
     let data = {}
     let docRef = doc(db, 'official-pairs', id)
     let docSnap = await getDoc(docRef)
+    pageReads++
     return docSnap.data()
 }
 

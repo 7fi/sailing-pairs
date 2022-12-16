@@ -16,15 +16,6 @@ vertLabels.addEventListener('change', () => {
     updateGraph()
 })
 
-// const updateGraphBtn = document.getElementById('updateGraph')
-// const regattasBox = document.getElementById('regattas')
-// const namesBox = document.getElementById('namesBox')
-// updateGraphBtn.addEventListener('click', () => {
-//     updateGraph()
-// })
-// const API_URL = 'http://localhost:3000' // For development
-// const API_URL = 'https://bhspairs.onrender.com' // For deployment
-
 const firebaseConfig = {
     apiKey: 'AIzaSyAIlmAr8qfAjVweURTIvOmvNbZzlii1QXc',
     authDomain: 'bhspairs.firebaseapp.com',

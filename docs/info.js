@@ -1,7 +1,3 @@
-// const API_URL = 'https://bhspairs.herokuapp.com' // For deployment
-// const API_URL = 'https://bhspairs.onrender.com' // For deployment
-// const API_URL = 'http://localhost:3000' // For development
-
 const firebaseConfig = {
     apiKey: 'AIzaSyAIlmAr8qfAjVweURTIvOmvNbZzlii1QXc',
     authDomain: 'bhspairs.firebaseapp.com',
@@ -10,6 +6,11 @@ const firebaseConfig = {
     messagingSenderId: '853792589116',
     appId: '1:853792589116:web:0d634d29b62ae7cab90a39',
     measurementId: 'G-KPRQEN42TT',
+}
+
+let localHost = false
+if (localHost) {
+    firebaseConfig = {}
 }
 
 const people = {
