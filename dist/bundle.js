@@ -15,7 +15,7 @@
   \***********************/
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
-eval("__webpack_require__.e(/*! import() */ \"docs_client_js\").then(__webpack_require__.bind(__webpack_require__, /*! ./client.js */ \"./docs/client.js\"))\nPromise.all(/*! import() */[__webpack_require__.e(\"vendors-node_modules_firebase_app_dist_esm_index_esm_js-node_modules_firebase_firestore_dist_-2b1f60\"), __webpack_require__.e(\"vendors-node_modules_firebase_analytics_dist_esm_index_esm_js\"), __webpack_require__.e(\"docs_client_js\"), __webpack_require__.e(\"docs_pairs_js\")]).then(__webpack_require__.bind(__webpack_require__, /*! ./pairs.js */ \"./docs/pairs.js\"))\nPromise.all(/*! import() */[__webpack_require__.e(\"vendors-node_modules_firebase_app_dist_esm_index_esm_js-node_modules_firebase_firestore_dist_-2b1f60\"), __webpack_require__.e(\"vendors-node_modules_firebase_analytics_dist_esm_index_esm_js\"), __webpack_require__.e(\"docs_client_js\"), __webpack_require__.e(\"docs_pairs_js\"), __webpack_require__.e(\"docs_randomize_js\")]).then(__webpack_require__.bind(__webpack_require__, /*! ./randomize.js */ \"./docs/randomize.js\"))\n\n\n//# sourceURL=webpack://sailing-pairs/./docs/entry.js?");
+eval("__webpack_require__.e(/*! import() */ \"docs_client_js\").then(__webpack_require__.bind(__webpack_require__, /*! ./client.js */ \"./docs/client.js\"))\nPromise.all(/*! import() */[__webpack_require__.e(\"vendors-node_modules_firebase_analytics_dist_esm_index_esm_js-node_modules_firebase_app_dist_-e13a9f\"), __webpack_require__.e(\"docs_client_js\"), __webpack_require__.e(\"docs_pairs_js\")]).then(__webpack_require__.bind(__webpack_require__, /*! ./pairs.js */ \"./docs/pairs.js\"))\nPromise.all(/*! import() */[__webpack_require__.e(\"vendors-node_modules_firebase_analytics_dist_esm_index_esm_js-node_modules_firebase_app_dist_-e13a9f\"), __webpack_require__.e(\"docs_client_js\"), __webpack_require__.e(\"docs_pairs_js\"), __webpack_require__.e(\"docs_randomize_js\")]).then(__webpack_require__.bind(__webpack_require__, /*! ./randomize.js */ \"./docs/randomize.js\"))\n\n\n//# sourceURL=webpack://sailing-pairs/./docs/entry.js?");
 
 /***/ })
 
@@ -184,7 +184,7 @@ eval("__webpack_require__.e(/*! import() */ \"docs_client_js\").then(__webpack_r
 /******/ 		// undefined = chunk not loaded, null = chunk preloaded/prefetched
 /******/ 		// [resolve, reject, Promise] = chunk loading, 0 = chunk loaded
 /******/ 		var installedChunks = {
-/******/ 			"pairs": 0
+/******/ 			"main": 0
 /******/ 		};
 /******/ 		
 /******/ 		__webpack_require__.f.j = (chunkId, promises) => {

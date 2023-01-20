@@ -15,7 +15,7 @@
   \*****************************/
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
-eval("__webpack_require__.e(/*! import() */ \"docs_client_js\").then(__webpack_require__.bind(__webpack_require__, /*! ./client.js */ \"./docs/client.js\"))\r\nPromise.all(/*! import() */[__webpack_require__.e(\"vendors-node_modules_firebase_app_dist_esm_index_esm_js-node_modules_firebase_firestore_dist_-2b1f60\"), __webpack_require__.e(\"vendors-node_modules_firebase_functions_dist_esm_index_esm_js\"), __webpack_require__.e(\"docs_scores2_js\")]).then(__webpack_require__.bind(__webpack_require__, /*! ./scores2.js */ \"./docs/scores2.js\"))\r\n\n\n//# sourceURL=webpack://sailing-pairs/./docs/entryScores.js?");
+eval("__webpack_require__.e(/*! import() */ \"docs_client_js\").then(__webpack_require__.bind(__webpack_require__, /*! ./client.js */ \"./docs/client.js\"))\nPromise.all(/*! import() */[__webpack_require__.e(\"vendors-node_modules_firebase_app_dist_esm_index_esm_js-node_modules_firebase_firestore_dist_-2b1f60\"), __webpack_require__.e(\"vendors-node_modules_firebase_functions_dist_esm_index_esm_js\"), __webpack_require__.e(\"docs_scores2_js\")]).then(__webpack_require__.bind(__webpack_require__, /*! ./scores2.js */ \"./docs/scores2.js\"))\n\n\n//# sourceURL=webpack://sailing-pairs/./docs/entryScores.js?");
 
 /***/ })
 

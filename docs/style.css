@@ -158,7 +158,7 @@ button {
   place-items: center;
   position: relative;
 }
-.icon:hover{
+.icon:hover {
   background-color: var(--med);
 }
 .buttonsHolder > .icon {
@@ -172,7 +172,7 @@ select {
   font-family: inherit;
   font-weight: 500;
 }
-#header select{
+#header select {
   margin: 22px 0px 0px 10px;
   height: 33px;
 }
