@@ -58,6 +58,7 @@ body {
   /* font-family: futura-pt, sans-serif; */
   font-weight: 400;
   -webkit-user-select: none;
+  background-color: var(--medDark);
 }
 button {
   appearance: none;
@@ -85,9 +86,10 @@ button {
   position: absolute;
   width: calc(50% - 30px);
   /* overflow-y: scroll; */
-  bottom: 0;
+  /* bottom: 0; */
+  padding-bottom: 1.2rem;
   top: 0;
-  height: 58.5rem;
+  /* height: 58.5rem; */
   /* grid-area: left; */
   margin: 20px 0 20px 20px;
 }
@@ -490,7 +492,7 @@ select {
 .pairSlotHolder {
   display: flex;
   flex-direction: row;
-  height: 47px;
+  height: 47px !important;
   width: 100%;
   gap: 7px;
 }
