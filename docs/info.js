@@ -80,8 +80,6 @@ const people = {
         partner: 'Sabrina',
       },
       { name: 'Cascade', skipper: true, crew: true, partner: '' },
-      { name: 'Cole', skipper: false, crew: true, partner: '' },
-      { name: 'Cyrus', skipper: false, crew: true, partner: 'Adam' },
       { name: 'Elliott', skipper: true, crew: true, weight: 135, partner: 'Gretchen F' },
       { name: 'Fin', skipper: false, crew: true, partner: 'Beto' },
       { name: 'Jaya', skipper: true, crew: true, partner: 'Jeffery' },
@@ -103,13 +101,14 @@ const people = {
     'Jr. Varsity': [
       { name: 'Andrea', skipper: false, crew: true, partner: '' },
       { name: 'Carson', skipper: false, crew: true, partner: '' },
-      { name: 'Chris', skipper: false, crew: true, partner: 'Joseph' },
-      { name: 'Gretchen F', skipper: false, crew: true, partner: 'Elliott' },
+      { name: 'Chris', skipper: false, crew: true, partner: '' },
+      { name: 'Emma', skipper: false, crew: true, partner: '' },
+      { name: 'Gretchen F', skipper: false, crew: true, partner: '' },
       { name: 'Gretchen I', skipper: false, crew: true, partner: '' },
       { name: 'Holden', skipper: false, crew: true, partner: '' },
-      { name: 'Kai', skipper: false, crew: true, partner: 'Ryan' },
-      { name: 'Payton', skipper: false, crew: true, partner: 'Luke' },
-      { name: 'Zephyr', skipper: false, crew: true, partner: 'Alexander' },
+      { name: 'Kai', skipper: false, crew: true, partner: '' },
+      { name: 'Payton', skipper: false, crew: true, partner: '' },
+      { name: 'Zephyr', skipper: false, crew: true, partner: '' },
     ],
 
     // Varsity: [
@@ -168,55 +167,5 @@ const people = {
 // }
 
 const mobileSize = '800px'
-
-/* speculation lmao
-Varsity: [
-      { name: 'Adam', skipper: true, crew: false, partner: 'Cyrus' },
-      { name: 'Alexander', skipper: true, crew: false, partner: 'Zephyr' },
-      { name: 'Andrea', skipper: false, crew: true, partner: '' },
-      { name: 'Ava', skipper: true, crew: true, weight: 113, partner: 'Ben' },
-      { name: 'Ben', skipper: true, crew: false, partner: 'Ava' },
-      { name: 'Beto', skipper: true, crew: false, partner: 'Fin' },
-      {
-        name: 'Carter',
-        skipper: true,
-        crew: false,
-        weight: 152,
-        picks: ['Sabrina', 'Elliott', 'Talia', 'Jaya'],
-        pic: 'https://35b7f1d7d0790b02114c-1b8897185d70b198c119e1d2b7efd8a2.ssl.cf1.rackcdn.com/roster_full_photos/83071916/original/d436c99f-76cc-4838-a257-a84324c2599d.jpg',
-        partner: 'Sabrina',
-      },
-      { name: 'Cascade', skipper: true, crew: true, partner: '' },
-      { name: 'Chris', skipper: false, crew: true, partner: 'Joseph' },
-      { name: 'Cyrus', skipper: false, crew: true, partner: 'Adam' },
-      { name: 'Elliott', skipper: true, crew: true, weight: 135, partner: 'Gretchen F' },
-      { name: 'Fin', skipper: false, crew: true, partner: 'Beto' },
-      { name: 'Jaya', skipper: true, crew: true, partner: 'Jeffery' },
-      { name: 'Jeffrey', skipper: true, crew: true, partner: 'Jaya' },
-      { name: 'Joseph', skipper: true, crew: true, partner: 'Chris' },
-      { name: 'Kai', skipper: false, crew: true, partner: 'Ryan' },
-      { name: 'Luke', skipper: true, crew: true, partner: 'Payton' },
-      { name: 'Nelson', skipper: true, crew: true, partner: '' },
-      { name: 'Nick', skipper: false, crew: true, partner: '' },
-      { name: 'Nolan', skipper: true, crew: false, partner: 'Talia', weight: 145 },
-      { name: 'Owen', skipper: true, crew: false, partner: 'Sharkey' },
-      { name: 'Ryan', skipper: true, crew: false, partner: 'Kai', weight: 160 },
-      { name: 'Sabrina', skipper: false, crew: true, partner: 'Carter', weight: 105 },
-      { name: 'Sharkey', skipper: false, crew: true, partner: 'Owen' },
-      { name: 'Stella', skipper: false, crew: true, partner: '' },
-      { name: 'Talia', skipper: false, crew: true, partner: 'Nolan', weight: 109 },
-    ],
-    'Jr. Varsity': [
-      { name: 'Carson', skipper: false, crew: true, partner: '' },
-      { name: 'Cole', skipper: false, crew: true, partner: '' },
-      { name: 'Gretchen F', skipper: false, crew: true, partner: 'Elliott' },
-      { name: 'Gretchen I', skipper: false, crew: true, partner: '' },
-      { name: 'Holden', skipper: false, crew: true, partner: '' },
-      { name: 'Maura', skipper: true, crew: true, partner: '' },
-      { name: 'Payton', skipper: false, crew: true, partner: 'Luke' },
-      { name: 'Suraj', skipper: false, crew: true, partner: '' },
-      { name: 'Zephyr', skipper: false, crew: true, partner: 'Alexander' },
-    ],
-*/
 
 export { people, mobileSize, firebaseConfig }
