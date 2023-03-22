@@ -85,7 +85,6 @@ const people = {
       { name: 'Jaya', skipper: true, crew: true, partner: 'Jeffery' },
       { name: 'Jeffrey', skipper: true, crew: true, partner: 'Jaya' },
       { name: 'Joseph', skipper: true, crew: true, partner: 'Chris' },
-      { name: 'Luke', skipper: true, crew: true, partner: 'Payton' },
       { name: 'Maura', skipper: true, crew: true, partner: '' },
       { name: 'Nelson', skipper: true, crew: true, partner: '' },
       { name: 'Nick', skipper: false, crew: true, partner: '' },
