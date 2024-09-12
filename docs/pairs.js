@@ -47,10 +47,10 @@ let selAbsent = false
 let selLocked = false
 let byPos = true
 let byBoatCount = false
-let byPrevParts = true
+let byPrevParts = false
 let absent = []
 let locked = []
-let boatDisplayVal = 'true'
+let boatDisplayVal = 'false'
 
 let pageReads = 0
 
@@ -842,6 +842,7 @@ function getBoatCount(snapshot, rtn) {
     pairingsObj[doc.id] = doc?.data()
   })
   let pairings = Object.values(pairingsObj)
+  console.log(pairings)
 
   let fjCount = new Array(names.length).fill(0)
   let c420Count = new Array(names.length).fill(0)
@@ -852,15 +853,17 @@ function getBoatCount(snapshot, rtn) {
   let c420Cut = e420Cut + 2 * 3
 
   for (let i = 0; i < pairings.length; i++) {
-    console.log(Object.values(pairings[i]).length)
-    for (let j = 0; j < fjCut; j++) {
-      fjCount[names.indexOf(pairings[i][j])]++
-    }
-    for (let j = fjCut; j < e420Cut; j++) {
-      e420Count[names.indexOf(pairings[i][j])]++
-    }
-    for (let j = e420Cut; j < c420Cut; j++) {
-      c420Count[names.indexOf(pairings[i][j])]++
+    if (pairings[i].season == season) {
+      console.log(Object.values(pairings[i]).length)
+      for (let j = 0; j < fjCut; j++) {
+        fjCount[names.indexOf(pairings[i][j])]++
+      }
+      for (let j = fjCut; j < e420Cut; j++) {
+        e420Count[names.indexOf(pairings[i][j])]++
+      }
+      for (let j = e420Cut; j < c420Cut; j++) {
+        c420Count[names.indexOf(pairings[i][j])]++
+      }
     }
   }
   // console.log("Boat count",names,fjCount,c420Count,e420Count);
@@ -932,24 +935,25 @@ async function getPrevPartners(name, pairings) {
 
   for (let i = 0; i < pairings.length; i++) {
     let nameIndex = Object.values(pairings[i]).indexOf(name)
+    if (pairings[i].season == season) {
+      if (Object.values(pairings[i]).includes(name)) {
+        //if skipper slot and isnt empty crew
+        if (nameIndex % 3 == 0 && pairings[i][nameIndex + 1] != undefined && pairings[i][nameIndex + 1] != '') {
+          partners.push(pairings[i][nameIndex + 1])
 
-    if (Object.values(pairings[i]).includes(name)) {
-      //if skipper slot and isnt empty crew
-      if (nameIndex % 3 == 0 && pairings[i][nameIndex + 1] != undefined && pairings[i][nameIndex + 1] != '') {
-        partners.push(pairings[i][nameIndex + 1])
+          //if rotating slot is not empty
+          if (pairings[i][nameIndex + 2] != undefined && pairings[i][nameIndex + 2] != '') {
+            partners.push(pairings[i][nameIndex + 2])
+          }
 
-        //if rotating slot is not empty
-        if (pairings[i][nameIndex + 2] != undefined && pairings[i][nameIndex + 2] != '') {
-          partners.push(pairings[i][nameIndex + 2])
+          //if crew slot and skipper is not empty
+        } else if (nameIndex % 3 == 1 && pairings[i][nameIndex - 1] != undefined && pairings[i][nameIndex - 1] != '') {
+          partners.push(pairings[i][nameIndex - 1])
+
+          //if rotating slot and skipper is not empty
+        } else if (nameIndex % 3 == 2 && pairings[i][nameIndex - 2] != undefined && pairings[i][nameIndex - 2] != '') {
+          partners.push(pairings[i][nameIndex - 2])
         }
-
-        //if crew slot and skipper is not empty
-      } else if (nameIndex % 3 == 1 && pairings[i][nameIndex - 1] != undefined && pairings[i][nameIndex - 1] != '') {
-        partners.push(pairings[i][nameIndex - 1])
-
-        //if rotating slot and skipper is not empty
-      } else if (nameIndex % 3 == 2 && pairings[i][nameIndex - 2] != undefined && pairings[i][nameIndex - 2] != '') {
-        partners.push(pairings[i][nameIndex - 2])
       }
     }
   }
